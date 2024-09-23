@@ -7,7 +7,7 @@
   >
     <img
       :src="$slidev.themeConfigs.logoHeader"
-      class="w-16 h-16 object-contain"
+      class="w-12 h-12 p-2 !rounded-full bg-white object-contain"
     />
   </header>
 </template>

@@ -4,14 +4,14 @@
   "version": "2.2.2",
   "packageManager": "pnpm@9.1.4",
   "description": "A Penguin theme for Slidev",
-  "author": "Alvaro Saburido <hola@alvarosaburido.dev>",
+  "author": "Jimmylan Surquin <jimmylan.surquin@andromed.fr>",
   "license": "MIT",
-  "homepage": "https://penguin-theme.alvarosaburido.dev/",
+  "homepage": "https://jimmylan.fr/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alvarosaburido/slidev-theme-penguin.git"
+    "url": "git+https://github.com/jimmylansrq/slidev-theme-penguin.git"
   },
-  "bugs": "https://github.com/alvarosaburido/slidev-theme-penguin/issues",
+  "bugs": "https://github.com/jimmylansrq/slidev-theme-penguin/issues",
   "keywords": [
     "slidev-theme",
     "slidev",

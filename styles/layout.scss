@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+
 :root {
   --slidev-theme-primary: #3e5166;
   --slidev-theme-secondary: #34d399;
@@ -12,17 +15,47 @@ html:not(.dark) #slide-content {
   height: 100% !important;
 }
 
+.slidev-layout blockquote {
+  @apply border-l-0;
+}
+
 .dark #slide-content {
   /* dark mode css here */
   @apply bg-primary-600 text-light-300;
 
   h1 {
-    @apply text-secondary;
+    @apply text-purple-500;
   }
 
   a {
     @apply text-secondary-300 hover:text-secondary-500;
   }
+}
+
+.slidev-layout pre {
+  font-size: 0.875rem !important;
+  padding: 1rem;
+  background-color: #3e5066 !important;
+  color: #f8f8f2;
+  border-radius: 0.5rem;
+  overflow: auto;
+}
+
+.slidev-layout code {
+  font-family: "Source Code Pro", monospace !important;
+  //color: #f8f8f2;
+  /* background-color: #2d2d2d; */
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+}
+
+.slidev-layout :not(pre) > code {
+  font-size: 0.9em;
+  background: transparent;
+  font-weight: 300;
+  font-family: "IBM Plex Mono", monospace !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
 }
 
 .slidev-layout {
@@ -69,44 +102,20 @@ html:not(.dark) #slide-content {
     }
 
     li::before {
-      content: '🐧 ';
+      content: "🐧 ";
     }
   }
 
-  pre {
-    font-size: 0.875rem !important;
-  }
-
-  code {
-    @apply text-secondary-300;
-
-    font-size: 0.875rem !important;
-  }
-
-  :not(pre) > code {
-    font-size: 0.9em;
-    background: transparent;
-    @apply font-light py-0.5 rounded;
-  }
-
-  :not(pre) > code:before,
-  :not(pre) > code:after {
-    content: '';
-    padding: 0 0.2em;
-    opacity: 0.5;
-  }
-
-  :not(pre) > code:before {
-    margin-right: -0.08em;
-  }
-
-  span[style*='color: var(--shiki-token-keyword)'],
-  span[style*='color: var(--shiki-token-function)'] {
+  span[style*="color: var(--shiki-token-keyword)"],
+  span[style*="color: var(--shiki-token-function)"] {
     font-style: italic;
   }
 
   .slidev-code-wrapper {
-    max-width: 400px;
+    max-width: 1000px;
+    // en attendant
+    max-height: 53.33vh !important;
+    overflow-y: auto !important;
   }
 
   iframe label.btn {
