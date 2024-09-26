@@ -5,7 +5,7 @@ layout: intro
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
 title: Formation Podman/Docker
-download: true
+# download: true
 transition: slide-left
 # remoteAssets: false
 # export:
