@@ -1,6 +1,6 @@
-import { AsGraphic } from '@alvarosabu/ui'
-import { defineAppSetup } from '@slidev/types'
+import { AsGraphic } from "@alvarosabu/ui";
+import { defineAppSetup } from "@slidev/types";
 
 export default defineAppSetup(({ app }) => {
-  app.component('AsGraphic', AsGraphic)
-})
+  app.component("AsGraphic", AsGraphic);
+});

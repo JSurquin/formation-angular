@@ -1,14 +1,11 @@
 <template>
-  <div class="slidev-layout intro grid">
+  <div class="slidev-layout intro grid print:block">
     <LayoutHeader />
     <CornerCurves class="absolute left-0 top-0 transform rotate-90" />
     <div class="flex flex-col justify-center text-center">
       <slot></slot>
     </div>
-    <AsGraphic
-      type="zigzag"
-      class="absolute top-20 -right-30"
-    />
+    <AsGraphic type="zigzag" class="absolute top-20 -right-30" />
   </div>
 </template>
 

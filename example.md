@@ -7,7 +7,8 @@ highlighter: shiki
 title: Slidev Penguin Theme
 themeConfig:
   logoHeader: "/avatar.png"
-  eventLogo: "https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-amsterdam-with-name.png"
+  eventLogo: "https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-am\
+    sterdam-with-name.png"
   eventUrl: "https://vuejs.amsterdam/"
   twitter: "@jimmylan"
   twitterUrl: "https://twitter.com/jimmylansrq"
@@ -42,6 +43,7 @@ Fondateur <a  href="https://www.storyblok.com/"><logos-storyblok-icon  mr-1/>And
  - Création de contenu sur <a href="https://www.youtube.com/channel/alvarodevlabs"> <logos-youtube-icon mr-1 /> alvarodevlabs </a>
  - Blog & Portfolio <a href="https://jimmylansrq.dev"> jimmylansrq.dev </a>
  - Dites salut à <a href="https://twitter.com/jimmylansrq"> <logos-twitter mr-1 /> @ jimmylansrq </a>
+
 ---
 layout: text-image
 media: 'https://i.pinimg.com/originals/f5/5e/80/f55e8059ea945abfd6804b887dd4a0af.gif'
@@ -90,6 +92,7 @@ layout: two-cols
 - Les volumes persistants
 - Encore des Commandes Docker Avancées
 - Le rootless
+
 ---
 layout: text-image
 reverse: true
@@ -280,7 +283,6 @@ eventLogo: 'https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-ams
 eventUrl: 'https://vuejs.amsterdam/'
 twitter: '@alvarosabu'
 twitterUrl: 'https://twitter.com/alvarosabu'
-
 ---
 
 # Définition de virtualisation
@@ -418,6 +420,7 @@ import { TresCanvas } from '@tresjs/core'
   </TresCanvas>
 </template>
 ```
+
 ---
 
 # Dockerfile , exemple avec Node.js
@@ -443,6 +446,7 @@ EXPOSE 3000
 # Démarrer l'application
 CMD ["npm", "start"]
 ```
+
 ---
 
 # Dockerfile , exemple avec React
@@ -468,6 +472,7 @@ EXPOSE 3000
 # Démarrer l'application
 CMD ["npm", "start"]
 ```
+
 ---
 
 # Dockerfile , exemple avec Python
@@ -494,6 +499,7 @@ EXPOSE 8000
 # Démarrer l'application
 CMD ["python", "app.py"]
 ```
+
 ---
 
 # Dockerfile , exemple avec Ruby
@@ -519,6 +525,7 @@ EXPOSE 3000
 # Démarrer l'application
 CMD ["ruby", "app.rb"]
 ```
+
 ---
 
 ## Parlons maintenant du podman-compose
@@ -561,9 +568,11 @@ services:
       - "5432:5432"
 ```
 </small>
+
 ---
 layout: default
 ---
+
 # Le rootless
 
 Le rootless est une fonctionnalité de Podman qui permet d'exécuter des conteneurs en tant qu'utilisateur non root par défaut.
@@ -617,6 +626,7 @@ Attention cette commande va activer le rootless pour tous les utilisateurs du sy
 ---
 layout: two-cols
 ---
+
 Un autre exemple de code
 
 ```vue
@@ -959,6 +969,7 @@ Voici un exemple en live qui permet de comprendre comment fonctionne le rootless
 50. Comment utiliser les outils de CI/CD avec Docker ?
 
 </small>
+
 ---
 
 ## Réponses - Partie 1
@@ -1200,6 +1211,7 @@ function multiply() {
 }
 ```
 ````
+
 ---
 layout: new-section
 ---
@@ -1514,6 +1526,7 @@ podman run --config my-config my-container
 ```bash
 podman config inspect my-config
 ```
+
 ---
 
 # Exemple concret d'utilisation de Podman
@@ -1637,10 +1650,6 @@ podman-compose up
 ## Conclusion
 
 Podman offre une alternative puissante à Docker pour la gestion de conteneurs, avec des fonctionnalités similaires mais une architecture différente. Son utilisation peut améliorer la sécurité et les performances des applications conteneurisées.
----
-# Différences principales entre Podman et Docker
-
-### Podman et Docker sont très similaires, mais certaines commandes et fonctionnalités diffèrent. Voici les différences majeures entre les deux outils.
 
 ---
 
@@ -1753,7 +1762,7 @@ Podman offre une alternative puissante à Docker pour la gestion de conteneurs, 
 - **Docker** : Pas de fonctionnalité native pour cela.
 
 ---
----
+
 # Conteneurs éphémères vs persistants
 
 - Les conteneurs éphémères ne conservent pas leur état entre les redémarrages.
