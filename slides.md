@@ -85,46 +85,29 @@ routeAlias: 'sommaire'
 <br>
 
 <div class="flex flex-col gap-2">
-<Link to="intro-podman">🚀 Introduction à Podman</Link>
 <Link to="comprendre-cicd">🔧 Comprendre le CI/CD</Link>
 <Link to="utiliser-des-pipelines-cicd">🔄 Utiliser des pipelines CI/CD</Link>
 <Link to="comprendre-les-microservices">🔍 Comprendre les micro-services</Link>
 <Link to="pourquoi-utiliser-les-microservices">❓ Pourquoi utiliser les micro-services?</Link>
+<Link to="des-definitions-avant-tout">🔧 Des définitions avant tout</Link>
 <Link to="virtualisation-vs-conteneurisation">💻 Virtualisation vs conteneurisation</Link>
+<Link to="intro-podman">🚀 Introduction à Podman</Link>
 <Link to="quel-est-la-différence-entre-docker-et-podman">🐳 Quel est la différence entre Docker et Podman ?</Link>
 </div>
 ::right::
 
 <div class="flex flex-col gap-2">
-<Link to="des-definitions-avant-tout">🔧 Des définitions avant tout</Link>
 <Link to="le-cli-docker">🔄 Le CLI Docker</Link>
+<Link to="images-podman">🔍 Les images Podman</Link>
 <Link to="creer-son-premier-conteneur">🚀 Créer son premier conteneur</Link>
 <Link to="autres-commandes-docker">🔄 Autres Commandes Docker</Link>
-<Link to="images-podman">🔍 Les images Podman</Link>
 <Link to="commandes-docker-avancees">🔍 Commandes Docker Avancées</Link>
 <Link to="pods-et-reseau">🔍 Les Pods et le réseau</Link>
 <Link to="volumes-persistants">🔍 Les volumes persistants</Link>
 <Link to="encore-des-commandes-docker-avancees">🔍 Encore des Commandes Docker Avancées</Link>
 <Link to="le-rootless">🔍 Le rootless</Link>
+<Link to="kubernetes">🎉 Bonus : Introduction à Kubernetes</Link>
 </div>
----
-layout: text-image
-reverse: true
-routeAlias: 'intro-podman'
-title: 'intro-podman'
-anchor: 'intro-podman'
-media: 'https://developers.redhat.com/sites/default/files/styles/share/public/blog/2019/08/podman.png?itok=rIuCQyMl'
----
-
-<a name="DISCLAIMER" id="intro-podman"></a>
-
-# Introduction à Podman
-
-Podman est un outil de gestion de conteneurs qui permet de créer, gérer et exécuter des conteneurs sans nécessiter de démon.
-
-Il est compatible avec les commandes Docker, ce qui facilite la transition pour les utilisateurs de Docker.
-
-Podman offre également des fonctionnalités supplémentaires telles que la gestion des pods et une meilleure sécurité grâce à son architecture sans démon (mais nous en reparlerons plus tard).
 
 ---
 routeAlias: 'comprendre-cicd'
@@ -233,6 +216,41 @@ Mais vous allez utiliser des containers qui eux même peuvent être des micro-se
 Et de toute façon cette architecture est utilisé dans la vie de tous les jours.
 
 ---
+layout: new-section
+routeAlias: 'des-definitions-avant-tout'
+---
+
+# Des définitions avant tout
+
+<img class="mx-auto" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjNxZTgweTU3MnFmYnphNWdpODRxM2F2Y2JkNW15NGRlODI0bG4xeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wpgYasZ0tBrP4lCgS3/giphy.webp" alt="penguin-work" width="300"/>
+
+---
+
+# Définition de virtualisation
+
+La virtualisation est un processus qui permet de créer une image d'un système d'exploitation ou d'un environnement logiciel dans ce qu'on appelle une machine virtuelle.
+
+# Définition de conteneur
+
+Un conteneur est un environnement logiciel qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
+
+# Définition de conteneurisation
+
+La conteneurisation est un processus qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
+
+---
+
+<!-- pas a la bonne place -->
+
+# Définition de machine virtuelle
+
+Une machine virtuelle est un environnement logiciel qui permet de créer une machine virtuelle à partir d'un système d'exploitation ou d'un environnement logiciel.
+
+# Définition de machine conteneurisée
+
+Une machine conteneurisée est un environnement logiciel qui permet de créer une machine conteneurisée à partir d'un système d'exploitation ou d'un environnement logiciel.
+
+---
 routeAlias: 'virtualisation-vs-conteneurisation'
 ---
 
@@ -246,27 +264,13 @@ La virtualisation et la conteneurisation sont deux concepts liés à la gestion 
 - **Conteneurisation** : La conteneurisation est un processus qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
 
 ---
-layout: default
-routeAlias: 'quel-est-la-différence-entre-docker-et-podman'
----
-
-<a name="DIFFERENCES" id="DIFFERENCES"></a>
-# Quel est la différence entre Docker et Podman ?
-
-Podman est un outil de gestion de conteneurs qui permet de créer, gérer et exécuter des conteneurs sans nécessiter de démon.
-
-Il est compatible avec les commandes Docker, ce qui facilite la transition pour les utilisateurs de Docker.
-
-**Podman offre également des fonctionnalités supplémentaires telles que la gestion des pods et une meilleure sécurité grâce à son architecture sans démon.**
-
----
 routeAlias: 'schema-de-virtualisation-et-de-conteneurisation'
 ---
 
 # Schéma de la Virtualisation et de la Conteneurisation
 
 <small>
-Voici un schéma en mermaid.js qui illustre les différences entre la virtualisation et la conteneurisation.
+Voici un schéma qui illustre les différences entre la virtualisation et la conteneurisation.
 
 </small>
 <div class="mermaid">
@@ -287,28 +291,6 @@ graph TD
     J -->|Bibliothèques et Dépendances| M[Applications PostgreSQL]
     K -->|Bibliothèques et Dépendances| N[Applications Redis]
 ```
-
-</div>
-
----
-routeAlias: 'differences-entre-docker-et-podman'
----
-
-<a name="quel-est-la-différence-entre-docker-et-podman" id="quel-est-la-différence-entre-docker-et-podman"></a>
-
-# Différences entre Docker et Podman
-
-<div class="text-[8px]">
-
-| Fonctionnalité       | Docker                                                                 | Podman                                                                 |
-|----------------------|------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| **Démon**            | Nécessite un démon pour fonctionner                                    | N'a pas besoin de démon pour fonctionner                              |
-| **Pods**             | Ne gère pas les pods                                                   | Offre une gestion des pods, permettant de regrouper plusieurs conteneurs |
-| **Sécurité**         | Fonctionne avec un démon, ce qui peut poser des problèmes de sécurité  | Conçu pour une meilleure sécurité grâce à son architecture sans démon |
-| **Compatibilité**    | -                                                                      | Commandes compatibles avec celles de Docker, facilitant la transition |
-| **Rootless**         | Nécessite des privilèges root pour certaines opérations                | Permet l'exécution de conteneurs en tant qu'utilisateur non root par défaut |
-| **Outils standards** | Utilise des outils spécifiques à Docker                                | Utilise des outils standards de Linux pour la gestion des conteneurs, comme systemd |
-| **Images**           | Nécessite un démon d'arrière-plan pour créer des images                | Permet de créer des images de conteneurs sans nécessiter de démon d'arrière-plan |
 
 </div>
 
@@ -376,12 +358,53 @@ C'est lui qui gère les ressources matérielles et les interactions entre le mat
 </small>
 
 ---
+layout: text-image
+reverse: true
+routeAlias: 'intro-podman'
+title: 'intro-podman'
+anchor: 'intro-podman'
+media: 'https://developers.redhat.com/sites/default/files/styles/share/public/blog/2019/08/podman.png?itok=rIuCQyMl'
+---
+
+<a name="DISCLAIMER" id="intro-podman"></a>
+
+# Introduction à Podman
+
+Podman est un outil de gestion de conteneurs qui permet de créer, gérer et exécuter des conteneurs sans nécessiter de démon.
+
+Il est compatible avec les commandes Docker, ce qui facilite la transition pour les utilisateurs de Docker.
+
+Podman offre également des fonctionnalités supplémentaires telles que la gestion des pods et une meilleure sécurité grâce à son architecture sans démon (mais nous en reparlerons plus tard dans cette formation).
+
+---
+routeAlias: 'differences-entre-docker-et-podman'
+---
+
+<a name="quel-est-la-différence-entre-docker-et-podman" id="quel-est-la-différence-entre-docker-et-podman"></a>
+
+# Différences entre Docker et Podman
+
+<div class="text-[8px]">
+
+| Fonctionnalité       | Docker                                                                 | Podman                                                                 |
+|----------------------|------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| **Démon**            | Nécessite un démon pour fonctionner                                    | N'a pas besoin de démon pour fonctionner                              |
+| **Pods**             | Ne gère pas les pods                                                   | Offre une gestion des pods, permettant de regrouper plusieurs conteneurs |
+| **Sécurité**         | Fonctionne avec un démon, ce qui peut poser des problèmes de sécurité  | Conçu pour une meilleure sécurité grâce à son architecture sans démon |
+| **Compatibilité**    | -                                                                      | Commandes compatibles avec celles de Docker, facilitant la transition |
+| **Rootless**         | Nécessite des privilèges root pour certaines opérations                | Permet l'exécution de conteneurs en tant qu'utilisateur non root par défaut |
+| **Outils standards** | Utilise des outils spécifiques à Docker                                | Utilise des outils standards de Linux pour la gestion des conteneurs, comme systemd |
+| **Images**           | Nécessite un démon d'arrière-plan pour créer des images                | Permet de créer des images de conteneurs sans nécessiter de démon d'arrière-plan |
+
+</div>
+
+---
 routeAlias: 'le-cli-docker'
 ---
 
 <a name="le-cli-docker" id="le-cli-docker"></a>
 
-# Le CLI Docker
+# Le CLI Docker/Podman
 
 Nous allons voir les commandes principales de Docker.
 
@@ -389,20 +412,10 @@ Nous allons voir les commandes principales de Docker.
 
 | Commande               | Description                                    |
 | ---------------------- | ---------------------------------------------- |
-| <kbd>docker run</kbd>  | Exécute une commande dans un nouveau conteneur |
-| <kbd>docker ps</kbd>   | Liste les conteneurs en cours d'exécution      |
-| <kbd>docker stop</kbd> | Arrête un conteneur en cours d'exécution       |
-| <kbd>docker rm</kbd>   | Supprime un conteneur arrêté                   |
-
----
-
-# Autres Commandes Docker
-
-Voici d'autres commandes classiques de Docker.
-
-### Commandes Docker supplémentaires
-
-Dans le prochain tableau je vous ai mis les commandes Docker les plus utilisées.
+| <kbd>docker/podman run</kbd>  | Exécute une commande dans un nouveau conteneur |
+| <kbd>docker/podman ps</kbd>   | Liste les conteneurs en cours d'exécution      |
+| <kbd>docker/podman stop</kbd> | Arrête un conteneur en cours d'exécution       |
+| <kbd>docker/podman rm</kbd>   | Supprime un conteneur arrêté                   |
 
 ---
 
@@ -410,47 +423,47 @@ Dans le prochain tableau je vous ai mis les commandes Docker les plus utilisées
 
 | Commande                 | Description                                                 |
 | ------------------------ | ----------------------------------------------------------- |
-| <kbd>docker pull</kbd>   | Télécharge une image depuis un registre                     |
-| <kbd>docker images</kbd> | Liste les images disponibles localement                     |
-| <kbd>docker rmi</kbd>    | Supprime une ou plusieurs images                            |
-| <kbd>docker exec</kbd>   | Exécute une commande dans un conteneur en cours d'exécution |
-| <kbd>docker build</kbd>  | Construit une image à partir d'un Dockerfile                  |
-| <kbd>docker push</kbd>   | Envoie une image à un registre                             |
-| <kbd>docker tag</kbd>    | Ajoute un tag à une image                                   |
-| <kbd>docker login</kbd>  | Connecte à un registre                                      |
-| <kbd>docker logout</kbd> | Déconnecte d'un registre                                    |
+| <kbd>docker/podman pull</kbd>   | Télécharge une image depuis un registre                     |
+| <kbd>docker/podman images</kbd> | Liste les images disponibles localement                     |
+| <kbd>docker/podman rmi</kbd>    | Supprime une ou plusieurs images                            |
+| <kbd>docker/podman exec</kbd>   | Exécute une commande dans un conteneur en cours d'exécution |
+| <kbd>docker/podman build</kbd>  | Construit une image à partir d'un Dockerfile                  |
+| <kbd>docker/podman push</kbd>   | Envoie une image à un registre                             |
+| <kbd>docker/podman tag</kbd>    | Ajoute un tag à une image                                   |
+| <kbd>docker/podman login</kbd>  | Connecte à un registre                                      |
+| <kbd>docker/podman logout</kbd> | Déconnecte d'un registre                                    |
 
 </small>
 
 ---
 
-# Commandes Docker Avancées
+# Commandes avancées
 
-Voici quelques commandes Docker avancées.
+Voici quelques commandes avancées.
 
-### Commandes Docker Avancées
+### Commandes avancées
 
 | Commande                         | Description                                       |
 | -------------------------------- | ------------------------------------------------- |
-| <kbd>docker network create</kbd> | Crée un nouveau réseau Docker                     |
-| <kbd>docker volume create</kbd>  | Crée un nouveau volume Docker                     |
-| <kbd>docker inspect</kbd>        | Affiche les détails d'un conteneur ou d'une image |
-| <kbd>docker logs</kbd>           | Affiche les logs d'un conteneur                   |
+| <kbd>docker/podman network create</kbd> | Crée un nouveau réseau Docker                     |
+| <kbd>docker/podman volume create</kbd>  | Crée un nouveau volume Docker                     |
+| <kbd>docker/podman inspect</kbd>        | Affiche les détails d'un conteneur ou d'une image |
+| <kbd>docker/podman logs</kbd>           | Affiche les logs d'un conteneur                   |
 
 ---
 
-# Encore des Commandes Docker Avancées
+# Encore des Commandes avancées
 
 Voici quelques autres commandes Docker avancées.
 
-### Commandes Docker Avancées supplémentaires
+### Commandes avancées supplémentaires
 
 | Commande                       | Description                                                                                       |
 | ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| <kbd>docker-compose up</kbd>   | Démarre et attache des conteneurs définis dans un fichier docker-compose                          |
-| <kbd>docker-compose down</kbd> | Arrête et supprime les conteneurs, réseaux, volumes définis dans un fichier docker-compose        |
-| <kbd>docker-compose logs</kbd> | Affiche les logs des services définis dans un fichier docker-compose                              |
-| <kbd>docker-compose exec</kbd> | Exécute une commande dans un conteneur en cours d'exécution défini dans un fichier docker-compose |
+| <kbd>docker/podman-compose up</kbd>   | Démarre et attache des conteneurs définis dans un fichier docker-compose                          |
+| <kbd>docker/podman-compose down</kbd> | Arrête et supprime les conteneurs, réseaux, volumes définis dans un fichier docker-compose        |
+| <kbd>docker/podman-compose logs</kbd> | Affiche les logs des services définis dans un fichier docker-compose                              |
+| <kbd>docker/podman-compose exec</kbd> | Exécute une commande dans un conteneur en cours d'exécution défini dans un fichier docker-compose |
 
 ---
 
@@ -465,178 +478,6 @@ docker compose up
 <br>
 
 ## Directement !
-
----
-layout: new-section
----
-
-# Le CLI Podman
-
-<img class="mt-20 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Podman-logo-orig.png" alt="cli podman" width="300"/>
-
----
-layout: new-section
----
-
-<!-- ps podman -->
-
-# Podman Compose
-
-<img class="mt-20 mx-auto" src="https://opengraph.githubassets.com/218b635d8ba22fae4434592b6131abffddcdca371eb3499ce83cf58b45c1306a/containers/podman-compose" alt="cli podman" width="300"/>
-
----
-
-# Avant de commencer
-
-Qu'est ce que le podman-compose ?
-
-C'est un outil qui permet de déployer des conteneurs avec des fichiers YAML.
-
-Podman compose est un outil qui permet de déployer des conteneurs avec des fichiers YAML.
-
-Attention : je parle bien de conteneurs et pas d'images, vous pouvez utiliser des images existantes ou des images personnalisées pour vos conteneurs.
-
----
-
-En general : on utilise le podman-compose pour des environnements de dev.
-
-Ou : On utilise un dockerfile/podmanfile , et un docker-compose.yml pour deployer nos conteneurs dans des environnements de prod, le docker-compose lancera donc dans ce cas les builds de nos images personnalisées et en suite lancera les conteneurs dans des "pods" ou "services".
-
-Mais il est obsolète depuis la version 2.0 de Podman (mais on l'utilise encore pour des raisons de compatibilité ou si on est sur docker tout simplement).
-
-Aujourd'hui on utilise plutôt le podman play with docker.
-**(mais nous n'allons pas l'utiliser dans ce cours)**
-
-https://docs.podman.io/en/v3.4.1/markdown/podman-play-kube.1.html
-
----
-
-# SCHEMA DE PODMAN COMPOSE ET PODMAN FILE
-
-<!-- ce n'est pas à la bonne place mais bon... -->
-
-Nous allons voir ici un schéma de Podman Compose et Podman File.
-Comment nous pouvons faire pour déployer nos conteneurs avec des fichiers YAML.
-Mais comment aussi pour déployer des conteneurs avec des fichiers JSON.
-
-<div class="mermaid">
-
-```mermaid
-graph LR
-    A[Développeur] -->|Écrit| B[Podman Compose]
-    B -->|Génère| C[Podman YAML]
-    C -->|Déploie| D[Podman Pods]
-    D -->|Contient| E[Conteneur 1: Nginx]
-    D -->|Contient| F[Conteneur 2: PostgreSQL]
-    D -->|Contient| G[Conteneur 3: Redis]
-    E -->|Expose| H[Port 80]
-    F -->|Expose| I[Port 5432]
-    G -->|Expose| J[Port 6379]
-    A -->|Écrit| K[Podman File]
-    K -->|Crée| L[Image Personnalisée]
-    L -->|Lancée par| B
-    L -->|Déploie| M[Podman Conteneurs]
-    M -->|Contient| N[Conteneur 1: Nginx]
-    M -->|Contient| O[Conteneur 2: PostgreSQL]
-    M -->|Contient| P[Conteneur 3: Redis]
-    N -->|Expose| Q[Port 80]
-    O -->|Expose| R[Port 5432]
-    P -->|Expose| S[Port 6379]
-```
-
-</div>
-
----
-
-# Maintenant le podman-compose !
-
-Un mauvais podman-compose
-
-<small>
-
-```yaml
-version: "3.8"
-services:
-  web:
-    image: python:3.9
-    container_name: web
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: ["python", "app.py"]
-  db:
-    image: postgres:13
-    container_name: db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata:
-```
-
-</small>
-<br>
-
----
-
-## Explication
-
-- `pgdata` est le nom du volume persistant.
-- `/var/lib/postgresql/data` est le chemin dans le conteneur où le volume sera monté.
-
-<br>
-
-## Pouquoi est-ce un mauvais podman-compose ?
-
-Tout d'abord, il utilise une image de base officielle de Python, ce qui est inutile dans notre cas.
-
-De plus, il démarre l'application, ce qui est inutile dans notre cas.
-
----
-
-# Un bon podman-compose
-
-```yaml
-version: "3.8"
-services:
-  web:
-    image: python:3.9
-    command: ["python", "app.py"]
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/apptu peu
-    working_dir: /app
-    restart: always
-    container_name: web
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-```
-
----
-
-# Pouquoi est-ce un bon podman-compose ?
-
-Tout d'abord, il est clair et simple.
-
-Nous avons une app python qui est définie dans le docker-compose.yaml tournant sur le port 8000.
-
-De plus, il installe les dépendances du projet, ce qui est utile dans notre cas.
-
----
-layout: new-section
----
-
-# Sécurité
-
-<img class="mt-20 mx-auto" src="https://kinsta.com/fr/wp-content/uploads/sites/4/2023/09/docker-security.jpg" alt="cli podman" width="300"/>
 
 ---
 layout: new-section
@@ -696,168 +537,37 @@ docker search <image>
 
 ---
 layout: new-section
-routeAlias: 'pods-et-reseau'
 ---
 
-<a name="pods-et-reseau" id="pods-et-reseau"></a>
+<!-- ps podman -->
 
-# Les Pods et le réseau
+# Créer son premier conteneur
 
-<img class="mt-20 mx-auto" src="https://podman-desktop.io/assets/images/podman-desktop-release-1.2-3a022da0788ed1fd7e6c1820879dd235.png" alt="cli podman" width="300"/>
-
----
-layout: new-section
-routeAlias: 'volumes-persistants'
----
-
-# Les volumes persistants
-
-<a name="volumes-persistants" id="volumes-persistants"></a>
-
-<img class="mt-20 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Podman-logo-orig.png" alt="cli podman" width="300"/>
+<img class="mt-20 mx-auto" src="https://opengraph.githubassets.com/218b635d8ba22fae4434592b6131abffddcdca371eb3499ce83cf58b45c1306a/containers/podman-compose" alt="cli podman" width="300"/>
 
 ---
 
-# Les volumes persistants
-
-## Qu'est-ce qu'un volume persistant ?
-
-Un volume persistant est un espace de stockage partagé entre le conteneur et le host (votre ordinateur).
-
-## Pourquoi utiliser un volume persistant ?
-
-Un volume persistant est utile pour stocker des données de manière permanente.
-
-## Comment utiliser un volume persistant ?
-
-Pour utiliser un volume persistant, vous devez le déclarer dans votre fichier de configuration et le monter dans votre conteneur. Voici un exemple concret avec un container Nginx :
-
-```yaml
-volumes:
-  - nginx-data:/var/www/html
-```
-
-<br>
----
-
-## Explication
-
-- `nginx-data` est le nom du volume persistant.
-- `/var/www/html` est le chemin dans le conteneur où le volume sera monté.
-
-<br>
-
-## En clair :
-
-Je créer un volume persistant qui va être monté dans le conteneur sur le chemin `/var/www/html`.
-
-Sur mon pc je pourrais y acceder à cet endroit dans mon filesystem :
+# Créer son premier conteneur
 
 ```bash
-~/nginx-data
+podman run -d --name my-container -p 8080:80 nginx
 ```
 
----
+## Explications
 
-<span class="text-red-500">
-
-**Mais aussi avec le docker run classique**
-
-</span>
-
-<br>
-
-```bash
-docker run -v my-volume:/data
-```
-
-<br>
+- `podman run` : Commande pour créer et exécuter un conteneur.
+- `-d` : Exécute le conteneur en arrière-plan.
+- `--name my-container` : Nom du conteneur.
+- `-p 8080:80` : Port du conteneur. (8080 sur l'host, 80 dans le conteneur)
+- `nginx` : Image à utiliser.
 
 ---
 
-# Quel est la différence entre un volume persistant et un volume temporaire ?
+# Petit exercice :
 
-Un volume persistant est un volume qui est créé et utilisé dans le conteneur.
+Créer un conteneur qui tourne une image nginx ou de votre choix et qui est accessible sur votre host.
 
-Un volume temporaire est un volume qui est créé et utilisé dans le conteneur.
-
-Exemple de volume temporaire :
-
-```bash
-docker run -v /tmp:/data
-```
-
-Nous stockons les données dans le conteneur dans le dossier `/data` mais via tmp qui veut dire temporaire (temporary).
-
-## Exemple de volume persistant :
-
-```yaml
-volumes:
-  - my-volume:/data
-```
-
----
-
-# Exemple concret !
-
-```yaml
-volumes:
-  - mysql-data:/var/lib/mysql
-  - mysql-logs:/var/log/mysql
-  - mysql-config:/etc/mysql
-```
-Nous venons d'associer un volume persistant à notre conteneur MySQL.
-
-<br>
-<br>
-
-# Explications :
-
-- `mysql-data` est un volume persistant qui stocke les données de la base de données.
-- `mysql-logs` est un volume persistant qui stocke les logs de la base de données.
-- `mysql-config` est un volume persistant qui stocke la configuration de la base de données.
-
----
-layout: new-section
-routeAlias: 'des-definitions-avant-tout'
----
-
-# Des définitions avant tout
-
-<img class="mx-auto" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjNxZTgweTU3MnFmYnphNWdpODRxM2F2Y2JkNW15NGRlODI0bG4xeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wpgYasZ0tBrP4lCgS3/giphy.webp" alt="penguin-work" width="300"/>
-
----
-eventLogo: 'https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-amsterdam-with-name.png'
-eventUrl: 'https://vuejs.amsterdam/'
-twitter: '@alvarosabu'
-twitterUrl: 'https://twitter.com/alvarosabu'
----
-
-<!-- ce n'est pas à la bonne place -->
-
-# Définition de virtualisation
-
-La virtualisation est un processus qui permet de créer une image d'un système d'exploitation ou d'un environnement logiciel dans ce qu'on appelle une machine virtuelle.
-
-# Définition de conteneur
-
-Un conteneur est un environnement logiciel qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
-
-# Définition de conteneurisation
-
-La conteneurisation est un processus qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
-
----
-
-<!-- pas a la bonne place -->
-
-# Définition de machine virtuelle
-
-Une machine virtuelle est un environnement logiciel qui permet de créer une machine virtuelle à partir d'un système d'exploitation ou d'un environnement logiciel.
-
-# Définition de machine conteneurisée
-
-Une machine conteneurisée est un environnement logiciel qui permet de créer une machine conteneurisée à partir d'un système d'exploitation ou d'un environnement logiciel.
+Vous avez déjà tout ce qu'il faut dans la slide précédente.
 
 ---
 layout: new-section
@@ -869,28 +579,92 @@ layout: new-section
 
 ---
 
-<!-- Je pense qu'il manque avant les définitions un petit rappel de ce qu'est un Dockerfile.
-et du podmanfile -->
+# En premier, définition d'un Dockerfile/PodmanFile.
+
+Un Dockerfile est un fichier qui contient les instructions pour créer une image de conteneur.
+
+Un podmanFile pareil, mais pour podman.
+
+**L'idée, est de pouvoir créer des images de conteneurs de manière custom.** (car je le rappel, on peut aussi utiliser des images officielle comme ubuntu, debian, etc..., mais forcement, elle ne seront pas personnalisée à mon application mais juste une image de base)
+
+Par exemple, si j'ai besoin d'une image avec une version de node spécifique, je peux créer une image avec la version de node et toutes les dépendances dont j'ai besoin.
+
+---
+
+# Pour l'utiliser, il faut faire :
+
+```bash
+podman build -t my-image .
+```
+
+Explications :
+
+- `podman build` : Commande pour créer une image à partir d'un Dockerfile.
+- `-t my-image` : Nom de l'image.
+- `.` : Répertoire où se trouve le Dockerfile, ici à la racine du projet.
+
+---
+
+# Petit exercice :
+
+Créer un Dockerfile/PodmanFile qui permet de créer une image avec une version de node spécifique et qui est accessible sur votre host.
+
+---
 
 # Un mauvais dockerfile
 
-Voyons ici un mauvais Dockerfile.
-
 ```dockerfile
+# Utilisation d'une image de base lourde et non nécessaire pour l'application
 FROM ubuntu:latest
-RUN apt-get update && apt-get install -y nginx
-CMD ["nginx", "-g", "daemon off;"]
+
+# Ne pas spécifier de mainteneur - manque de clarté sur qui a créé cette image
+MAINTAINER "someone@example.com"
+
+# Exécution d'une seule commande apt-get sans update, peut conduire à des paquets obsolètes ou vulnérables
+RUN apt-get install -y curl
+
+# Le code de l'application est copié avant d'installer les dépendances, ce qui casse la mise en cache Docker
+COPY . /app
+
+# Exécution de plusieurs commandes RUN dans une seule instruction, rendant difficile le débogage et la maintenance
+RUN cd /app && \
+    mkdir temp && \
+    touch temp/file.txt && \
+    echo "Creating a temporary file"
+
+# Mauvais usage de l'utilisateur root, les applications ne devraient pas tourner avec ces privilèges par sécurité
+USER root
+
+# Utilisation d'un port non nécessaire pour l'application
+EXPOSE 1234
+
+# Commande CMD incorrecte et inutile, l'application ne se lance pas réellement ici
+CMD ["echo", "Hello World"]
 ```
 
-<br>
+---
 
-## Pouquoi est-ce un mauvais Dockerfile ?
+### Explication des erreurs :
 
-Tout d'abord, il utilise une image de base officielle d'Ubuntu, ce qui est inutile dans notre cas.
+<small>
 
-De plus, il installe nginx, ce qui est inutile dans notre cas.
+1. **FROM ubuntu:latest** : L'image Ubuntu est lourde pour la plupart des applications, préférer une image plus légère comme Alpine ou une image spécifique à l'environnement d'exécution (par exemple, `node:alpine`, `python:slim`). De plus, utiliser `:latest` peut introduire des problèmes de version instable, mieux vaut utiliser une version spécifique.
+   
+2. **MAINTAINER** : Cette instruction est obsolète dans les versions récentes de Docker. Utilisez `LABEL maintainer="someone@example.com"` à la place.
 
-Enfin, il démarre nginx, ce qui est inutile dans notre cas.
+3. **RUN apt-get install -y curl** : Il manque une commande `apt-get update` avant l’installation des paquets, ce qui peut entraîner des paquets obsolètes. De plus, l'installation de `curl` pourrait ne pas être nécessaire, cela ajoute du poids à l'image inutilement.
+
+4. **COPY . /app** : Le code est copié avant d'installer les dépendances, ce qui casse la mise en cache de Docker. Pour une meilleure optimisation, les dépendances doivent être installées avant de copier l'ensemble du code source, surtout si elles sont rarement modifiées.
+
+5. **RUN cd /app && \ mkdir temp && \ touch temp/file.txt** : Il y a plusieurs commandes dans une seule instruction `RUN`, ce qui rend le débogage difficile. Si une seule partie échoue, il sera compliqué d’identifier laquelle. En plus, la création d'un fichier temporaire dans une étape de build n'a aucun sens si l'application ne l'utilise pas directement.
+
+6. **USER root** : Utiliser l'utilisateur root pour exécuter des applications n'est pas recommandé pour des raisons de sécurité. Il vaut mieux créer un utilisateur non privilégié et l'utiliser pour exécuter l'application.
+
+7. **EXPOSE 1234** : Exposer un port qui n'est pas utilisé par l'application est inutile et peut prêter à confusion.
+
+8. **CMD ["echo", "Hello World"]** : Cette commande ne démarre pas réellement une application. Elle ne fait qu'afficher un message, ce qui ne reflète pas le comportement attendu pour une application Docker.
+
+</small>
 
 ---
 
@@ -899,24 +673,68 @@ Enfin, il démarre nginx, ce qui est inutile dans notre cas.
 Voyons ici un bon Dockerfile.
 
 ```dockerfile
-FROM node:14
+# Utilisation d'une image de base légère et adaptée à l'application
+FROM alpine:3.16
+
+# Déclaration du mainteneur via l'instruction LABEL (plus moderne que MAINTAINER)
+LABEL maintainer="someone@example.com"
+
+# Mise à jour des paquets et installation de curl proprement
+# Combine apt-get update et install pour réduire les couches et garder l'image à jour
+RUN apk update && apk add --no-cache curl
+
+# Installation des dépendances avant de copier le code source pour optimiser le cache Docker
+# Cela garantit que les dépendances sont réutilisées si le code source change
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+# Copie du fichier de dépendances uniquement (si applicable, par ex: package.json pour Node.js, requirements.txt pour Python)
+# COPY package.json /app  <-- Exemple de bonne pratique pour Node.js ou Python
+
+# Installation des dépendances (si applicable)
+# RUN npm install ou pip install -r requirements.txt
+
+# Copie du code de l'application dans le conteneur
 COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
+
+# Création d'un utilisateur non root pour éviter les risques de sécurité liés à l'exécution en tant que root
+RUN adduser -D -g '' appuser
+USER appuser
+
+# Exposer uniquement le port nécessaire par l'application
+EXPOSE 8080
+
+# Démarrage de l'application (commande finale appropriée pour l'application)
+# Assurez-vous de définir la commande qui démarre l'application réelle (par exemple, Node, Python, etc.)
+CMD ["./start-app.sh"]
 ```
 
-<br>
+---
 
-## Pouquoi est-ce un bon Dockerfile ?
+# Pouquoi est-ce un bon Dockerfile ?
 
-Tout d'abord, il utilise une image de base officielle de Node.js, ce qui est utile dans notre cas.
+<small>
 
-De plus, il installe les dépendances du projet, ce qui est utile dans notre cas.
+1. **FROM alpine:3.16** : Alpine est une image de base très légère (seulement quelques Mo) par rapport à Ubuntu, ce qui réduit la taille globale de l'image Docker. En spécifiant une version précise (`3.16`), on garantit la stabilité.
 
-Enfin, il démarre l'application, ce qui est utile dans notre cas.
+2. **LABEL maintainer="someone@example.com"** : La commande `LABEL` est la méthode recommandée pour spécifier le mainteneur de l'image, car elle est plus moderne et flexible que l'ancienne instruction `MAINTAINER`.
+
+3. **RUN apk update && apk add --no-cache curl** : L'utilisation de `apk update` permet de s'assurer que les paquets sont à jour avant l'installation. L'option `--no-cache` évite de stocker des fichiers temporaires inutiles, ce qui optimise l'image en la rendant plus petite.
+
+4. **WORKDIR /app** : `WORKDIR` définit le répertoire de travail où toutes les actions suivantes auront lieu, au lieu d'utiliser des commandes `cd`. C'est plus propre et plus lisible.
+
+5. **COPY package.json /app** et **RUN npm install / pip install** : Installer les dépendances avant de copier tout le code source permet de tirer parti du cache Docker. Si le code source change fréquemment mais que les dépendances restent les mêmes, cette étape ne sera pas réexécutée à chaque build.
+
+6. **COPY . .** : Copie l'ensemble du code source de l'application dans le répertoire de travail. Cela se fait après l'installation des dépendances pour préserver le cache.
+
+7. **RUN adduser -D -g '' appuser** : Créer un utilisateur non root permet d'éviter d'exécuter l'application avec des privilèges élevés, ce qui est une bonne pratique pour renforcer la sécurité.
+
+8. **USER appuser** : Le conteneur s'exécute désormais en tant qu'utilisateur non privilégié.
+
+9. **EXPOSE 8080** : L'application doit seulement exposer les ports réellement nécessaires. Le port `8080` est souvent utilisé pour des applications web.
+
+10. **CMD ["./start-app.sh"]** : Assurez-vous que la commande de démarrage correspond à ce qui est attendu pour lancer l'application (par exemple un script ou une commande pour lancer le serveur).
+
+</small>
 
 ---
 
@@ -1155,6 +973,87 @@ Pourquoi ? : l'utilisateur root est trop puissant.
 
 Donc la j'ai créer un utilisateur non root pour exécuter l'application qui a uniquement les droits nécessaires.
 
+
+---
+layout: new-section
+---
+
+<!-- ps podman -->
+
+# Podman Compose
+
+<img class="mt-20 mx-auto" src="https://opengraph.githubassets.com/218b635d8ba22fae4434592b6131abffddcdca371eb3499ce83cf58b45c1306a/containers/podman-compose" alt="cli podman" width="300"/>
+
+---
+
+# Avant de commencer
+
+Qu'est ce que le podman-compose ?
+
+C'est un outil qui permet de déployer des conteneurs avec des fichiers YAML.
+
+Podman compose est un outil qui permet de déployer des conteneurs avec des fichiers YAML.
+
+> Attention : je parle bien de conteneurs et pas d'images, vous pouvez utiliser des images existantes ou des images personnalisées pour vos conteneurs.
+
+<br>
+
+> Deuxieme chose : Le YAML est un langage de configuration très simple à prendre en main mais qui demande une indentation parfaite (comme par exemple du python), si vous ne respectez pas l'indentation, vous aurez une erreur.
+
+---
+
+En general : on utilise le podman-compose pour des environnements de dev.
+
+**Exemple avec un projet next qui veut utiliser postgres comme base de données, pourquoi l'installer en local et galérer donc si on veux changer de système d'exploitation ?**
+
+> Parce que oui vous l'avez compris, mais on installe pas pareil postgresql sur windows que sur linux et que sur macOS, donc si un développeur arrive sur le projet bonjour la galère.
+
+Ou : On utilise un dockerfile/podmanfile , et un docker-compose.yml pour deployer nos conteneurs dans des environnements de prod, le docker-compose lancera donc dans ce cas les builds de nos images personnalisées et en suite lancera les conteneurs dans des "pods" ou "services".
+
+Mais il est obsolète depuis la version 2.0 de Podman (mais on l'utilise encore pour des raisons de compatibilité ou si on est sur docker tout simplement).
+
+Aujourd'hui on utilise **plutôt le podman play kube**.
+**(mais nous n'allons pas l'utiliser dans ce cours car il faudrait avoir un cluster kubernetes donc apprendre kubernetes et nous on veut juste faire simple.)**
+
+https://docs.podman.io/en/v3.4.1/markdown/podman-play-kube.1.html
+
+---
+
+# SCHEMA DE PODMAN COMPOSE ET PODMAN FILE
+
+<!-- ce n'est pas à la bonne place mais bon... -->
+
+Nous allons voir ici un schéma de Podman Compose et Podman File.
+Comment nous pouvons faire pour déployer nos conteneurs avec des fichiers YAML.
+Mais comment aussi pour déployer des conteneurs avec des fichiers JSON.
+
+<div class="mermaid">
+
+```mermaid
+graph LR
+    A[Développeur] -->|Écrit| B[Podman Compose]
+    B -->|Génère| C[Podman YAML]
+    C -->|Déploie| D[Podman Pods]
+    D -->|Contient| E[Conteneur 1: Nginx]
+    D -->|Contient| F[Conteneur 2: PostgreSQL]
+    D -->|Contient| G[Conteneur 3: Redis]
+    E -->|Expose| H[Port 80]
+    F -->|Expose| I[Port 5432]
+    G -->|Expose| J[Port 6379]
+    A -->|Écrit| K[Podman File]
+    K -->|Crée| L[Image Personnalisée]
+    L -->|Lancée par| B
+    L -->|Déploie| M[Podman Conteneurs]
+    M -->|Contient| N[Conteneur 1: Nginx]
+    M -->|Contient| O[Conteneur 2: PostgreSQL]
+    M -->|Contient| P[Conteneur 3: Redis]
+    N -->|Expose| Q[Port 80]
+    O -->|Expose| R[Port 5432]
+    P -->|Expose| S[Port 6379]
+```
+
+</div>
+
 ---
 
 ## Parlons maintenant du podman-compose
@@ -1193,6 +1092,274 @@ ports: - "5432:5432"
 
 ```
 </small>
+
+---
+
+Un mauvais podman-compose
+
+<small>
+
+```yaml
+version: '3'
+
+# Utilisation d'un format incorrect pour définir les services
+services:
+  web-app:
+    # Utilisation d'une image sans version, ce qui peut provoquer des builds instables
+    image: nginx
+
+    # Mauvaise syntaxe pour les ports, cette configuration ne mappe pas correctement
+    ports:
+      - "80:"
+
+    # Montage de volumes non nécessaires et peu sécurisés, sans spécifier de chemin hôte ou conteneur
+    volumes:
+      - "/tmp"
+
+    # Dépendances entre services manquantes, ce qui peut provoquer des problèmes de démarrage
+    depends_on:
+      - db
+
+  db:
+    # Utilisation de l'image latest pour une base de données, ce qui est instable
+    image: postgres:latest
+
+    # Manque de variables d'environnement nécessaires pour configurer la base de données
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
+    # Volumes non définis pour la persistance des données, ce qui entraînera une perte de données lors du redémarrage
+    volumes:
+      - "/var/lib/postgresql/data"
+```
+
+</small>
+<br>
+
+---
+
+## Pouquoi est-ce un mauvais podman-compose ?
+
+1. **`version: '3'`** : Bien que cette version fonctionne, il est recommandé de spécifier la dernière version disponible (comme `3.8`) pour utiliser les nouvelles fonctionnalités et éviter des comportements inattendus.
+
+2. **`image: nginx`** : Ne pas spécifier de version de l'image est une très mauvaise pratique. L'image `nginx` par défaut utilisera `latest`, ce qui peut entraîner des builds instables si la version change sans préavis. Il est préférable de spécifier une version explicite (par exemple, `nginx:1.21.6`).
+
+3. **`ports: - "80:"`** : Ici, la syntaxe de port est incorrecte. Il manque le port du conteneur, ce qui signifie que la redirection du port ne fonctionnera pas. Il doit être spécifié correctement comme `"80:80"` (port hôte:port conteneur).
+
+4. **`volumes: - "/tmp"`** : Le volume monte un répertoire temporaire de l'hôte sans préciser de répertoire cible dans le conteneur, ce qui n'a pas de sens ici. En plus, il est dangereux d'utiliser des répertoires comme `/tmp` sans contrôle sur les permissions. Il faut toujours spécifier le chemin hôte/conteneur de manière explicite pour plus de clarté.
+
+5. **`depends_on` manquant de configuration** : La section `depends_on` est utilisée pour gérer l'ordre de démarrage des conteneurs. Cependant, cela n'assure pas que le service dépendant est réellement prêt à l'emploi. Il faut utiliser des vérifications de santé (`healthcheck`) pour garantir que le service dépendant est opérationnel avant de démarrer le suivant.
+
+6. **`image: postgres:latest`** : Utiliser `latest` est risqué pour une base de données comme Postgres. Il est préférable de fixer une version spécifique (par exemple, `postgres:13.3`) pour éviter des migrations ou des changements inattendus dans la base de données lors d'une mise à jour.
+
+7. **Variables d'environnement non définies correctement** : Les variables `POSTGRES_USER`, `POSTGRES_PASSWORD` et `POSTGRES_DB` sont nécessaires pour configurer la base de données, mais elles ne sont pas définies ici, ce qui entraînera un échec de démarrage du conteneur Postgres.
+
+8. **Volumes non définis pour la persistance des données** : Le volume `/var/lib/postgresql/data` n'est pas défini de manière appropriée. Il est important de spécifier un chemin de volume sur l'hôte pour permettre la persistance des données, par exemple :
+   ```yaml
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   ```
+
+---
+
+### Version corrigée :
+
+```yaml
+version: '3.8'
+
+services:
+  web-app:
+    # Utilisation d'une image adaptée avec une version spécifique pour plus de stabilité
+    image: httpd:2.4
+
+    # Ports correctement mappés entre l'hôte et le conteneur
+    ports:
+      - "8080:80"
+
+    # Volume correctement défini avec un chemin hôte et un chemin conteneur
+    volumes:
+      - ./web-app:/usr/local/apache2/htdocs/
+
+    # Déclaration explicite d'un réseau pour une meilleure communication entre services
+    networks:
+      - webnet
+
+  database:
+    # Utilisation d'une version spécifique de MySQL pour garantir une compatibilité et une stabilité
+    image: mysql:5.7
+
+    # Définition explicite des variables d'environnement pour la configuration de MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+
+    # Volume correctement défini pour la persistance des données de MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    # Dépendance correctement définie avec un healthcheck pour vérifier que web-app est prêt avant de démarrer
+    depends_on:
+      web-app:
+        condition: service_healthy
+
+    # Vérification de santé pour s'assurer que la base de données est prête avant que d'autres services ne tentent de s'y connecter
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+
+# Déclaration du réseau personnalisé pour une communication sécurisée
+networks:
+  webnet:
+
+# Déclaration des volumes persistants
+volumes:
+  mysql_data:
+```
+
+---
+
+### Explication des améliorations :
+
+1. **`version: '3.8'`** : Utilisation d'une version plus récente et stable de la spécification Compose.
+
+2. **`image: httpd:2.4` et `mysql:5.7`** : Spécifier une version pour chaque image assure la stabilité des builds, évitant ainsi des surprises lors de mises à jour.
+
+3. **`ports: "8080:80"`** : Correctement configuré pour rediriger le port 8080 de l'hôte vers le port 80 du conteneur.
+
+4. **Volumes correctement définis** : Les volumes sont montés avec des chemins explicites entre l'hôte et le conteneur, garantissant que les données et fichiers sources sont correctement synchronisés.
+
+5. **`networks`** : Création d'un réseau personnalisé pour garantir que les services peuvent communiquer correctement tout en isolant le trafic du réseau hôte.
+
+6. **`healthcheck`** : Vérifications de santé pour garantir que les services démarrent correctement et sont prêts à être utilisés avant de lancer d'autres services dépendants.
+
+7. **`depends_on`** avec condition de santé : Le conteneur "web-app" doit être prêt avant que la base de données ne démarre, avec une vérification via un healthcheck pour éviter des erreurs de démarrage.
+
+Avec ces corrections, le fichier `podman-compose.yml` est beaucoup plus robuste, sécurisé et efficace.
+
+---
+layout: new-section
+---
+
+# Sécurité
+
+<img class="mt-20 mx-auto" src="https://kinsta.com/fr/wp-content/uploads/sites/4/2023/09/docker-security.jpg" alt="cli podman" width="300"/>
+
+---
+layout: new-section
+routeAlias: 'volumes-persistants'
+---
+
+# Les volumes persistants
+
+<a name="volumes-persistants" id="volumes-persistants"></a>
+
+<img class="mt-20 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Podman-logo-orig.png" alt="cli podman" width="300"/>
+
+---
+
+# Les volumes persistants
+
+## Qu'est-ce qu'un volume persistant ?
+
+Un volume persistant est un espace de stockage partagé entre le conteneur et le host (votre ordinateur).
+
+## Pourquoi utiliser un volume persistant ?
+
+Un volume persistant est utile pour stocker des données de manière permanente.
+
+## Comment utiliser un volume persistant ?
+
+Pour utiliser un volume persistant, vous devez le déclarer dans votre fichier de configuration et le monter dans votre conteneur. Voici un exemple concret avec un container Nginx :
+
+```yaml
+volumes:
+  - nginx-data:/var/www/html
+```
+
+<br>
+---
+
+## Explication
+
+- `nginx-data` est le nom du volume persistant.
+- `/var/www/html` est le chemin dans le conteneur où le volume sera monté.
+
+<br>
+
+## En clair :
+
+Je créer un volume persistant qui va être monté dans le conteneur sur le chemin `/var/www/html`.
+
+Sur mon pc je pourrais y acceder à cet endroit dans mon filesystem :
+
+```bash
+~/nginx-data
+```
+
+---
+
+<span class="text-red-500">
+
+**Mais aussi avec le docker run classique**
+
+</span>
+
+<br>
+
+```bash
+docker run -v my-volume:/data
+```
+
+<br>
+
+---
+
+# Quel est la différence entre un volume persistant et un volume temporaire ?
+
+Un volume persistant est un volume qui est créé et utilisé dans le conteneur.
+
+Un volume temporaire est un volume qui est créé et utilisé dans le conteneur.
+
+Exemple de volume temporaire :
+
+```bash
+docker run -v /tmp:/data
+```
+
+Nous stockons les données dans le conteneur dans le dossier `/data` mais via tmp qui veut dire temporaire (temporary).
+
+## Exemple de volume persistant :
+
+```yaml
+volumes:
+  - my-volume:/data
+```
+
+---
+
+# Exemple concret !
+
+```yaml
+volumes:
+  - mysql-data:/var/lib/mysql
+  - mysql-logs:/var/log/mysql
+  - mysql-config:/etc/mysql
+```
+Nous venons d'associer un volume persistant à notre conteneur MySQL.
+
+<br>
+<br>
+
+# Explications :
+
+- `mysql-data` est un volume persistant qui stocke les données de la base de données.
+- `mysql-logs` est un volume persistant qui stocke les logs de la base de données.
+- `mysql-config` est un volume persistant qui stocke la configuration de la base de données.
 
 ---
 layout: default
@@ -1418,7 +1585,6 @@ Attention cette commande va activer le rootless pour tous les utilisateurs du sy
 ---
 
 <small>
-
 
 4. Comment activer le mode rootless dans Podman ?
    - [ ] En utilisant la commande `podman rootless`
@@ -2018,48 +2184,72 @@ Les réseaux dans Podman permettent aux conteneurs de communiquer entre eux et a
 ## Types de réseaux dans Podman
 
 1. **Bridge Network** : Le réseau par défaut qui permet aux conteneurs de communiquer entre eux sur le même hôte.
-   Exemple : `podman network create my-bridge-network`
+   Exemple : Les conteneurs sur un réseau "bridge" peuvent se connecter entre eux en utilisant leurs adresses IP internes, mais ne sont pas directement accessibles depuis l'extérieur.
+   Exemple : Aucun besoin de créer un réseau personnalisé ici, car le mode "bridge" est par défaut.
    Métaphore : Un pont qui relie tous les bateaux dans un port.
 
-2. **Host Network** : Utilise le réseau de l'hôte, ce qui peut améliorer les performances mais réduit l'isolation.
-   Exemple : `podman network create my-host-network`
+2. **Host Network** : Utilise directement le réseau de l'hôte, ce qui peut améliorer les performances mais réduit l'isolation, car les conteneurs partagent la pile réseau avec l’hôte.
+   Exemple : Lancer un conteneur avec le réseau de l'hôte :
+   ```bash
+   podman run --network host nginx
+   ```
    Métaphore : Un bateau qui utilise directement les infrastructures du port sans passer par des canaux intermédiaires.
-
-3. **None Network** : Désactive le réseau pour le conteneur, utile pour des tâches spécifiques où l'isolation est primordiale.
-   Exemple : `podman network create my-none-network`
-   Métaphore : Un bateau ancré au milieu de l'océan sans aucune contact avec d'autres bateaux ou ports.
-
-4. **Macvlan Network** : Attribue une adresse MAC unique à chaque conteneur, permettant une meilleure intégration avec les réseaux physiques.
-   Exemple : `podman network create my-macvlan-network`
-   Métaphore : Un bateau qui a une adresse unique (un bateau unique par exemple) et qui peut s'amarrer à différents ports physiques sans soucis.
 
 ---
 
-## Exemple de configuration de réseau dans Podman
+3. **None Network** : Désactive tout accès réseau pour le conteneur, utile pour des tâches spécifiques où l'isolation est essentielle, par exemple des calculs locaux sans interaction réseau.
+   Exemple : Lancer un conteneur sans aucun réseau :
+   ```bash
+   podman run --network none busybox
+   ```
+   Métaphore : Un bateau ancré au milieu de l'océan sans aucun contact avec d'autres bateaux ou ports.
 
-1. **Bridge Network** :
+4. **Macvlan Network** : Attribue une adresse MAC unique à chaque conteneur, permettant au conteneur d’être sur le même réseau physique que l’hôte tout en étant isolé du réseau de l’hôte.
+   Exemple : Créer un réseau macvlan et attacher un conteneur à ce réseau :
+   ```bash
+   podman network create -d macvlan -o parent=eth0 my-macvlan-network
+   podman run --network my-macvlan-network nginx
+   ```
+   Métaphore : Un bateau qui a une adresse unique (un bateau spécifique avec des coordonnées) et qui peut s'amarrer à différents ports physiques sans problème.
 
-```bash
-podman network create my-bridge-network
-```
+---
 
-2. **Host Network** :
+### Exemple de configuration de réseau dans Podman
 
-```bash
-podman network create my-host-network
-```
+1. **Bridge Network** (réseau par défaut pour les conteneurs) :
+   Vous n'avez pas besoin de créer un réseau spécifique. Il suffit de lancer un conteneur normalement :
+   ```bash
+   podman run -d --name my-container nginx
+   ```
 
-3. **None Network** :
+2. **Host Network** (partage du réseau de l’hôte, en clair : le conteneur et l'host communiquent entre eux, on peut aussi le faire via l'association de ports) :
+   ```bash
+   podman run --network host nginx
+   ```
 
-```bash
-podman network create my-none-network
-```
+---
 
-4. **Macvlan Network** :
+3. **None Network** (aucun accès réseau pour le conteneur) :
+   ```bash
+   podman run --network none busybox
+   ```
 
-```bash
-podman network create my-macvlan-network
-```
+4. **Macvlan Network** (réseau intégré au réseau physique du conteneur, en clair : le conteneur et l'host communiquent entre eux) :
+   ```bash
+   podman network create -d macvlan -o parent=eth0 my-macvlan-network
+   podman run --network my-macvlan-network nginx
+   ```
+
+---
+layout: new-section
+routeAlias: 'pods-et-reseau'
+---
+
+<a name="pods-et-reseau" id="pods-et-reseau"></a>
+
+# Les Pods et le réseau
+
+<img class="mt-20 mx-auto" src="https://podman-desktop.io/assets/images/podman-desktop-release-1.2-3a022da0788ed1fd7e6c1820879dd235.png" alt="cli podman" width="300"/>
 
 ---
 
@@ -2348,19 +2538,6 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
 
 ---
 
-pas à sa place , plutot dans la partie sur les images de podman
-
-# Support des images et des registries
-
-- **Podman** : Offre des commandes supplémentaires pour signer et gérer les images.
-  ```bash
-  podman image sign
-  podman image trust
-  ```
-- **Docker** : Pas d'équivalents pour ces commandes.
-
----
-
 # Logs et événements
 
 - **Podman** et **Docker** ont des commandes similaires pour les logs, mais la syntaxe peut légèrement différer.
@@ -2454,16 +2631,27 @@ pas à sa place , plutot dans la partie sur les images de podman
 
 ---
 
-# Rootless Networking Challenges
+# Défis du Réseau en Mode Rootless
 
-- Les conteneurs rootless dans Podman peuvent poser des défis de gestion réseau, car ils ne peuvent pas créer d’interfaces réseau sans privilèges root.
-- Docker gère le rootless networking via une configuration spécifique avec `dockerd`.
+- Les conteneurs rootless dans Podman présentent des limitations en matière de gestion réseau, car ils n'ont pas la capacité de créer ou de configurer des interfaces réseau sans droits root. Cela peut compliquer l'exposition de ports ou la configuration de réseaux complexes.
 
-  **Exemple : Démarrer un conteneur rootless avec Podman**
+- Docker, quant à lui, gère le réseau rootless à travers une configuration spécifique du démon `dockerd`, qui permet de contourner ces restrictions tout en maintenant la sécurité.
+
+---
+
+  **Exemple : Lancer un conteneur en mode rootless avec Podman**
+
+  Pour démarrer un conteneur en mode rootless et publier un port, vous pouvez utiliser la commande suivante :
 
   ```bash
   podman --rootless run -p 8080:80 nginx
   ```
+
+Dans cet exemple, le port 8080 de l'hôte est redirigé vers le port 80 du conteneur Nginx. Toutefois, des configurations supplémentaires peuvent être nécessaires selon l'environnement réseau.
+
+---
+
+Cela clarifie les enjeux, tout en ajoutant des détails sur les différences entre Podman et Docker.
 
 ---
 
@@ -2484,72 +2672,6 @@ pas à sa place , plutot dans la partie sur les images de podman
   podman logs mycontainer
   podman run --log-driver=journald nginx
   ```
-
----
-
-# Intégration avec Kubernetes
-
-- Docker était historiquement utilisé comme runtime dans Kubernetes, mais est maintenant remplacé par **containerd**.
-- **Podman** a une compatibilité directe avec Kubernetes en exportant des pods au format YAML.
-
-  **Exemple : Exporter un pod vers Kubernetes avec Podman**
-
-  ```bash
-  podman generate kube mypod > mypod.yaml
-  kubectl apply -f mypod.yaml
-  ```
-
----
-
-> Je vous parle rapidement de kubernetes car c'est ce qui est utilisé dans la plupart des entreprises.
-
-# Qu'est ce que Kubernetes ?
-
-Kubernetes est un système d'orchestration de conteneurs open-source.
-
-C'est un système de gestion de conteneurs qui permet de gérer des clusters de conteneurs.
-
-Même si sur la doc officiel il disent que ce n'est pas un orchestrateur mais un systeme de gestion de conteneurs.
-
-# Comment ça marche ?
-
-Kubernetes utilise un système de master et de workers.
-
-Le master est en général un serveur qui gère les workers.
-
-Les workers sont les serveurs qui exécutent les conteneurs.
-
-Pour l'utiliser il faut donc un cluster de serveurs et être sur linux.
-
-[Kubernetes sur Windows](https://learn.microsoft.com/fr-fr/virtualization/windowscontainers/kubernetes/getting-started-kubernetes-windows)
-
----
-
-# Exemple de manifeste Kubernetes
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-pod
-spec:
-  containers:
-    - name: my-container
-      image: my-image:latest
-```
-
-Explication :
-
-- `apiVersion: v1` : Version de l'API Kubernetes.
-- `kind: Pod` : Type de ressource à créer.
-- `metadata: name: my-pod` : Metadonnées du pod.
-- `spec: containers: - name: my-container image: my-image:latest` : Spécification du conteneur à démarrer.
-
-<small class="!-mt-4 text-red-500">
-
-**Attention nous n'allons pas rentrer dans le détail de kubernetes, juste pour vous donner un exemple de manifeste.**
-
-</small>
 
 ---
 
@@ -2593,19 +2715,6 @@ Explication :
 > Retenez le -d qui permet de démarrer le conteneur en arrière-plan.
 
 </small>
-
----
-
-# Extensions des conteneurs avec CRIU (Checkpoint/Restore)
-
-- **Podman** supporte nativement **CRIU** pour la sauvegarde/restauration de l'état d'un conteneur.
-  Cela permet de migrer des conteneurs en cours d'exécution d'un hôte à un autre.
-
-  **Exemple : Checkpoint d'un conteneur**
-
-  ```bash
-  podman container checkpoint --export=mycontainer.tar mycontainer
-  ```
 
 ---
 
@@ -2906,6 +3015,151 @@ volumes:
 - Avec **Docker Compose** et **Podman Compose**, il est possible d'orchestrer des conteneurs complexes de manière efficace.
 - Les fichiers **Dockerfile**/**Podmanfile** peuvent être optimisés pour la production en utilisant des techniques avancées comme les **multi-stage builds**.
 - **Podman** offre une alternative rootless et compatible avec Kubernetes, ce qui en fait un excellent choix pour les environnements où la sécurité est primordiale.
+
+---
+
+# Bonus : Support des images et des registries
+
+## Support des images et des registries
+
+- **Podman** : Offre des commandes supplémentaires pour signer et gérer les images.
+
+<br>
+
+```bash
+  podman image sign
+  podman image trust
+```
+
+<br>
+
+- **Docker** : Pas d'équivalents pour ces commandes.
+
+---
+
+# Bonus : extensions des conteneurs avec CRIU (Checkpoint/Restore)
+
+- **Podman** supporte nativement **CRIU** pour la sauvegarde/restauration de l'état d'un conteneur.
+  Cela permet de migrer des conteneurs en cours d'exécution d'un hôte à un autre.
+
+  **Exemple : Checkpoint d'un conteneur**
+
+  ```bash
+  podman container checkpoint --export=mycontainer.tar mycontainer
+  ```
+
+---
+
+# Pourquoi Utiliser Git avec Podman ?
+
+<br>
+
+- **Versioning** : Git permet de versionner et de suivre les modifications dans les fichiers de configuration ou Dockerfiles.
+- **Collaboration** : Partager des images et configurations via des dépôts Git facilite la collaboration entre les équipes.
+- **Automatisation** : Git peut être intégré dans des pipelines CI/CD pour déclencher automatiquement des actions sur Podman (builds, déploiements).
+
+---
+
+# Étapes pour Gérer les Images avec Git
+
+1. **Stocker les Dockerfiles dans un dépôt Git**
+   - Vous pouvez maintenir vos Dockerfiles et fichiers de configuration dans un dépôt Git pour un suivi des modifications et des révisions.
+
+2. **Cloner le Dépôt et Builder l'Image**
+   - Clonez votre dépôt Git localement :
+     ```bash
+     git clone https://github.com/votre-repo.git
+     cd votre-repo
+     ```
+   - Utilisez Podman pour builder l'image à partir du Dockerfile :
+     ```bash
+     podman build -t mon-image .
+     ```
+
+---
+
+3. **Push de l’Image dans un Registre**
+   - Une fois l’image construite, vous pouvez la pousser dans un registre Docker ou OCI pour la partager :
+     ```bash
+     podman push mon-image docker://mon-registre/mon-image:latest
+     ```
+
+---
+
+# Avantages
+- **Suivi** : Un historique complet des modifications.
+- **Déploiement rapide** : Mise à jour et déploiement automatisés via Git.
+- **Sécurité** : Des versions d'images bien documentées et traçables.
+
+---
+
+Cela permet d'introduire les concepts clés de l'utilisation de Git avec Podman, avec un focus sur les avantages pratiques et les étapes techniques.
+
+---
+
+# Intégration avec Kubernetes
+
+- Docker était historiquement utilisé comme runtime dans Kubernetes, mais est maintenant remplacé par **containerd**.
+- **Podman** a une compatibilité directe avec Kubernetes en exportant des pods au format YAML.
+
+  **Exemple : Exporter un pod vers Kubernetes avec Podman**
+
+  ```bash
+  podman generate kube mypod > mypod.yaml
+  kubectl apply -f mypod.yaml
+  ```
+
+---
+
+> Je vous parle rapidement de kubernetes car c'est ce qui est utilisé dans la plupart des entreprises.
+
+# Qu'est ce que Kubernetes ?
+
+Kubernetes est un système d'orchestration de conteneurs open-source.
+
+C'est un système de gestion de conteneurs qui permet de gérer des clusters de conteneurs.
+
+Même si sur la doc officiel il disent que ce n'est pas un orchestrateur mais un systeme de gestion de conteneurs.
+
+# Comment ça marche ?
+
+Kubernetes utilise un système de master et de workers.
+
+Le master est en général un serveur qui gère les workers.
+
+Les workers sont les serveurs qui exécutent les conteneurs.
+
+Pour l'utiliser il faut donc un cluster de serveurs et être sur linux.
+
+[Kubernetes sur Windows](https://learn.microsoft.com/fr-fr/virtualization/windowscontainers/kubernetes/getting-started-kubernetes-windows)
+
+---
+
+# Exemple de manifeste Kubernetes
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: my-image:latest
+```
+
+Explication :
+
+- `apiVersion: v1` : Version de l'API Kubernetes.
+- `kind: Pod` : Type de ressource à créer.
+- `metadata: name: my-pod` : Metadonnées du pod.
+- `spec: containers: - name: my-container image: my-image:latest` : Spécification du conteneur à démarrer.
+
+<small class="!-mt-4 text-red-500">
+
+**Attention nous n'allons pas rentrer dans le détail de kubernetes, juste pour vous donner un exemple de manifeste.**
+
+</small>
 
 ---
 class: 'grid text-center align-self-center justify-self-center'
