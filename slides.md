@@ -100,11 +100,10 @@ routeAlias: 'sommaire'
 <Link to="le-cli-docker">🔄 Le CLI Docker</Link>
 <Link to="images-podman">🔍 Les images Podman</Link>
 <Link to="creer-son-premier-conteneur">🚀 Créer son premier conteneur</Link>
-<Link to="autres-commandes-docker">🔄 Autres Commandes Docker</Link>
+<Link to="le-cli-docker">🔄 Autres Commandes Docker</Link>
 <Link to="commandes-docker-avancees">🔍 Commandes Docker Avancées</Link>
 <Link to="pods-et-reseau">🔍 Les Pods et le réseau</Link>
 <Link to="volumes-persistants">🔍 Les volumes persistants</Link>
-<Link to="encore-des-commandes-docker-avancees">🔍 Encore des Commandes Docker Avancées</Link>
 <Link to="le-rootless">🔍 Le rootless</Link>
 <Link to="kubernetes">🎉 Bonus : Introduction à Kubernetes</Link>
 </div>
@@ -511,7 +510,7 @@ Il est compatible avec les commandes Docker, ce qui facilite la transition pour 
 Podman offre également des fonctionnalités supplémentaires telles que la gestion des pods et une meilleure sécurité grâce à son architecture sans démon (mais nous en reparlerons plus tard dans cette formation).
 
 ---
-routeAlias: 'differences-entre-docker-et-podman'
+routeAlias: 'quel-est-la-différence-entre-docker-et-podman'
 ---
 
 <a name="quel-est-la-différence-entre-docker-et-podman" id="quel-est-la-différence-entre-docker-et-podman"></a>
@@ -593,6 +592,10 @@ Nous allons voir les commandes principales de Docker.
 </small>
 
 ---
+routeAlias: "commandes-docker-avancees"
+---
+
+<a name="commandes-docker-avancees" id="commandes-docker-avancees"></a>
 
 # Commandes avancées
 
@@ -631,6 +634,10 @@ Depuis la version 2.0 de docker , vous n'êtes plus obligé d'écrire docker-com
 ```bash
 docker compose up
 ```
+
+<br>
+
+> Ne vous inquiétez pas, nous verrons plus tard comment utiliser ces commandes.
 
 <br>
 
@@ -692,9 +699,18 @@ Mais bien sur je peux aussi créer mes images.
 docker search <image>
 ```
 
+Attention petite précision : les images sont lourdes, il faut donc les utiliser avec parcimonie.
+
+En général, on utilise des images de base légères comme `alpine`, `ubuntu:slim`, `debian:slim`, etc...
+
+**Je pense que vous avez compris le truc, il faut essayer d'utiliser des images de base légères.**
+
 ---
 layout: new-section
+routeAlias: "creer-son-premier-conteneur"
 ---
+
+<a name="creer-son-premier-conteneur" id="creer-son-premier-conteneur"></a>
 
 <!-- ps podman -->
 
@@ -720,11 +736,19 @@ podman run -d --name my-container -p 8080:80 nginx
 
 ---
 
-# Petit exercice :
+# Tout petit exercice :
 
 Créer un conteneur qui tourne une image nginx ou de votre choix et qui est accessible sur votre host.
 
 Vous avez déjà tout ce qu'il faut dans la slide précédente.
+
+Vous pouvez en suite utiliser les commande `podman ps` et `podman logs <id>` pour vérifier que tout fonctionne et que le conteneur tourne.
+
+Vous pouvez vous amuser à créer plusieurs conteneurs à partir de la même image et de les rendre accessibles depuis votre host.
+
+Vous pouvez aussi essayer d'accéder à l'application depuis votre host.
+
+Et vous pouvez tout stopper avec la commande `podman stop <id>` et le supprimer avec la commande `podman rm <id>`.
 
 ---
 layout: new-section
@@ -744,7 +768,7 @@ Un podmanFile pareil, mais pour podman.
 
 **L'idée, est de pouvoir créer des images de conteneurs de manière custom.** (car je le rappel, on peut aussi utiliser des images officielle comme ubuntu, debian, etc..., mais forcement, elle ne seront pas personnalisée à mon application mais juste une image de base)
 
-Par exemple, si j'ai besoin d'une image avec une version de node spécifique, je peux créer une image avec la version de node et toutes les dépendances dont j'ai besoin.
+Par exemple, si j'ai besoin d'une image avec une version de node spécifique et quelques dépendances spécifiques à mon application, je peux créer une image avec la version de node et toutes les dépendances et mon application dont j'ai besoin.
 
 ---
 
@@ -760,11 +784,39 @@ Explications :
 - `-t my-image` : Nom de l'image.
 - `.` : Répertoire où se trouve le Dockerfile, ici à la racine du projet.
 
+Par contre si vous utilisez un podman file ou un dockerfile avec un nom autre que `Dockerfile`
+<br>
+Il faut faire :
+
+```bash
+podman build -t my-image -f Dockerfile.dev .
+```
+
+Dockerfile.dev est le nom du Dockerfile que j'ai utilisé comme exemple.
+
 ---
 
 # Petit exercice :
 
 Créer un Dockerfile/PodmanFile qui permet de créer une image avec une version de node spécifique et qui est accessible sur votre host.
+
+Vous devez créer une petite application node, nextjs, react, etc ce que vous voulez, mais ce qui marche avec nodejs haha 🫣
+
+Exemple :
+
+```dockerfile
+FROM node:18
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
 
 ---
 
@@ -780,6 +832,8 @@ MAINTAINER "someone@example.com"
 # Exécution d'une seule commande apt-get sans update, peut conduire à des paquets obsolètes ou vulnérables
 RUN apt-get install -y curl
 ```
+
+<br>
 
 > ps : suite sur la deuxieme slide
 ---
@@ -855,6 +909,8 @@ RUN apk update && apk add --no-cache curl
 # Cela garantit que les dépendances sont réutilisées si le code source change
 WORKDIR /app
 ```
+
+<br>
 
 > ps : suite sur la deuxieme slide
 
@@ -1549,7 +1605,11 @@ Nous venons d'associer un volume persistant à notre conteneur MySQL.
 
 ---
 layout: default
+routeAlias: "le-rootless"
 ---
+
+<a name="le-rootless" id="le-rootless"></a>
+
 # Le rootless
 
 Le rootless est une fonctionnalité de Podman qui permet d'exécuter des conteneurs en tant qu'utilisateur non root par défaut.
@@ -3197,6 +3257,10 @@ volumes:
 Cela permet d'introduire les concepts clés de l'utilisation de Git avec Podman, avec un focus sur les avantages pratiques et les étapes techniques.
 
 ---
+routeAlias: "kubernetes"
+---
+
+<a name="kubernetes" id="kubernetes"></a>
 
 # Intégration avec Kubernetes
 
@@ -3268,4 +3332,4 @@ class: 'grid text-center align-self-center justify-self-center'
 
 # Merci à vous pour votre attention.
 
-[Documentations](https://andromed.fr) / [GitHub Repo](https://github.com/jimmylansrq/podman-formation)
+[Documentations](https://podman.io/)
