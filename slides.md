@@ -124,6 +124,9 @@ Le CI/CD est un processus qui permet de créer, tester et déployer des applicat
 Une métaphore pour comprendre :
 
 - **CI** : Imaginez que vous êtes un chef cuisinier. Vous avez une recette pour faire un gâteau. Le CI (Intégration Continue) consiste à vérifier chaque ingrédient et chaque étape de la recette au fur et à mesure que vous les ajoutez, pour s'assurer que tout est correct et que le gâteau sera réussi.
+
+<br>
+
 - **CD** : Une fois que tous les ingrédients sont vérifiés et que la recette est prête, le CD (Déploiement Continu) consiste à mettre le gâteau au four et à le cuire automatiquement sans intervention supplémentaire, garantissant ainsi que le gâteau sera prêt à être servi dès qu'il est cuit.
 
 ---
@@ -533,9 +536,26 @@ routeAlias: 'differences-entre-docker-et-podman'
 
 ---
 
-# Explication et définition d'un démon
+## Explication et définition d'un démon
 
-Un démon est un programme qui s'exécute en arrière-plan et qui gère les ressources du système.
+<br>
+
+> Un démon est un programme qui s'exécute en arrière-plan et qui gère les ressources du système.
+
+<br>
+
+## Explication d'un pod
+
+> Un pod est un groupe de conteneurs qui partagent le même espace de réseau et qui sont déployés ensemble.
+
+<br>
+
+## Qu'est ce que root / rootless ?
+
+<br>
+
+> - **Root** : Un utilisateur avec des privilèges root peut faire tout ce que bon lui semble dans le système.
+> - **Rootless** : Un utilisateur non root ne peut pas faire des choses comme installer des paquets, modifier des fichiers systèmes, etc.
 
 ---
 routeAlias: 'le-cli-docker'
@@ -643,7 +663,7 @@ docker pull ubuntu:latest
 
 <small>
 
-Cela va nous donner une image de Ubuntu.
+Cela va nous donner une image de la distribution linux Ubuntu.
 
 Je vais donc **À PARTIR DE CETTE IMAGE** créer un **CONTENEUR**.
 
@@ -761,7 +781,12 @@ MAINTAINER "someone@example.com"
 
 # Exécution d'une seule commande apt-get sans update, peut conduire à des paquets obsolètes ou vulnérables
 RUN apt-get install -y curl
+```
 
+> ps : suite sur la deuxieme slide
+---
+
+```dockerfile
 # Le code de l'application est copié avant d'installer les dépendances, ce qui casse la mise en cache Docker
 COPY . /app
 
@@ -795,6 +820,12 @@ CMD ["echo", "Hello World"]
 
 4. **COPY . /app** : Le code est copié avant d'installer les dépendances, ce qui casse la mise en cache de Docker. Pour une meilleure optimisation, les dépendances doivent être installées avant de copier l'ensemble du code source, surtout si elles sont rarement modifiées.
 
+</small>
+
+---
+
+<small>
+
 5. **RUN cd /app && \ mkdir temp && \ touch temp/file.txt** : Il y a plusieurs commandes dans une seule instruction `RUN`, ce qui rend le débogage difficile. Si une seule partie échoue, il sera compliqué d’identifier laquelle. En plus, la création d'un fichier temporaire dans une étape de build n'a aucun sens si l'application ne l'utilise pas directement.
 
 6. **USER root** : Utiliser l'utilisateur root pour exécuter des applications n'est pas recommandé pour des raisons de sécurité. Il vaut mieux créer un utilisateur non privilégié et l'utiliser pour exécuter l'application.
@@ -825,7 +856,13 @@ RUN apk update && apk add --no-cache curl
 # Installation des dépendances avant de copier le code source pour optimiser le cache Docker
 # Cela garantit que les dépendances sont réutilisées si le code source change
 WORKDIR /app
+```
 
+> ps : suite sur la deuxieme slide
+
+---
+
+```dockerfile
 # Copie du fichier de dépendances uniquement (si applicable, par ex: package.json pour Node.js, requirements.txt pour Python)
 # COPY package.json /app  <-- Exemple de bonne pratique pour Node.js ou Python
 
@@ -860,6 +897,12 @@ CMD ["./start-app.sh"]
 3. **RUN apk update && apk add --no-cache curl** : L'utilisation de `apk update` permet de s'assurer que les paquets sont à jour avant l'installation. L'option `--no-cache` évite de stocker des fichiers temporaires inutiles, ce qui optimise l'image en la rendant plus petite.
 
 4. **WORKDIR /app** : `WORKDIR` définit le répertoire de travail où toutes les actions suivantes auront lieu, au lieu d'utiliser des commandes `cd`. C'est plus propre et plus lisible.
+
+</small>
+
+---
+
+<small>
 
 5. **COPY package.json /app** et **RUN npm install / pip install** : Installer les dépendances avant de copier tout le code source permet de tirer parti du cache Docker. Si le code source change fréquemment mais que les dépendances restent les mêmes, cette étape ne sera pas réexécutée à chaque build.
 
@@ -1007,62 +1050,70 @@ CMD ["java", "-jar", "my-application.jar"]
 
 # DISCLAIMER
 
-Les Dockerfile ci-dessus sont des exemples et ne sont pas des Dockerfile à 100% complet je m'explique avec un dockerfile que j'ai personnellement sur un projet nextJS.
+<small>
+Les Dockerfiles ci-dessus sont des exemples et ne sont pas entièrement complets , je précise cela en me basant sur un Dockerfile que j'utilise personnellement dans un projet Next.js.
+
+</small>
 
 <small>
 
 ```dockerfile
+# Étape de dépendances
 FROM node:22-alpine AS deps
-RUN apk add --no-cache libc6-compat python3 make g++ cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev openssl3
+RUN apk add --no-cache \
+  libc6-compat \
+  python3 \
+  make \
+  g++ \
+  cairo-dev \
+  pango-dev \
+  jpeg-dev \
+  giflib-dev \
+  librsvg-dev \
+  openssl3
+
 WORKDIR /app
-COPY package.json  ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
-COPY server.js ./
-RUN cat tsconfig.json && sleep 10
-# Installer Canvas avant les autres dépendances
-RUN ls -l
-RUN npm install canvas --build-from-source
-RUN npm install --frozen-lockfile
-# Rebuild the source code only when needed
+COPY package.json package-lock.json ./
+RUN npm install canvas --build-from-source && npm install --frozen-lockfile
+```
+
+</small>
+
+---
+
+<small>
+
+```dockerfile
+# Étape de construction
 FROM node:22-alpine AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules /app/node_modules
-COPY --from=deps /app/server.js /app/server.js
-RUN cat /app/node_modules/typescript/package.json | grep version && sleep 10
-COPY --from=deps /app/tsconfig.json ./tsconfig.json
-COPY .env ./.env
-RUN ls -l
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY tsconfig.json server.js .env ./
 COPY . .
 
 USER root
+RUN npx prisma generate && npm run build
 
-RUN npx prisma generate
-RUN npm run build
-
+# Étape de production
 FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 RUN npm i -g next
 
-# COPY --from=builder /app/next.config.js ./ 
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/.env ./.env
 COPY --from=builder /app/server.js ./server.js
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/ ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-RUN ls -l && sleep 10
+
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT 3000
 
 CMD ["node", "server.js"]
@@ -1143,7 +1194,7 @@ Podman compose est un outil qui permet de déployer des conteneurs avec des fich
 
 En general : on utilise le podman-compose pour des environnements de dev.
 
-**Exemple avec un projet next qui veut utiliser postgres comme base de données, pourquoi l'installer en local et galérer donc si on veux changer de système d'exploitation ?**
+**Exemple avec un projet next qui veut utiliser postgreSQL comme base de données, pourquoi l'installer en local et galérer à devoir recommencer ces étapes si on voudrais changer de serveur ou pour un autre developpeur sur le projet qui devrais donc refaire les memes étapes en local sur sa machine ?**
 
 > Parce que oui vous l'avez compris, mais on installe pas pareil postgresql sur windows que sur linux et que sur macOS, donc si un développeur arrive sur le projet bonjour la galère.
 
@@ -1287,9 +1338,13 @@ services:
 
 3. **`ports: - "80:"`** : Ici, la syntaxe de port est incorrecte. Il manque le port du conteneur, ce qui signifie que la redirection du port ne fonctionnera pas. Il doit être spécifié correctement comme `"80:80"` (port hôte:port conteneur).
 
+---
+
 4. **`volumes: - "/tmp"`** : Le volume monte un répertoire temporaire de l'hôte sans préciser de répertoire cible dans le conteneur, ce qui n'a pas de sens ici. En plus, il est dangereux d'utiliser des répertoires comme `/tmp` sans contrôle sur les permissions. Il faut toujours spécifier le chemin hôte/conteneur de manière explicite pour plus de clarté.
 
 5. **`depends_on` manquant de configuration** : La section `depends_on` est utilisée pour gérer l'ordre de démarrage des conteneurs. Cependant, cela n'assure pas que le service dépendant est réellement prêt à l'emploi. Il faut utiliser des vérifications de santé (`healthcheck`) pour garantir que le service dépendant est opérationnel avant de démarrer le suivant.
+
+---
 
 6. **`image: postgres:latest`** : Utiliser `latest` est risqué pour une base de données comme Postgres. Il est préférable de fixer une version spécifique (par exemple, `postgres:13.3`) pour éviter des migrations ou des changements inattendus dans la base de données lors d'une mise à jour.
 
@@ -1371,6 +1426,8 @@ volumes:
 3. **`ports: "8080:80"`** : Correctement configuré pour rediriger le port 8080 de l'hôte vers le port 80 du conteneur.
 
 4. **Volumes correctement définis** : Les volumes sont montés avec des chemins explicites entre l'hôte et le conteneur, garantissant que les données et fichiers sources sont correctement synchronisés.
+
+---
 
 5. **`networks`** : Création d'un réseau personnalisé pour garantir que les services peuvent communiquer correctement tout en isolant le trafic du réseau hôte.
 
@@ -2262,7 +2319,7 @@ Enfin `docker buildx build --platform linux/amd64,linux/arm64 -t jimmylansrq/my-
 
 # Comment l'installer si on la pas ?
 
-### Debian/Ubuntu
+### Distributions Debian/Ubuntu
 
 `sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`
 
