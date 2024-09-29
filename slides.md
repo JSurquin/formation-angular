@@ -2202,22 +2202,6 @@ Attention cette commande va activer le rootless pour tous les utilisateurs du sy
 layout: new-section
 ---
 
-# PODMAN COMPOSE
-
-<img class="mx-auto" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExa3oyYTZlYTd2d2xybnZtdHl3ZTM5cjBpdDc3MXR1ZjI5YnY2NHQ5MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orieXnl3Ai4w2j3yM/giphy.webp" alt="penguin-work" width="500"/>
-
----
-layout: new-section
----
-
-# PODMAN FILE / DOCKERFILE
-
-<img class="mx-auto" src="https://miro.medium.com/v2/resize:fit:1000/1*E8IgOSkMTpBRs0w0-Zsx2g.gif" alt="penguin-work" width="500"/>
-
----
-layout: new-section
----
-
 # DOCKER BUILD X
 
 <img class="mx-auto" src="https://miro.medium.com/v2/resize:fit:611/1*GuufCwlvJuRd4uceQ2vQnQ.png" alt="penguin-work" width="500"/>
