@@ -47,7 +47,6 @@ presenterImage: 'https://andromed.fr/assets/fondator-205054868b0195afbf807299ba4
 Fondateur <a  href="https://www.andromed.fr/"><logos-storyblok-icon  mr-1/>Andromed</a>
 
 - Lille, France 🇫🇷
-- J'écris de temps en temps pour <a href="https://dev.to/jimmylansrq"> dev.to/@jimmylansrq </a>
 - Création de contenu sur <a href="https://www.youtube.com/channel/jimmylansrq"> <logos-youtube-icon mr-1 /> jimmylansrq </a>
 - Blog & Portfolio <a href="https://jimmylan.fr"> jimmylan.fr </a>
 
