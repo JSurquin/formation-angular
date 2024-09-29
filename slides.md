@@ -157,19 +157,17 @@ Que veux dire pipeline ?
 
 Donc il est important de comprendre le concept de CI/CD avec ces outils.
 
-Imaginons que nous développons une application web.
-
-Nous voulons déployer notre application.
+Imaginons que nous développons une application web, nous voudrions déployer notre application.
 
 Nous pourrions utiliser un pipeline CI/CD pour déployer notre application.
 
-À chaque push sur le dépôt git, nous voulons déployer notre application.
+À chaque push sur le dépôt git, la pipeline se déclenche et déploie notre application.
 
-<br>
+Mais elle déploie notre application dans un container.
 
-Nous pourrions utiliser un pipeline CI/CD pour déployer notre application.
+Dans un environnement **ISOLÉ ET PORTABLE**, c'est ça que nous voulons !.
 
-Donc lancer le docker-compose ou le dockerfile au besoin. (mais nous y reviendrons)
+Si on change d'environnement de travail, nous n'aurons pas besoin de refaire les mêmes étapes, via Podman ou Docker.
 
 </small>
 
@@ -1439,14 +1437,6 @@ Avec ces corrections, le fichier `podman-compose.yml` est beaucoup plus robuste,
 
 ---
 layout: new-section
----
-
-# Sécurité
-
-<img class="mt-20 mx-auto" src="https://kinsta.com/fr/wp-content/uploads/sites/4/2023/09/docker-security.jpg" alt="cli podman" width="300"/>
-
----
-layout: new-section
 routeAlias: 'volumes-persistants'
 ---
 
@@ -2207,75 +2197,6 @@ Attention cette commande va activer le rootless pour tous les utilisateurs du sy
 [Podman vs Docker](https://www.redhat.com/fr/topics/containers/docker-vs-podman)
 
 [Podman et Docker, quelle différence ?](https://www.ibm.com/docs/fr/power8?topic=processors-podman-docker)
-
----
-layout: default
----
-
-````md magic-move
-```js
-console.log(`Step ${1}`);
-```
-
-```js
-console.log(`Step ${1 + 1}`);
-```
-
-```ts
-console.log(`Step ${3}` as string);
-```
-````
-
-````md magic-move {at:4, lines: true}
-```js {*|1|2-5}
-let count = 1;
-function add() {
-  count++;
-}
-```
-
-Non-code blocks in between as ignored, you can put some comments.
-
-```js {*}{lines: false}
-// le remplacement
-let count = 1;
-const add = () => (count += 1);
-// comme nous le voyons ici nous avons remplacé le code par un commentaire
-```
-
-```js {*|3-4}
-let x = 10;
-let y = 20;
-function multiply() {
-  return x * y;
-}
-```
-````
-
----
-layout: new-section
----
-
-# Container is the new black
-
-<div class="grid grid-cols-2 gap-4 z-10">
-  <div class="bg-blue-500 p-4 rounded-md">
-    <h2 class="text-lg font-semibold text-white">Container 1</h2>
-    <p class="text-sm text-white">This is the first container.</p>
-  </div>
-  <div class="bg-green-500 p-4 rounded-md">
-    <h2 class="text-lg font-semibold text-white">Container 2</h2>
-    <p class="text-sm text-white">This is the second container.</p>
-  </div>
-</div>
-
----
-layout: new-section
----
-
-# LE MODE ROOTLESS
-
-<img class="mx-auto" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWxxbXNlNGN0Zno3Z3B4bzBwMGNjc29iY2M5dnlkZGQ1dTk5Z2c5NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QRav1ZIImOKC7UAt6t/giphy.webp" alt="penguin-work" width="300"/>
 
 ---
 layout: new-section
