@@ -319,7 +319,7 @@ La virtualisation est un processus qui permet de créer une image d'un système 
 
 # Définition de conteneur
 
-Un conteneur est un environnement logiciel qui permet de créer un conteneur à partir d'un système d'exploitation ou d'un environnement logiciel.
+Un conteneur est un environnement isolé qui permet de déployer des applications à partir d’un système d’exploitation ou d’un environnement logiciel.
 
 # Définition de conteneurisation
 
@@ -331,7 +331,7 @@ La conteneurisation est un processus qui permet de créer un conteneur à partir
 
 # Définition de machine virtuelle
 
-Une machine virtuelle est un environnement logiciel qui permet de créer une machine virtuelle à partir d'un système d'exploitation ou d'un environnement logiciel.
+Une machine virtuelle est un environnement logiciel qui permet d’exécuter des systèmes d’exploitation ou des applications de manière isolée, en simulant un matériel informatique.
 
 ---
 routeAlias: 'virtualisation-vs-conteneurisation'
@@ -530,6 +530,12 @@ routeAlias: 'differences-entre-docker-et-podman'
 | **Images**           | Nécessite un démon d'arrière-plan pour créer des images                | Permet de créer des images de conteneurs sans nécessiter de démon d'arrière-plan |
 
 </div>
+
+---
+
+# Explication et définition d'un démon
+
+Un démon est un programme qui s'exécute en arrière-plan et qui gère les ressources du système.
 
 ---
 routeAlias: 'le-cli-docker'
