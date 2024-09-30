@@ -1485,6 +1485,75 @@ Pourquoi ? : l'utilisateur root est trop puissant.
 Donc la j'ai créer un utilisateur non root pour exécuter l'application qui a uniquement les droits nécessaires.
 
 ---
+
+# Réseaux Podman
+
+## Introduction aux réseaux Podman
+
+Les réseaux dans Podman permettent aux conteneurs de communiquer entre eux et avec le monde extérieur. Ils jouent un rôle crucial dans l'isolation, la sécurité et la performance des conteneurs.
+
+---
+
+## Types de réseaux dans Podman
+
+1. **Bridge Network** : Le réseau par défaut qui permet aux conteneurs de communiquer entre eux sur le même hôte.
+   Exemple : Les conteneurs sur un réseau "bridge" peuvent se connecter entre eux en utilisant leurs adresses IP internes, mais ne sont pas directement accessibles depuis l'extérieur.
+   Exemple : Aucun besoin de créer un réseau personnalisé ici, car le mode "bridge" est par défaut.
+   Métaphore : Un pont qui relie tous les bateaux dans un port.
+
+2. **Host Network** : Utilise directement le réseau de l'hôte, ce qui peut améliorer les performances mais réduit l'isolation, car les conteneurs partagent la pile réseau avec l’hôte.
+   Exemple : Lancer un conteneur avec le réseau de l'hôte :
+   ```bash
+   podman run --network host nginx
+   ```
+   Métaphore : Un bateau qui utilise directement les infrastructures du port sans passer par des canaux intermédiaires.
+
+---
+
+3. **None Network** : Désactive tout accès réseau pour le conteneur, utile pour des tâches spécifiques où l'isolation est essentielle, par exemple des calculs locaux sans interaction réseau.
+   Exemple : Lancer un conteneur sans aucun réseau :
+   ```bash
+   podman run --network none busybox
+   ```
+   Métaphore : Un bateau ancré au milieu de l'océan sans aucun contact avec d'autres bateaux ou ports.
+
+4. **Macvlan Network** : Attribue une adresse MAC unique à chaque conteneur, permettant au conteneur d’être sur le même réseau physique que l’hôte tout en étant isolé du réseau de l’hôte.
+   Exemple : Créer un réseau macvlan et attacher un conteneur à ce réseau :
+   ```bash
+   podman network create -d macvlan -o parent=eth0 my-macvlan-network
+   podman run --network my-macvlan-network nginx
+   ```
+   Métaphore : Un bateau qui a une adresse unique (un bateau spécifique avec des coordonnées) et qui peut s'amarrer à différents ports physiques sans problème.
+
+---
+
+### Exemple de configuration de réseau dans Podman
+
+1. **Bridge Network** (réseau par défaut pour les conteneurs) :
+   Vous n'avez pas besoin de créer un réseau spécifique. Il suffit de lancer un conteneur normalement :
+   ```bash
+   podman run -d --name my-container nginx
+   ```
+
+2. **Host Network** (partage du réseau de l’hôte, en clair : le conteneur et l'host communiquent entre eux, on peut aussi le faire via l'association de ports) :
+   ```bash
+   podman run --network host nginx
+   ```
+
+---
+
+3. **None Network** (aucun accès réseau pour le conteneur) :
+   ```bash
+   podman run --network none busybox
+   ```
+
+4. **Macvlan Network** (réseau intégré au réseau physique du conteneur, en clair : le conteneur et l'host communiquent entre eux) :
+   ```bash
+   podman network create -d macvlan -o parent=eth0 my-macvlan-network
+   podman run --network my-macvlan-network nginx
+   ```
+
+---
 layout: new-section
 ---
 
@@ -1511,7 +1580,6 @@ Podman compose est un outil qui permet de déployer des conteneurs avec des fich
 > Deuxieme chose : Le YAML est un langage de configuration très simple à prendre en main mais qui demande une indentation parfaite (comme par exemple du python), si vous ne respectez pas l'indentation, vous aurez une erreur.
 
 ---
-
 
 **Exemple avec un projet next qui veut utiliser postgreSQL comme base de données, pourquoi l'installer en local et galérer à devoir recommencer ces étapes si on voudrais changer de serveur ou pour un autre developpeur sur le projet qui devrais donc refaire les memes étapes en local sur sa machine ?**
 
@@ -1555,6 +1623,35 @@ graph LR
 ```
 
 </div>
+
+---
+
+Parlons des réseaux maintenant.
+
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx:latest
+    networks:
+      - frontend_net
+
+  backend:
+    image: php:7.4-apache
+    networks:
+      - frontend_net
+      - backend_net
+
+  db:
+    image: mysql:latest
+    networks:
+      - backend_net
+
+networks:
+  frontend_net:
+  backend_net:
+```
 
 ---
 
@@ -1853,44 +1950,6 @@ Nous venons d'associer un volume persistant à notre conteneur MySQL.
 3. **Indications** :
 	- Trouvez comment utiliser un volume pour monter un dossier de l’hôte dans le conteneur.
 
-
----
-layout: default
-routeAlias: "le-rootless"
----
-
-<a name="le-rootless" id="le-rootless"></a>
-
-# Le rootless
-
-Le rootless est une fonctionnalité de Podman qui permet d'exécuter des conteneurs en tant qu'utilisateur non root par défaut.
-
-Cela signifie que vous n'avez pas besoin d'être root pour exécuter des conteneurs.
-
-Pour activer le rootless, vous pouvez utiliser la commande suivante :
-
-```bash
-podman machine init --rootless
-````
-
-Cela va nous créer une machine virtuelle de podman dans laquelle nous allons pouvoir exécuter nos conteneurs.
-
-(Donc comme vous le voyez, la c'est un mix entre virtualisation et conteneurisation.)
-
----
-
-Pour vérifier si le rootless est activé, vous pouvez utiliser la commande suivante :
-
-```bash
-podman info --debug | grep -i rootless
-```
-
-<br>
-
-> Sachez que docker ne supporte pas le rootless blablabla... c'est totalement faux.
-
-Le lien d'une doc pour docker : [Docker Rootless](https://dev.to/izackv/running-a-docker-container-with-a-custom-non-root-user-syncing-host-and-container-permissions-26mb)
-
 ---
 
 # Quelques liens
@@ -1904,75 +1963,6 @@ Le lien d'une doc pour docker : [Docker Rootless](https://dev.to/izackv/running-
 [Podman vs Docker](https://www.redhat.com/fr/topics/containers/docker-vs-podman)
 
 [Podman et Docker, quelle différence ?](https://www.ibm.com/docs/fr/power8?topic=processors-podman-docker)
-
----
-
-# Réseaux Podman
-
-## Introduction aux réseaux Podman
-
-Les réseaux dans Podman permettent aux conteneurs de communiquer entre eux et avec le monde extérieur. Ils jouent un rôle crucial dans l'isolation, la sécurité et la performance des conteneurs.
-
----
-
-## Types de réseaux dans Podman
-
-1. **Bridge Network** : Le réseau par défaut qui permet aux conteneurs de communiquer entre eux sur le même hôte.
-   Exemple : Les conteneurs sur un réseau "bridge" peuvent se connecter entre eux en utilisant leurs adresses IP internes, mais ne sont pas directement accessibles depuis l'extérieur.
-   Exemple : Aucun besoin de créer un réseau personnalisé ici, car le mode "bridge" est par défaut.
-   Métaphore : Un pont qui relie tous les bateaux dans un port.
-
-2. **Host Network** : Utilise directement le réseau de l'hôte, ce qui peut améliorer les performances mais réduit l'isolation, car les conteneurs partagent la pile réseau avec l’hôte.
-   Exemple : Lancer un conteneur avec le réseau de l'hôte :
-   ```bash
-   podman run --network host nginx
-   ```
-   Métaphore : Un bateau qui utilise directement les infrastructures du port sans passer par des canaux intermédiaires.
-
----
-
-3. **None Network** : Désactive tout accès réseau pour le conteneur, utile pour des tâches spécifiques où l'isolation est essentielle, par exemple des calculs locaux sans interaction réseau.
-   Exemple : Lancer un conteneur sans aucun réseau :
-   ```bash
-   podman run --network none busybox
-   ```
-   Métaphore : Un bateau ancré au milieu de l'océan sans aucun contact avec d'autres bateaux ou ports.
-
-4. **Macvlan Network** : Attribue une adresse MAC unique à chaque conteneur, permettant au conteneur d’être sur le même réseau physique que l’hôte tout en étant isolé du réseau de l’hôte.
-   Exemple : Créer un réseau macvlan et attacher un conteneur à ce réseau :
-   ```bash
-   podman network create -d macvlan -o parent=eth0 my-macvlan-network
-   podman run --network my-macvlan-network nginx
-   ```
-   Métaphore : Un bateau qui a une adresse unique (un bateau spécifique avec des coordonnées) et qui peut s'amarrer à différents ports physiques sans problème.
-
----
-
-### Exemple de configuration de réseau dans Podman
-
-1. **Bridge Network** (réseau par défaut pour les conteneurs) :
-   Vous n'avez pas besoin de créer un réseau spécifique. Il suffit de lancer un conteneur normalement :
-   ```bash
-   podman run -d --name my-container nginx
-   ```
-
-2. **Host Network** (partage du réseau de l’hôte, en clair : le conteneur et l'host communiquent entre eux, on peut aussi le faire via l'association de ports) :
-   ```bash
-   podman run --network host nginx
-   ```
-
----
-
-3. **None Network** (aucun accès réseau pour le conteneur) :
-   ```bash
-   podman run --network none busybox
-   ```
-
-4. **Macvlan Network** (réseau intégré au réseau physique du conteneur, en clair : le conteneur et l'host communiquent entre eux) :
-   ```bash
-   podman network create -d macvlan -o parent=eth0 my-macvlan-network
-   podman run --network my-macvlan-network nginx
-   ```
 
 ---
 layout: new-section
@@ -2092,19 +2082,6 @@ podman-compose up
 
 ---
 
-<!-- pas à la bonne place , plutot dans la partie sur les volumes de podman -->
-
-# Exécution rootless vs rootfull
-
-- **Podman** : Permet d'exécuter des conteneurs en mode rootfull ou rootless selon l'utilisateur.
-  ```bash
-  podman --rootless run
-  podman --rootfull run
-  ```
-- **Docker** : Ne distingue pas rootless/rootfull sans configuration.
-
----
-
 # Checkpoint/Restore
 
 - **Podman** : Peut sauvegarder et restaurer l'état d'un conteneur.
@@ -2113,31 +2090,6 @@ podman-compose up
   podman container restore
   ```
 - **Docker** : Pas de fonctionnalité native pour cela.
-
----
-
-# Conteneurs éphémères vs persistants
-
-- Les conteneurs éphémères ne conservent pas leur état entre les redémarrages.
-- Les conteneurs persistants utilisent des volumes ou des systèmes de fichiers montés pour conserver des données.
-
-  **Exemple : conteneur éphémère**
-
-  ```bash
-  docker run --rm nginx
-  podman run --rm nginx
-  ```
-
-  Le conteneur se supprime automatiquement après arrêt.
-
-  **Exemple : conteneur persistant**
-
-  ```bash
-  docker run -v /mon/volume:/data --name conteneur_persistant nginx
-  podman run -v /mon/volume:/data --name conteneur_persistant nginx
-  ```
-
-  Les données dans le répertoire `/data` sont conservées même après l'arrêt du conteneur.
 
 ---
 
@@ -2150,26 +2102,6 @@ podman-compose up
   ```bash
   docker save --output=myimage.tar myapp:latest
   podman save --format oci-archive --output=myimage.tar myapp:latest
-  ```
-
----
-
-# Différences dans la gestion des logs et événements
-
-- Docker stocke les logs dans un format JSON sur disque.
-- Podman peut stocker les logs dans des fichiers journaux et être compatible avec journald sur Linux.
-
-  **Exemple : Gestion des logs Docker**
-
-  ```bash
-  docker logs mycontainer
-  ```
-
-  **Exemple : Gestion des logs avec journald sous Podman**
-
-  ```bash
-  podman logs mycontainer
-  podman run --log-driver=journald nginx
   ```
 
 ---
@@ -2208,193 +2140,6 @@ podman-compose up
   ```
 
 <br>
-
----
-
-# Podman Compose et Docker Compose complexes
-
-### Créer et orchestrer des conteneurs avec Podman Compose et Docker Compose dans un environnement de production.
-
-### Inclut des Dockerfile/Podmanfile avancés.
-
----
-
-# Architecture du projet
-
-- L'architecture comprend :
-
-  - Un **API Backend** en Python Flask.
-  - Un **Frontend** en React.
-  - Une base de données **PostgreSQL**.
-  - Un service **Redis** pour la mise en cache.
-
-  L'objectif est d'orchestrer l'ensemble de ces conteneurs via un fichier `docker-compose.yml` ou `podman-compose.yml`.
-
----
-
-# Dockerfile pour l'API Backend
-
-### Explication : Construction d'une image Flask en production avec gestion des dépendances, sans garder de fichiers temporaires.
-
-```dockerfile
-# Utiliser une image Python officielle
-FROM python:3.9-slim as build
-
-# Installer les dépendances nécessaires pour l'API Flask
-RUN apt-get update && apt-get install -y build-essential libpq-dev
-
-# Créer un répertoire de travail
-WORKDIR /app
-
-# Copier les fichiers de l'application
-COPY requirements.txt .
-
-# Installer les dépendances en évitant les fichiers cache pour un conteneur plus léger
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copier le code source
-COPY . .
-
-# Exposer le port 5000 pour Flask
-EXPOSE 5000
-
-# Commande pour lancer l'API Flask
-CMD ["flask", "run", "--host=0.0.0.0"]
-```
-
-### Explication :
-
-- On utilise une image **slim** pour réduire la taille.
-- Les dépendances sont installées via `pip` avec l'option `--no-cache-dir` pour éviter la persistance de fichiers temporaires.
-
----
-
-# Dockerfile pour le Frontend en React
-
-```dockerfile
-# Étape 1 : Construction du frontend
-FROM node:16 as build
-
-# Créer un répertoire de travail
-WORKDIR /app
-
-# Copier les fichiers package.json et package-lock.json pour installer les dépendances
-COPY package*.json ./
-
-# Installer les dépendances
-RUN npm install
-
-# Copier le reste de l'application
-COPY . .
-
-# Construire l'application React
-RUN npm run build
-
-# Étape 2 : Serveur Nginx pour héberger l'application
-FROM nginx:alpine
-
-# Copier les fichiers de build de React vers Nginx
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Exposer le port 80
-EXPOSE 80
-
-# Commande par défaut pour démarrer Nginx
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-### Explication :
-
-- Le **multi-stage build** est utilisé pour construire l'application dans une première étape, puis héberger le frontend avec **Nginx** dans une image plus légère.
-
----
-
-# Docker Compose
-
-```yaml
-version: "3.8"
-services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - backend
-
-  redis:
-    image: redis:alpine
-    networks:
-      - backend
-
-  backend:
-    build:
-      context: ./backend
-    depends_on:
-      - db
-      - redis
-    environment:
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydatabase
-      REDIS_URL: redis://redis:6379
-    networks:
-      - backend
-    ports:
-      - "5000:5000"
-
-  frontend:
-    build:
-      context: ./frontend
-    depends_on:
-      - backend
-    networks:
-      - frontendnet
-    ports:
-      - "80:80"
-
-networks:
-  backend:
-  frontendnet:
-
-volumes:
-  pgdata:
-```
-
----
-
-### Explication :
-
-- **depends_on** assure que le **Backend** attend que la base de données et **Redis** soient prêts avant de démarrer.
-- Des volumes sont utilisés pour persister les données de PostgreSQL.
-- Deux réseaux (`backend` et `frontendnet`) sont définis pour séparer les communications internes.
-
-<div class="mermaid w-[600px] max-h-[100px]">
-
-```mermaid
-graph LR
-    A[Backend] -->|depends_on| B[Base de données]
-    A -->|depends_on| C[Redis]
-    B -->|volume| D[Données PostgreSQL]
-    A -->|réseau| E[backend]
-    F[Frontend] -->|réseau| G[frontendnet]
-    E -->|séparation| G
-    B -->|volume| D[Données PostgreSQL]
-    A -->|réseau| E[backend]
-    F[Frontend] -->|réseau| G[frontendnet]
-    E -->|séparation| G
-
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style B fill:#bbf,stroke:#333,stroke-width:4px
-    style C fill:#bfb,stroke:#333,stroke-width:4px
-    style D fill:#ffb,stroke:#333,stroke-width:4px
-    style E fill:#fbb,stroke:#333,stroke-width:4px
-    style F fill:#bff,stroke:#333,stroke-width:4px
-    style G fill:#fbf,stroke:#333,stroke-width:4px
-```
-
-</div>
 
 ---
 
