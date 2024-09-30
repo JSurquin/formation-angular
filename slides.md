@@ -767,62 +767,29 @@ Créer, gérer et supprimer un conteneur en utilisant des commandes CLI.
      
      ```
 
-2. **Télécharger une nouvelle image**  
+2. **Télécharger une nouvelle image**
    Téléchargez l'image `nginx` à partir du registre Docker Hub.
 
-   - **Commande à utiliser :**  
+   - **Commande à utiliser :**
      ```bash
-     
+
      ```
 
 ---
 
-3. **Créer et exécuter un conteneur**  
+3. **Créer et exécuter un conteneur**
    Créez et exécutez un conteneur `nginx` avec un port exposé sur votre machine hôte (port 8080 sur l’hôte redirigé vers le port 80 du conteneur).
 
-   - **Commande à utiliser :**  
+   - **Commande à utiliser :**
      ```bash
-     
      ```
 
-4. **Vérifier le conteneur en cours d'exécution**  
+4. **Vérifier le conteneur en cours d'exécution**
    Affichez la liste des conteneurs en cours d'exécution.
 
-   - **Commande à utiliser :**  
+   - **Commande à utiliser :**
      ```bash
-     
      ```
-
----
-
-5. **Arrêter le conteneur**  
-   Arrêtez le conteneur `mynginx`.
-
-   - **Commande à utiliser :**  
-     ```bash
-     
-     ```
-
-6. **Supprimer le conteneur**  
-   Supprimez le conteneur `mynginx` ainsi que l'image associée.
-
-   - **Commande à utiliser :**  
-     ```bash
-     
-     ```
-
----
-
-   - **Commande à utiliser :**  
-     ```bash
-     
-     ```
-
-#### Bonus :
-Exécutez une commande pour vérifier quel utilisateur est utilisé dans le conteneur `mynginx` :
-```bash
-     
-```
 
 ---
 layout: new-section
@@ -840,9 +807,176 @@ Un Dockerfile est un fichier qui contient les instructions pour créer une image
 
 Un podmanFile pareil, mais pour podman.
 
-**L'idée, est de pouvoir créer des images de conteneurs de manière custom.** (car je le rappel, on peut aussi utiliser des images officielle comme ubuntu, debian, etc..., mais forcement, elle ne seront pas personnalisée à mon application mais juste une image de base)
-
 Par exemple, si j'ai besoin d'une image avec une version de node spécifique et quelques dépendances spécifiques à mon application, je peux créer une image avec la version de node et toutes les dépendances et mon application dont j'ai besoin.
+
+---
+
+# Les commandes principales
+
+Spécifie l'image de base à partir de laquelle l'image Docker sera construite
+
+```dockerfile
+FROM <image>:<tag>
+```
+
+Définit le créateur du Dockerfile ou des métadonnées sur l'image
+
+```dockerfile
+LABEL maintainer="<nom ou email>"
+```
+
+---
+
+Copie un fichier ou un répertoire depuis la machine locale vers l'image Docker
+
+```dockerfile
+COPY <chemin_source> <chemin_destination>
+```
+
+---
+
+Télécharge un fichier depuis une URL vers l'image Docker
+
+```dockerfile
+ADD <source> <destination>
+```
+
+<br>
+
+> Remarque : `ADD` peut aussi extraire des fichiers compressés, contrairement à `COPY`.
+
+<br>
+
+Définit le répertoire de travail (current working directory) dans l'image
+
+```dockerfile
+WORKDIR <chemin>
+```
+
+---
+
+Exécute une commande au moment de la création de l'image Docker
+
+<br>
+
+```dockerfile
+RUN <commande>
+```
+
+<br>
+
+Souvent utilisé pour installer des dépendances ou configurer le système
+
+<br>
+
+```dockerfile
+ENV <variable> <valeur>
+```
+
+<br>
+
+```dockerfile
+EXPOSE <port>
+```
+
+---
+
+Spécifie un point d’entrée pour l'exécution d’une commande par défaut dans le conteneur
+
+```dockerfile
+ENTRYPOINT ["commande", "argument"]
+```
+
+ENTRYPOINT est souvent utilisé pour définir une commande principale qui sera toujours exécutée
+
+Définit une commande par défaut qui peut être remplacée au moment du démarrage du conteneur
+
+```dockerfile
+CMD ["commande", "argument"]
+```
+
+<br>
+
+> CMD est plus flexible que ENTRYPOINT et peut être écrasé par des paramètres à la ligne de commande
+
+---
+
+Définit une variable d'environnement dans l'image
+
+```dockerfile
+ENV <variable> <valeur>
+```
+
+Définit les ports que le conteneur va exposer
+
+```dockerfile
+EXPOSE <port>
+```
+Ne mappe pas les ports automatiquement, c'est pour exposer le port dans le container mais pas via votre host
+
+---
+
+Copie des fichiers et conserve les métadonnées de fichiers (comme permissions)
+```dockerfile
+COPY --chown=<utilisateur>:<groupe> <chemin_source> <chemin_destination>
+```
+
+Utile lorsque les permissions sur les fichiers sont importantes dans le conteneur
+
+Définit les volumes que l'image va utiliser
+
+```dockerfile
+VOLUME ["/chemin/vers/volume"]
+```
+Permet de spécifier un ou plusieurs répertoires qui seront montés en volume
+
+Définit l'utilisateur à utiliser dans le conteneur
+
+```dockerfile
+USER <utilisateur>
+```
+
+<br>
+
+> Par défaut, les conteneurs tournent sous l'utilisateur `root`, ce qui n'est pas le cas sur podman. (rootless)
+
+---
+
+Définit les arguments de build, qui peuvent être passés au moment de la construction de l’image
+
+```dockerfile
+ARG <nom_variable>
+```
+
+Définit un signal qui doit être utilisé pour arrêter le conteneur
+
+```dockerfile
+STOPSIGNAL <signal>
+```
+
+Définit la santé du conteneur via une commande qui s’exécute périodiquement
+
+```dockerfile
+HEALTHCHECK --interval=<durée> --timeout=<durée> --retries=<nombre> CMD <commande>
+```
+
+Permet de vérifier si le conteneur est en bon état de fonctionnement
+
+---
+
+Permet de spécifier une instruction Dockerfile d’une étape précédente pour obtenir des fichiers ou des couches
+
+```dockerfile
+FROM <image>:<tag> AS <alias>
+```
+
+Souvent utilisé dans des constructions multi-étapes (multi-stage builds)
+
+Définit un répertoire temporaire ou spécifique pour les fichiers temporaires
+
+```dockerfile
+WORKDIR /path/to/directory
+```
 
 ---
 
@@ -870,27 +1004,25 @@ Dockerfile.dev est le nom du Dockerfile que j'ai utilisé comme exemple.
 
 ---
 
-# Petit exercice :
+# Petit exercice : Optimisation des performances
 
-Créer un Dockerfile/PodmanFile qui permet de créer une image avec une version de node spécifique et qui est accessible sur votre host.
+#### Objectif :
 
-Vous devez créer une petite application node, nextjs, react, etc ce que vous voulez, mais ce qui marche avec nodejs haha 🫣
+Créer, optimiser et analyser des conteneurs Docker, avec un focus sur l’amélioration des performances et la gestion des ressources.
+----
 
-Exemple :
+### Étape 1 : Création d’un Dockerfile simple et lancement du conteneur
 
-```dockerfile
-FROM node:18
+<br>
 
-WORKDIR /app
-
-COPY . .
-
-RUN npm install
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
-```
+1. **Objectif** : Créer un Dockerfile pour une application simple et lancer un conteneur.
+2. **Tâches** :
+- Créez un Dockerfile pour une application minimale qui utilise une image de base légère.
+- Lancez le conteneur de manière à ce qu’il soit accessible sur le port 8080.
+- Installez un serveur web et faites-le démarrer lorsque le conteneur est lancé.
+3. **Indications** :
+- Vous pouvez choisir une image de base comme `alpine` ou une autre qui semble adaptée à vos besoins.
+- Trouvez la manière d’exposer le port du conteneur vers l’extérieur.
 
 ---
 
@@ -940,7 +1072,7 @@ CMD ["echo", "Hello World"]
 <small>
 
 1. **FROM ubuntu:latest** : L'image Ubuntu est lourde pour la plupart des applications, préférer une image plus légère comme Alpine ou une image spécifique à l'environnement d'exécution (par exemple, `node:alpine`, `python:slim`). De plus, utiliser `:latest` peut introduire des problèmes de version instable, mieux vaut utiliser une version spécifique.
-   
+
 2. **MAINTAINER** : Cette instruction est obsolète dans les versions récentes de Docker. Utilisez `LABEL maintainer="someone@example.com"` à la place.
 
 3. **RUN apt-get install -y curl** : Il manque une commande `apt-get update` avant l’installation des paquets, ce qui peut entraîner des paquets obsolètes. De plus, l'installation de `curl` pourrait ne pas être nécessaire, cela ajoute du poids à l'image inutilement.
@@ -1046,6 +1178,65 @@ CMD ["./start-app.sh"]
 10. **CMD ["./start-app.sh"]** : Assurez-vous que la commande de démarrage correspond à ce qui est attendu pour lancer l'application (par exemple un script ou une commande pour lancer le serveur).
 
 </small>
+
+---
+
+# Maintenant c'est à vous ! Exercice :
+
+### Étape 2 : Réécrire un Dockerfile très mal optimisé
+
+1. **Objectif** : Prendre un Dockerfile mal optimisé et le réécrire pour réduire la taille de l'image et améliorer les temps de démarrage.
+
+2. **Tâches** :
+	- Voici un Dockerfile qui pourrait être mieux écrit :
+
+---
+
+```dockerfile
+    FROM ubuntu:20.04
+    # Update and install tools
+    RUN apt-get update && apt-get install -y vim
+    RUN apt-get install -y git
+    RUN apt-get install -y curl
+    RUN apt-get install -y wget
+    # Installing nodejs and npm
+    RUN apt-get update && apt-get install -y nodejs
+    RUN apt-get install -y npm
+    # Installing web server
+    RUN apt-get install -y apache2
+    RUN service apache2 start
+    RUN apt-get install -y nginx
+    CMD ["service", "nginx", "start"]
+    # Setup application
+    RUN mkdir /app
+    RUN mkdir /app/tmp
+    RUN mkdir /app/static
+    COPY index.html /app/static/
+    COPY styles.css /app/static/
+    RUN mv /app/static/* /var/www/html/
+    # Cleanup
+    RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    CMD ["apache2ctl", "-D", "FOREGROUND"]
+```
+
+---
+
+Voici la correction :
+
+```dockerfile
+FROM ubuntu:20.04
+# Mettez à jour et installez tous les outils en une seule couche, supprimez WGET (non nécessaire)
+RUN apt-get update && apt-get install -y vim git curl nodejs npm apache2 nginx && \
+    rm -rf /var/lib/apt/lists/*
+# Configuration de l'application en moins d'étapes
+WORKDIR /app
+COPY index.html /var/www/html/
+COPY styles.css /var/www/html/
+# Exposer les ports nécessaires (si nécessaire pour le serveur Web)
+EXPOSE 80
+# Utiliser un seul serveur Web, supprimer les commandes de service (laisser CMD gérer le démarrage)
+CMD ["nginx", "-g", "daemon off;"]
+```
 
 ---
 
@@ -1321,20 +1512,12 @@ Podman compose est un outil qui permet de déployer des conteneurs avec des fich
 
 ---
 
-En general : on utilise le podman-compose pour des environnements de dev.
 
 **Exemple avec un projet next qui veut utiliser postgreSQL comme base de données, pourquoi l'installer en local et galérer à devoir recommencer ces étapes si on voudrais changer de serveur ou pour un autre developpeur sur le projet qui devrais donc refaire les memes étapes en local sur sa machine ?**
 
 > Parce que oui vous l'avez compris, mais on installe pas pareil postgresql sur windows que sur linux et que sur macOS, donc si un développeur arrive sur le projet bonjour la galère.
 
 Ou : On utilise un dockerfile/podmanfile , et un docker-compose.yml pour deployer nos conteneurs dans des environnements de prod, le docker-compose lancera donc dans ce cas les builds de nos images personnalisées et en suite lancera les conteneurs dans des "pods" ou "services".
-
-Mais il est obsolète depuis la version 2.0 de Podman (mais on l'utilise encore pour des raisons de compatibilité ou si on est sur docker tout simplement).
-
-Aujourd'hui on utilise **plutôt le podman play kube**.
-**(mais nous n'allons pas l'utiliser dans ce cours car il faudrait avoir un cluster kubernetes donc apprendre kubernetes et nous on veut juste faire simple.)**
-
-https://docs.podman.io/en/v3.4.1/markdown/podman-play-kube.1.html
 
 ---
 
@@ -1387,29 +1570,37 @@ version: '3.8'
 # et parce que 3.8 est compatible avec les anciens fichiers docker-compose.yaml
 
 # Définir les services (conteneurs) à exécuter
-
 services:
+  # Définir le service web (c'est son nom que vous verrez dans les logs)
+  web:
+    # Utiliser une image de base officielle de Python
+    image: python:3.9
+    # Définir le répertoire de travail dans le conteneur
+    working_dir: /app
+    # Copier le fichier requirements.txt dans le répertoire de travail
+    volumes:
+      - .:/app
+    # Exposer le port sur lequel l'application va s'exécuter
+    ports:
+      - "8000:8000"
+    # Démarrer l'application
+    command: ["python", "app.py"]
 
-# Définir le service web (c'est son nom que vous verrez dans les logs)
-
-web: # Utiliser une image de base officielle de Python
-image: python:3.9 # Définir le répertoire de travail dans le conteneur
-working_dir: /app # Copier le fichier requirements.txt dans le répertoire de travail
-volumes: - .:/app # Exposer le port sur lequel l'application va s'exécuter
-ports: - "8000:8000" # Démarrer l'application
-command: ["python", "app.py"]
-
-# Définir le service db
-
-db: # Utiliser une image de base officielle de PostgreSQL
-image: postgres:13 # Définir les variables d'environnement pour la base de données
-environment:
-POSTGRES_USER: example
-POSTGRES_PASSWORD: example
-POSTGRES_DB: example # Exposer le port sur lequel la base de données va s'exécuter
-ports: - "5432:5432"
+  # Définir le service db
+  db:
+    # Utiliser une image de base officielle de PostgreSQL
+    image: postgres:13
+    # Définir les variables d'environnement pour la base de données
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: example
+    # Exposer le port sur lequel la base de données va s'exécuter
+    ports:
+      - "5432:5432"
 
 ```
+
 </small>
 
 ---
@@ -1581,15 +1772,15 @@ routeAlias: 'volumes-persistants'
 
 # Les volumes persistants
 
-## Qu'est-ce qu'un volume persistant ?
+### Qu'est-ce qu'un volume persistant ?
 
 Un volume persistant est un espace de stockage partagé entre le conteneur et le host (votre ordinateur).
 
-## Pourquoi utiliser un volume persistant ?
+### Pourquoi utiliser un volume persistant ?
 
 Un volume persistant est utile pour stocker des données de manière permanente.
 
-## Comment utiliser un volume persistant ?
+### Comment utiliser un volume persistant ?
 
 Pour utiliser un volume persistant, vous devez le déclarer dans votre fichier de configuration et le monter dans votre conteneur. Voici un exemple concret avec un container Nginx :
 
@@ -1619,65 +1810,49 @@ Sur mon pc je pourrais y acceder à cet endroit dans mon filesystem :
 ~/nginx-data
 ```
 
----
-
-<span class="text-red-500">
-
-**Mais aussi avec le docker run classique**
-
-</span>
-
-<br>
+Vous pouvez le faire en cli via la commande :
 
 ```bash
 docker run -v my-volume:/data
 ```
 
-<br>
+Nous verrons plus tard que vous pouvez aussi le faire directement dans le docker-compose
 
----
-
-# Quel est la différence entre un volume persistant et un volume temporaire ?
-
-Un volume persistant est un volume qui est créé et utilisé dans le conteneur.
-
-Un volume temporaire est un volume qui est créé et utilisé dans le conteneur.
-
-Exemple de volume temporaire :
-
-```bash
-docker run -v /tmp:/data
-```
-
-Nous stockons les données dans le conteneur dans le dossier `/data` mais via tmp qui veut dire temporaire (temporary).
-
-## Exemple de volume persistant :
-
-```yaml
-volumes:
-  - my-volume:/data
-```
 
 ---
 
 # Exemple concret !
 
-```yaml
-volumes:
-  - mysql-data:/var/lib/mysql
-  - mysql-logs:/var/log/mysql
-  - mysql-config:/etc/mysql
+```bash
+podman run -d \
+  --name mysql-container \
+  -v mysql-data:/var/lib/mysql \
+  -v mysql-logs:/var/log/mysql \
+  -v mysql-config:/etc/mysql \
+  mysql:latest
 ```
-Nous venons d'associer un volume persistant à notre conteneur MySQL.
 
-<br>
-<br>
+Nous venons d'associer un volume persistant à notre conteneur MySQL.
 
 # Explications :
 
 - `mysql-data` est un volume persistant qui stocke les données de la base de données.
 - `mysql-logs` est un volume persistant qui stocke les logs de la base de données.
 - `mysql-config` est un volume persistant qui stocke la configuration de la base de données.
+
+---
+
+### Exercice : Utilisation d’un volume Docker
+
+<br>
+
+1. **Objectif** : Utiliser un volume Docker pour persister les fichiers de l'application.
+2. **Tâches** :
+	- Modifiez le conteneur que vous avez créer précedemment pour qu'il utilise un volume Docker, de sorte que les fichiers de l'application web puissent être partagés entre l'hôte et le conteneur.
+	- Lancez le conteneur avec ce volume et vérifiez que les modifications de fichiers sur l'hôte se reflètent bien dans le conteneur.
+3. **Indications** :
+	- Trouvez comment utiliser un volume pour monter un dossier de l’hôte dans le conteneur.
+
 
 ---
 layout: default
@@ -1714,612 +1889,7 @@ podman info --debug | grep -i rootless
 
 > Sachez que docker ne supporte pas le rootless blablabla... c'est totalement faux.
 
-Docker supporte le rootless depuis la version 20.10.0. (de 2010)
-Et nous sommes actuellement à la version 24.0.5 (de 2024)
-
----
-layout: default
----
-
-# Le rootless
-
-## Comment l'activer sur Docker ?
-
-```bash
-mkdir $HOME/.docker
-echo '{ "experimental": "enabled" }' > $HOME/.docker/daemon.json
-```
-
-<br>
-
-<blockquote class="bg-red-500 !text-red-500 rounded-md">
-
-Attention cette commande va activer le rootless pour tous les utilisateurs du système.
-
-</blockquote>
-
-<br>
-
-> Deuxième chose : cette commande va activer l'experimental et peut dépendre de la version de docker que vous avez installer et de votre système d'exploitation (linux/macOS/windows).
-
----
-
-# Quelques exercices
-
-## Podman cli
-
-<br>
-
-<small>
-
-1. Créer un conteneur à partir d'une image de base officielle de Node.js
-2. Exécuter une commande dans le conteneur
-3. Arrêter le conteneur
-4. Supprimer le conteneur
-
-</small>
-
-<br>
-
----
-
-## Podman-compose
-
-<br>
-
-<small>
-
-1. Créer un fichier docker-compose.yaml
-2. Définir le service web (c'est son nom que vous verrez dans les logs)
-3. Utiliser une image de base officielle de Python
-4. Définir le répertoire de travail dans le conteneur
-5. Copier le fichier requirements.txt dans le répertoire de travail
-6. Installer les dépendances du projet
-7. Copier le reste des fichiers de l'application dans le répertoire de travail
-8. Exposer le port sur lequel l'application va s'exécuter
-9. Démarrer l'application
-
-</small>
-
----
-
-## Dockerfile
-
-<br>
-
-1. Créer un fichier Dockerfile
-2. Utiliser une image de base officielle de Node.js
-3. Définir le répertoire de travail dans le conteneur
-4. Copier le fichier package.json et package-lock.json dans le répertoire de travail
-5. Installer les dépendances du projet
-6. Copier le reste des fichiers de l'application dans le répertoire de travail
-7. Exposer le port sur lequel l'application va s'exécuter
-8. Démarrer l'application
-
----
-
-# Exercices supplémentaires
-
-## Podman cli avancé
-
-<br>
-
-<small>
-
-1. Créer un réseau personnalisé pour les conteneurs
-2. Créer plusieurs conteneurs et les connecter au réseau
-3. Tester la communication entre les conteneurs
-4. Supprimer les conteneurs et le réseau
-
-</small>
-
-## Podman-compose avancé
-
-<br>
-
-<small>
-
-1. Ajouter un service de base de données au fichier docker-compose.yaml
-2. Configurer les variables d'environnement pour le service de base de données
-3. Lier le service web au service de base de données
-4. Tester la connexion entre le service web et le service de base de données
-5. Arrêter et supprimer les services
-
-</small>
-
----
-
-## Dockerfile avancé
-
-<br>
-
-1. Ajouter une étape de build pour optimiser la taille de l'image
-2. Utiliser une image de base alpine pour réduire la taille de l'image
-3. Ajouter des tests unitaires et les exécuter pendant la construction de l'image
-4. Configurer des variables d'environnement pour l'application
-5. Utiliser un multi-stage build pour séparer les étapes de build et de runtime
-
----
-
-# Exercices bonus
-
-## Podman cli bonus
-
-<br>
-
-<small>
-
-1. Créer un volume pour persister les données d'un conteneur
-2. Monter le volume dans le conteneur
-3. Tester la persistance des données après la suppression et la recréation du conteneur
-4. Supprimer le volume
-
-</small>
-
-## Podman-compose bonus
-
-<br>
-
-<small>
-
-1. Ajouter un service de cache (comme Redis) au fichier docker-compose.yaml
-2. Configurer les variables d'environnement pour le service de cache
-3. Lier le service web au service de cache
-4. Tester la connexion entre le service web et le service de cache
-5. Arrêter et supprimer les services
-
-</small>
-
----
-
-## Dockerfile bonus
-
-<br>
-
-1. Ajouter des labels pour documenter l'image
-2. Configurer un utilisateur non-root pour exécuter l'application
-3. Ajouter des scripts de démarrage pour initialiser l'application
-4. Utiliser des secrets pour gérer les informations sensibles pendant la construction de l'image
-5. Optimiser les couches de l'image pour réduire la taille et améliorer les performances
-
----
-
-## QCM - Partie 1
-
-<small>
-
-1. Quelle est la différence entre Docker et Podman ?
-   - [ ] Docker nécessite un démon pour fonctionner, Podman non
-   - [ ] Podman nécessite un démon pour fonctionner, Docker non
-   - [ ] Les deux nécessitent un démon pour fonctionner
-
-2. Comment Podman gère-t-il les conteneurs sans démon ?
-   - [ ] En utilisant un démon léger
-   - [ ] En utilisant des processus indépendants
-   - [ ] En utilisant un hyperviseur
-
-3. Qu'est-ce qu'un pod dans Podman et comment est-il utilisé ?
-   - [ ] Un groupe de conteneurs partageant le même réseau et espace de noms
-   - [ ] Un conteneur unique avec des fonctionnalités avancées
-   - [ ] Un outil de gestion des volumes
-
-</small>
-
----
-
-<small>
-
-4. Comment activer le mode rootless dans Podman ?
-   - [ ] En utilisant la commande `podman rootless`
-   - [ ] En configurant les permissions utilisateur
-   - [ ] En utilisant la commande `podman unprivileged`
-
-5. Quelles sont les commandes principales de Docker pour gérer les conteneurs ?
-   - [ ] `docker start`, `docker stop`, `docker restart`
-   - [ ] `docker run`, `docker ps`, `docker stop`
-   - [ ] `docker create`, `docker delete`, `docker list`
-
-</small>
-
----
-
-<small>
-
-6. Comment créer et gérer un réseau Docker ?
-   - [ ] En utilisant la commande `docker network create`
-   - [ ] En utilisant la commande `docker net create`
-   - [ ] En utilisant la commande `docker network setup`
-
-7. Quelles sont les étapes pour créer une image Docker optimisée ?
-   - [ ] Utiliser une image de base légère, minimiser les couches, utiliser des multi-stage builds
-   - [ ] Utiliser une image de base lourde, maximiser les couches, éviter les multi-stage builds
-   - [ ] Utiliser une image de base légère, maximiser les couches, éviter les multi-stage builds
-
-8. Comment utiliser docker-compose pour orchestrer plusieurs conteneurs ?
-   - [ ] En créant un fichier `docker-compose.yaml` et en utilisant la commande `docker-compose up`
-   - [ ] En créant un fichier `docker-compose.json` et en utilisant la commande `docker-compose start`
-   - [ ] En créant un fichier `docker-compose.xml` et en utilisant la commande `docker-compose run`
-
-</small>
-
----
-
-<small>
-
-9. Quelles sont les différences de sécurité entre Docker et Podman ?
-   - [ ] Podman permet l'exécution rootless par défaut, Docker non
-   - [ ] Docker permet l'exécution rootless par défaut, Podman non
-   - [ ] Les deux permettent l'exécution rootless par défaut
-
-10. Comment Podman permet-il une meilleure gestion des pods ?
-    - [ ] En utilisant des commandes spécifiques pour les pods
-    - [ ] En intégrant des outils de gestion de pods tiers
-    - [ ] En utilisant des scripts de gestion de pods
-
-</small>
-
----
-
-<small>
-
-11. Quelles sont les commandes pour gérer les volumes dans Docker ?
-   - [ ] `docker volume create`, `docker volume ls`, `docker volume rm`
-   - [ ] `docker volume new`, `docker volume list`, `docker volume delete`
-   - [ ] `docker volume add`, `docker volume show`, `docker volume remove`
-
-12. Comment vérifier les logs d'un conteneur Docker ?
-   - [ ] En utilisant la commande `docker logs <container_id>`
-   - [ ] En utilisant la commande `docker show logs <container_id>`
-   - [ ] En utilisant la commande `docker view logs <container_id>`
-
-13. Quelles sont les meilleures pratiques pour écrire un Dockerfile ?
-   - [ ] Utiliser des images de base légères, minimiser les couches, éviter les secrets
-   - [ ] Utiliser des images de base lourdes, maximiser les couches, inclure les secrets
-   - [ ] Utiliser des images de base légères, minimiser les couches, utiliser des multi-stage builds
-
-</small>
-
----
-
-<small>
-
-14. Comment utiliser les secrets dans un Dockerfile ?
-   - [ ] En utilisant la commande `docker secret add`
-   - [ ] En utilisant la commande `docker secret create`
-   - [ ] En utilisant la commande `docker secret use`
-
-15. Qu'est-ce qu'un multi-stage build dans Docker ?
-   - [ ] Une méthode pour créer des images Docker en plusieurs étapes pour optimiser la taille
-   - [ ] Une méthode pour créer des images Docker en une seule étape
-   - [ ] Une méthode pour créer des images Docker sans utiliser de Dockerfile
-
-16. Comment configurer un utilisateur non-root dans un Dockerfile ?
-   - [ ] En utilisant les instructions `USER` et `RUN adduser`
-   - [ ] En utilisant les instructions `USER` et `RUN createuser`
-   - [ ] En utilisant les instructions `USER` et `RUN newuser`
-
-</small>
-
----
-
-## Questionnaire - Partie 1
-
-<small>
-
-1. Quelle est la différence entre Docker et Podman ?
-
-2. Comment Podman gère-t-il les conteneurs sans démon ?
-
-3. Qu'est-ce qu'un pod dans Podman et comment est-il utilisé ?
-
-4. Comment activer le mode rootless dans Podman ?
-
-5. Quelles sont les commandes principales de Docker pour gérer les conteneurs ?
-
-6. Comment créer et gérer un réseau Docker ?
-
-7. Quelles sont les étapes pour créer une image Docker optimisée ?
-
-8. Comment utiliser docker-compose pour orchestrer plusieurs conteneurs ?
-
-9. Quelles sont les différences de sécurité entre Docker et Podman ?
-
-10. Comment Podman permet-il une meilleure gestion des pods ?
-
-</small>
-
----
-
-## Questionnaire - Partie 2
-
-<small>
-
-11. Quelles sont les commandes pour gérer les volumes dans Docker ?
-
-12. Comment vérifier les logs d'un conteneur Docker ?
-
-13. Quelles sont les meilleures pratiques pour écrire un Dockerfile ?
-
-14. Comment utiliser les secrets dans un Dockerfile ?
-
-15. Qu'est-ce qu'un multi-stage build dans Docker ?
-
-16. Comment configurer un utilisateur non-root dans un Dockerfile ?
-
-17. Quelles sont les commandes pour gérer les images Docker ?
-
-18. Comment fonctionne le réseau par défaut dans Docker ?
-
-19. Quelles sont les options pour persister les données dans Docker ?
-
-20. Comment fonctionne le rootless mode dans Docker ?
-
-</small>
-
----
-
-## Questionnaire - Partie 3
-
-<small>
-
-21. Quelles sont les différences de performance entre Docker et Podman ?
-
-22. Comment utiliser les labels dans un Dockerfile ?
-
-23. Quelles sont les étapes pour déboguer un conteneur Docker ?
-
-24. Comment fonctionne le système de cache dans Docker ?
-
-25. Quelles sont les commandes pour gérer les conteneurs arrêtés dans Docker ?
-
-26. Comment configurer des variables d'environnement dans un Dockerfile ?
-
-27. Quelles sont les meilleures pratiques pour sécuriser un conteneur Docker ?
-
-28. Comment fonctionne le système de build dans Docker ?
-
-29. Quelles sont les différences entre les réseaux bridge et overlay dans Docker ?
-
-30. Comment utiliser les volumes pour partager des données entre conteneurs ?
-
-</small>
-
----
-
-## Questionnaire - Partie 4
-
-<small>
-
-31. Quelles sont les commandes pour inspecter un conteneur Docker ?
-
-32. Comment fonctionne le système de stockage des images dans Docker ?
-
-33. Quelles sont les options pour limiter les ressources d'un conteneur Docker ?
-
-34. Comment utiliser les hooks dans un Dockerfile ?
-
-35. Quelles sont les différences entre Docker Swarm et Kubernetes ?
-
-36. Comment fonctionne le système de plugins dans Docker ?
-
-37. Quelles sont les commandes pour gérer les réseaux dans Docker ?
-
-38. Comment utiliser les health checks dans un Dockerfile ?
-
-39. Quelles sont les options pour monitorer les conteneurs Docker ?
-
-40. Comment fonctionne le système de logs dans Docker ?
-
-</small>
-
----
-
-## Questionnaire - Partie 5
-
-<small>
-
-41. Quelles sont les commandes pour gérer les secrets dans Docker ?
-
-42. Comment utiliser les configurations dans Docker Swarm ?
-
-43. Quelles sont les différences entre les images Docker et les conteneurs Docker ?
-
-44. Comment fonctionne le système de build cache dans Docker ?
-
-45. Quelles sont les options pour gérer les dépendances dans un Dockerfile ?
-
-46. Comment utiliser les multi-architecture builds dans Docker ?
-
-47. Quelles sont les commandes pour gérer les services dans Docker Swarm ?
-
-48. Comment fonctionne le système de versioning des images dans Docker ?
-
-49. Quelles sont les options pour gérer les réseaux multi-hosts dans Docker ?
-
-50. Comment utiliser les outils de CI/CD avec Docker ?
-
-##
-
-</small>
-
----
-
-## Réponses - Partie 1
-
-<small>
-
-1. Docker utilise un démon pour gérer les conteneurs, tandis que Podman n'en a pas besoin.
-
-2. Podman utilise des processus indépendants pour chaque conteneur, éliminant le besoin d'un démon central.
-
-3. Un pod dans Podman est un groupe de conteneurs qui partagent le même réseau et espace de noms.
-
-4. Pour activer le mode rootless dans Podman, utilisez la commande `podman machine init --rootless`.
-
-5. Les commandes principales de Docker pour gérer les conteneurs sont `docker run`, `docker ps`, `docker stop`, et `docker rm`.
-
-</small>
-
----
-
-## Réponses - Partie 2
-
-<small>
-
-6. Pour créer et gérer un réseau Docker, utilisez les commandes `docker network create` et `docker network connect`.
-
-7. Les étapes pour créer une image Docker optimisée incluent l'utilisation d'une image de base légère, la réduction du nombre de couches, et l'utilisation de multi-stage builds.
-
-8. Pour orchestrer plusieurs conteneurs avec docker-compose, définissez les services dans un fichier `docker-compose.yml` et utilisez la commande `docker-compose up`.
-
-9. Les différences de sécurité entre Docker et Podman incluent l'absence de démon dans Podman, ce qui réduit la surface d'attaque, et la possibilité d'exécuter des conteneurs en mode rootless.
-
-10. Podman permet une meilleure gestion des pods en regroupant plusieurs conteneurs dans un même pod, facilitant ainsi leur gestion et communication.
-
-</small>
-
----
-
-## Réponses - Partie 3
-
-<small>
-
-11. Les commandes pour gérer les volumes dans Docker incluent `docker volume create`, `docker volume ls`, et `docker volume rm`.
-
-12. Pour vérifier les logs d'un conteneur Docker, utilisez la commande `docker logs`.
-
-13. Les meilleures pratiques pour écrire un Dockerfile incluent l'utilisation d'images de base légères, la réduction du nombre de couches, et l'utilisation de multi-stage builds.
-
-14. Pour utiliser les secrets dans un Dockerfile, utilisez la directive `--secret` lors de la construction de l'image.
-
-15. Un multi-stage build dans Docker permet de séparer les étapes de build et de runtime, réduisant ainsi la taille de l'image finale.
-
-</small>
-
----
-
-## Réponses - Partie 4
-
-<small>
-
-16. Pour configurer un utilisateur non-root dans un Dockerfile, utilisez les directives `USER` et `RUN adduser`.
-
-17. Les commandes pour gérer les images Docker incluent `docker pull`, `docker images`, et `docker rmi`.
-
-18. Le réseau par défaut dans Docker est le réseau bridge, qui permet aux conteneurs de communiquer entre eux sur le même hôte.
-
-19. Les options pour persister les données dans Docker incluent l'utilisation de volumes et de bind mounts.
-
-20. Le rootless mode dans Docker permet d'exécuter des conteneurs en tant qu'utilisateur non-root, améliorant ainsi la sécurité.
-
-</small>
-
----
-
-## Réponses - Partie 5
-
-<small>
-
-21. Les différences de performance entre Docker et Podman sont généralement minimes, mais Podman peut offrir de meilleures performances en raison de l'absence de démon.
-
-22. Pour utiliser les labels dans un Dockerfile, utilisez la directive `LABEL`.
-
-23. Les étapes pour déboguer un conteneur Docker incluent l'utilisation des commandes `docker logs`, `docker exec`, et `docker inspect`.
-
-24. Le système de cache dans Docker permet de réutiliser les couches d'image précédemment construites pour accélérer les builds.
-
-25. Les commandes pour gérer les conteneurs arrêtés dans Docker incluent `docker ps -a` et `docker rm`.
-
-</small>
-
----
-
-## Réponses - Partie 6
-
-<small>
-
-26. Pour configurer des variables d'environnement dans un Dockerfile, utilisez la directive `ENV`.
-
-27. Les meilleures pratiques pour sécuriser un conteneur Docker incluent l'utilisation d'images de base légères, la réduction des privilèges, et l'utilisation de secrets pour les informations sensibles.
-
-28. Le système de build dans Docker utilise un fichier Dockerfile pour définir les étapes de construction de l'image.
-
-29. Les différences entre les réseaux bridge et overlay dans Docker incluent la portée du réseau (local pour bridge, multi-host pour overlay) et les cas d'utilisation (développement pour bridge, production pour overlay).
-
-30. Pour utiliser les volumes pour partager des données entre conteneurs, utilisez la directive `volumes` dans un fichier `docker-compose.yml`.
-
-</small>
-
----
-
-## Réponses - Partie 7
-
-<small>
-
-31. Les commandes pour inspecter un conteneur Docker incluent `docker inspect` et `docker ps`.
-
-32. Le système de stockage des images dans Docker utilise un registre pour stocker et distribuer les images.
-
-33. Les options pour limiter les ressources d'un conteneur Docker incluent les directives `--memory` et `--cpus` lors de l'exécution du conteneur.
-
-34. Pour utiliser les hooks dans un Dockerfile, utilisez les directives `ONBUILD` et `HEALTHCHECK`.
-35. Les différences entre Docker Swarm et Kubernetes incluent la complexité (Swarm est plus simple), les fonctionnalités (Kubernetes offre plus de fonctionnalités), et l'adoption (Kubernetes est plus largement adopté).
-
-</small>
-
----
-
-## Réponses - Partie 8
-
-<small>
-
-36. Le système de plugins dans Docker permet d'étendre les fonctionnalités de Docker en ajoutant des plugins pour le stockage, le réseau, et d'autres fonctionnalités.
-
-37. Les commandes pour gérer les réseaux dans Docker incluent `docker network create`, `docker network ls`, et `docker network rm`.
-
-38. Pour utiliser les health checks dans un Dockerfile, utilisez la directive `HEALTHCHECK`.
-
-39. Les options pour monitorer les conteneurs Docker incluent l'utilisation de Docker stats, Prometheus, et Grafana.
-
-40. Le système de logs dans Docker permet de collecter et de visualiser les logs des conteneurs en utilisant des commandes comme `docker logs` et des outils comme ELK stack.
-
-</small>
-
----
-
-## Réponses - Partie 9
-
-<small>
-
-41. Les commandes pour gérer les secrets dans Docker incluent `docker secret create`, `docker secret ls`, et `docker secret rm`.
-
-42. Pour utiliser les configurations dans Docker Swarm, utilisez les commandes `docker config create`, `docker config ls`, et `docker config rm`.
-
-43. Les différences entre les images Docker et les conteneurs Docker incluent le fait que les images sont des modèles statiques, tandis que les conteneurs sont des instances en cours d'exécution de ces images.
-
-44. Le système de build cache dans Docker permet de réutiliser les couches d'image précédemment construites pour accélérer les builds.
-
-45. Les options pour gérer les dépendances dans un Dockerfile incluent l'utilisation de fichiers de configuration comme `requirements.txt` pour Python ou `package.json` pour Node.js.
-
-</small>
-
----
-
-## Réponses - Partie 10
-
-<small>
-
-46. Pour utiliser les multi-architecture builds dans Docker, utilisez la commande `docker buildx` et configurez les plateformes cibles.
-
-47. Les commandes pour gérer les services dans Docker Swarm incluent `docker service create`, `docker service ls`, et `docker service rm`.
-
-48. Le système de versioning des images dans Docker permet de taguer les images avec des versions spécifiques en utilisant la commande `docker tag`.
-
-49. Les options pour gérer les réseaux multi-hosts dans Docker incluent l'utilisation de réseaux overlay et de Docker Swarm.
-
-50. Pour utiliser les outils de CI/CD avec Docker, intégrez Docker dans des pipelines CI/CD en utilisant des outils comme Jenkins, GitLab CI, et GitHub Actions.
-
-</small>
+Le lien d'une doc pour docker : [Docker Rootless](https://dev.to/izackv/running-a-docker-container-with-a-custom-non-root-user-syncing-host-and-container-permissions-26mb)
 
 ---
 
@@ -2541,82 +2111,6 @@ Les pods dans Podman offrent une meilleure isolation et communication entre les 
 
 ---
 
-<!-- je crois que j'en parle déjà avec les docker secrets, donc sois je met les deux slides ensemble ou je supprime celle ci -->
-# Les secrets dans Podman
-
-## Introduction aux secrets dans Podman
-
-Les secrets sont des données sensibles stockées dans Podman, telles que les identifiants de base de données ou les clés API. Ils permettent une gestion sécurisée des informations sensibles.
-
-## Création et gestion des secrets dans Podman
-
-1. **Création d'un secret** :
-
-```bash
-podman secret create my-secret my-secret-value
-```
-
-2. **Ajout de secrets à un conteneur** :
-
-```bash
-podman run --secret my-secret my-container
-```
-
----
-
-3. **Inspection du secret** :
-
-```bash
-podman secret inspect my-secret
-```
-
-4. **Suppression du secret** :
-
-```bash
-podman secret rm my-secret
-```
-
-## Conclusion
-
-Les secrets dans Podman permettent une gestion sécurisée des informations sensibles, facilitant la sécurisation des applications conteneurisées.
-
----
-
-<!-- peut être en parler avant de la configuration de podman , ce n'est pas à la bonne place -->
-# Les configurations dans Podman
-
-## Introduction aux configurations dans Podman
-
-Les configurations sont des données structurées stockées dans Podman, telles que les fichiers de configuration d'application. Ils permettent une gestion simplifiée des données structurées.
-
-## Création et gestion des configurations dans Podman
-
-1. **Création d'une configuration** :
-
-```bash
-podman config create my-config my-config-value
-```
-
-2. **Ajout de configurations à un conteneur** :
-
-```bash
-podman run --config my-config my-container
-```
-
-3. **Inspection de la configuration** :
-
-```bash
-podman config inspect my-config
-```
-
----
-
-## Conclusion
-
-Podman offre une alternative puissante à Docker pour la gestion de conteneurs, avec des fonctionnalités similaires mais une architecture différente. Son utilisation peut améliorer la sécurité et les performances des applications conteneurisées.
-
----
-
 # Une utilisation plus avancée de Podman avec un vrai projet concret
 
 ## Introduction
@@ -2672,81 +2166,6 @@ podman-compose up
 
 ---
 
-<!-- surement pas à la bonne place , plutot dans la partie sur les pods de podman -->
-
-# Gestion des Pods
-
-- **Podman** : Possède une gestion native des pods.
-  ```bash
-  podman pod create
-  podman pod start <pod_id>
-  ```
-- **Docker** : Pas de gestion native des pods. Il utilise plutôt des réseaux ou des outils comme **Docker Compose**.
-
----
-
-<!-- plutot dans les diff entre podman et docker mais j'en parle déjà -->
-
-# Démon (Daemon)
-
-- **Docker** : Nécessite un démon en arrière-plan (`dockerd`) pour fonctionner.
-- **Podman** : Fonctionne sans démon (daemonless), chaque commande s'exécute indépendamment.
-  ```bash
-  podman run --detach
-  ```
-
----
-
-<!-- peut etre a replacer aussi -->
-# Conteneurs Rootless
-
-- **Podman** : Supporte nativement les conteneurs rootless (sans privilèges root).
-  ```bash
-  podman run --user 1000:1000
-  ```
-- **Docker** : Nécessite une configuration spécifique pour activer les conteneurs rootless.
-  ```bash
-  docker run --user 1000:1000
-  ```
-
----
-
-# Création d'unités systemd
-
-- **Podman** : Peut générer des unités systemd pour gérer les conteneurs avec `systemctl`.
-  ```bash
-  podman generate systemd --name <container_name>
-  ```
-- **Docker** : Pas de commande native pour générer des unités systemd.
-
----
-
-# Qu'est ce que Systemd ?
-
-Systemd est un système de gestion de démons en arrière-plan pour Linux. Il gère les services, les unités, les sockets, etc.
-
-Il existe depuis longtemps et est très populaire sur les systèmes Linux.
-
-Il y a des alternatives comme **runit**, **s6** ou **launchd** sur macOS.
-
-Sur Windows : **systemd** n'existe pas, mais il existe des alternatives comme **systemd-genie** ou **scoop**.
-
-Et en fonction de la distribution de Linux que vous utilisez, il y aura des alternatives comme **upstart** sur Ubuntu, **System V** sur CentOS, etc.
-
----
-
-<!-- pas à la bonne place , plutot dans la partie sur les volumes de podman -->
-
-# Gestion des Volumes
-
-- **Podman** et **Docker** gèrent les volumes de manière similaire, mais Podman a des différences en mode rootless.
-  ```bash
-  podman volume create
-  docker volume create
-  ```
-
----
-
 <!-- pas à la bonne place , plutot dans la partie sur les volumes de podman -->
 
 # Exécution rootless vs rootfull
@@ -2757,31 +2176,6 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
   podman --rootfull run
   ```
 - **Docker** : Ne distingue pas rootless/rootfull sans configuration.
-
----
-
-<!-- pas à la bonne place , plutot dans la partie sur les réseaux de podman -->
-
-# Gestion des réseaux
-
-- **Podman** : Utilise **CNI** (Container Network Interface) pour la gestion du réseau.
-  ```bash
-  podman network create
-  ```
-- **Docker** : Utilise **CNM** (Container Network Model) pour le réseau.
-  ```bash
-  docker network create
-  ```
-
----
-
-# Logs et événements
-
-- **Podman** et **Docker** ont des commandes similaires pour les logs, mais la syntaxe peut légèrement différer.
-  ```bash
-  podman events
-  docker events
-  ```
 
 ---
 
@@ -2821,40 +2215,6 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
 
 ---
 
-# Différences dans la gestion des noms de conteneurs
-
-- **Docker** : Recycle les noms de conteneurs.
-- **Podman** : Refuse de réutiliser un nom de conteneur déjà utilisé sans le supprimer d'abord.
-
-  **Exemple : réutilisation de nom avec Docker**
-
-  ```bash
-  docker run --name web nginx
-  docker rm web
-  docker run --name web nginx
-  ```
-
----
-
-# Volumes secrets
-
-- Docker et Podman permettent de gérer des secrets via des volumes montés.
-
-  **Exemple : Créer un secret avec Docker**
-
-  ```bash
-  echo "my_secret" | docker secret create my_secret -
-  docker service create --name app --secret my_secret nginx
-  ```
-
-- **Podman** : Gère les secrets de manière similaire avec des volumes.
-  ```bash
-  podman secret create my_secret secretfile
-  podman run --secret my_secret nginx
-  ```
-
----
-
 # Compatibilité OCI (Open Container Initiative)
 
 - Docker et Podman suivent les standards **OCI** pour les images et les runtime des conteneurs.
@@ -2865,30 +2225,6 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
   docker save --output=myimage.tar myapp:latest
   podman save --format oci-archive --output=myimage.tar myapp:latest
   ```
-
----
-
-# Défis du Réseau en Mode Rootless
-
-- Les conteneurs rootless dans Podman présentent des limitations en matière de gestion réseau, car ils n'ont pas la capacité de créer ou de configurer des interfaces réseau sans droits root. Cela peut compliquer l'exposition de ports ou la configuration de réseaux complexes.
-
-- Docker, quant à lui, gère le réseau rootless à travers une configuration spécifique du démon `dockerd`, qui permet de contourner ces restrictions tout en maintenant la sécurité.
-
----
-
-**Exemple : Lancer un conteneur en mode rootless avec Podman**
-
-  Pour démarrer un conteneur en mode rootless et publier un port, vous pouvez utiliser la commande suivante :
-
-  ```bash
-  podman --rootless run -p 8080:80 nginx
-  ```
-
-Dans cet exemple, le port 8080 de l'hôte est redirigé vers le port 80 du conteneur Nginx. Toutefois, des configurations supplémentaires peuvent être nécessaires selon l'environnement réseau.
-
----
-
-Cela clarifie les enjeux, tout en ajoutant des détails sur les différences entre Podman et Docker.
 
 ---
 
@@ -2946,44 +2282,6 @@ Cela clarifie les enjeux, tout en ajoutant des détails sur les différences ent
   ```
 
 <br>
-
-<small class="!text-red-500">
-
-> Retenez le -d qui permet de démarrer le conteneur en arrière-plan.
-
-</small>
-
----
-
-# Gestion des conteneurs en mode headless
-
-- Docker et Podman peuvent gérer des conteneurs sans interface graphique (headless), idéal pour les environnements serveurs.
-
-  **Exemple : Démarrer un conteneur headless avec Docker**
-
-  ```bash
-  docker run -d --name headless_container ubuntu sleep 1000
-  ```
-
-  **Exemple : Démarrer un conteneur headless avec Podman**
-
-  ```bash
-  podman run -d --name headless_container ubuntu sleep 1000
-  ```
-
-<small>
-
-Si vous voulez une interface graphique pour gérer vos conteneurs,
-
-Vous pouvez utiliser **Podman Desktop** ou **Docker Desktop**.
-
-Si vous voulez utiliser X11 le serveur graphique, vous pouvez utiliser :
-
-</small>
-
-```bash
-docker run -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix x11-app-image
-```
 
 ---
 
@@ -3174,21 +2472,6 @@ graph LR
 
 ---
 
-# Podman Compose
-
-- La configuration de **Podman Compose** est identique à Docker Compose en termes de syntaxe, mais la gestion des pods diffère légèrement.
-- Les mêmes Dockerfile et `compose.yml` peuvent être utilisés avec **Podman**.
-- **Podman Compose** utilise par défaut **rootless** pour une sécurité accrue.
-
-```bash
-# Démarrer avec Podman Compose
-podman-compose up
-```
-
-- **Astuce** : Avec Podman, chaque conteneur peut être isolé dans des pods pour améliorer les performances et la gestion des ressources.
-
----
-
 # Docker Compose : Cas d'usage avec scaling
 
 ### Cas pratique : Scaler l'application backend pour plusieurs instances
@@ -3218,6 +2501,18 @@ services:
 
 - Le service backend est scalé en trois réplicas pour gérer plus de trafic.
 - Les ressources sont limitées pour chaque conteneur avec un maximum de **0.5 CPU** et **256MB de RAM**.
+
+---
+
+### Étape 3 : Limitation des ressources des conteneurs
+
+1. **Objectif** : Limiter les ressources (CPU, mémoire) allouées à un conteneur et observer l’impact sur les performances.
+2. **Tâches** :
+ - Lancez un conteneur avec des limites strictes de mémoire et de CPU.
+ - Chargez le serveur avec des requêtes pour tester son comportement sous contrainte de ressources.
+ - Comparez l’utilisation des ressources avant et après l'application de ces limites.
+3. **Indications** :
+ - Cherchez comment spécifier les limites de CPU et de mémoire lors du lancement d’un conteneur.
 
 ---
 
