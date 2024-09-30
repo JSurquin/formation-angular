@@ -16,7 +16,8 @@ transition: slide-left
 #     format: A4
 themeConfig:
   logoHeader: "/avatar.png"
-  eventLogo: "https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-amsterdam-with-name.png"
+  eventLogo: "https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-am\
+    sterdam-with-name.png"
   eventUrl: "https://vuejs.amsterdam/"
   twitter: "@jimmylan"
   twitterUrl: "https://twitter.com/jimmylansrq"
@@ -750,6 +751,80 @@ Vous pouvez aussi essayer d'accéder à l'application depuis votre host.
 Et vous pouvez tout stopper avec la commande `podman stop <id>` et le supprimer avec la commande `podman rm <id>`.
 
 ---
+
+### Exercice : Gestion des Conteneurs
+
+#### Objectif :
+Créer, gérer et supprimer un conteneur en utilisant des commandes CLI.
+
+#### Étapes :
+
+1. **Liste des images disponibles**  
+   Affichez la liste des images disponibles localement sur votre machine.
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+2. **Télécharger une nouvelle image**  
+   Téléchargez l'image `nginx` à partir du registre Docker Hub.
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+---
+
+3. **Créer et exécuter un conteneur**  
+   Créez et exécutez un conteneur `nginx` avec un port exposé sur votre machine hôte (port 8080 sur l’hôte redirigé vers le port 80 du conteneur).
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+4. **Vérifier le conteneur en cours d'exécution**  
+   Affichez la liste des conteneurs en cours d'exécution.
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+---
+
+5. **Arrêter le conteneur**  
+   Arrêtez le conteneur `mynginx`.
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+6. **Supprimer le conteneur**  
+   Supprimez le conteneur `mynginx` ainsi que l'image associée.
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+---
+
+   - **Commande à utiliser :**  
+     ```bash
+     
+     ```
+
+#### Bonus :
+Exécutez une commande pour vérifier quel utilisateur est utilisé dans le conteneur `mynginx` :
+```bash
+     
+```
+
+---
 layout: new-section
 ---
 
@@ -835,6 +910,7 @@ RUN apt-get install -y curl
 <br>
 
 > ps : suite sur la deuxieme slide
+
 ---
 
 ```dockerfile
@@ -1078,6 +1154,7 @@ EXPOSE 3000
 # Démarrer l'application
 CMD ["ruby", "app.rb"]
 ```
+
 ---
 
 # Dockerfile , exemple avec Java
@@ -1215,7 +1292,6 @@ J'ai aussi créer un utilisateur non root pour exécuter l'application.
 Pourquoi ? : l'utilisateur root est trop puissant.
 
 Donc la j'ai créer un utilisateur non root pour exécuter l'application qui a uniquement les droits nécessaires.
-
 
 ---
 layout: new-section
@@ -1523,6 +1599,7 @@ volumes:
 ```
 
 <br>
+
 ---
 
 ## Explication
@@ -1827,6 +1904,7 @@ Attention cette commande va activer le rootless pour tous les utilisateurs du sy
    - [ ] Un outil de gestion des volumes
 
 </small>
+
 ---
 
 <small>
@@ -2682,7 +2760,6 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
 
 ---
 
-
 <!-- pas à la bonne place , plutot dans la partie sur les réseaux de podman -->
 
 # Gestion des réseaux
@@ -2799,7 +2876,7 @@ Et en fonction de la distribution de Linux que vous utilisez, il y aura des alte
 
 ---
 
-  **Exemple : Lancer un conteneur en mode rootless avec Podman**
+**Exemple : Lancer un conteneur en mode rootless avec Podman**
 
   Pour démarrer un conteneur en mode rootless et publier un port, vous pouvez utiliser la commande suivante :
 
@@ -3060,6 +3137,7 @@ networks:
 volumes:
   pgdata:
 ```
+
 ---
 
 ### Explication :
