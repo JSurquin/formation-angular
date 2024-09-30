@@ -1951,20 +1951,6 @@ Nous venons d'associer un volume persistant à notre conteneur MySQL.
 	- Trouvez comment utiliser un volume pour monter un dossier de l’hôte dans le conteneur.
 
 ---
-
-# Quelques liens
-
-[Podman](https://podman.io/)
-
-[Docker](https://www.docker.com/)
-
-[Quel est la différence entre Docker et Podman ?](https://www.redhat.com/fr/topics/containers/docker-vs-podman)
-
-[Podman vs Docker](https://www.redhat.com/fr/topics/containers/docker-vs-podman)
-
-[Podman et Docker, quelle différence ?](https://www.ibm.com/docs/fr/power8?topic=processors-podman-docker)
-
----
 layout: new-section
 routeAlias: 'pods-et-reseau'
 ---
@@ -2027,58 +2013,47 @@ Les pods dans Podman offrent une meilleure isolation et communication entre les 
 
 ---
 
-# Une utilisation plus avancée de Podman avec un vrai projet concret
+### Petit exercice sur les pods
 
-## Introduction
+1. **Objectif** : Créer un pod avec deux conteneurs et vérifier que les deux conteneurs peuvent communiquer.
+2. **Tâches** :
+   - Créez un pod avec un conteneur Nginx et un conteneur Redis.
+   - Vérifiez que les deux conteneurs peuvent communiquer.
+3. **Indications** :
+   - Utilisez la commande `podman pod create` pour créer un pod.
+   - Utilisez la commande `podman run` pour ajouter les conteneurs au pod.
+   - Utilisez la commande `podman inspect` pour vérifier que les conteneurs sont dans le même pod.
 
-Podman est un outil puissant pour la gestion de conteneurs. Voici un exemple concret d'utilisation de Podman pour un projet réel.
-
-## Exemple : Application Django
-
-### Dockerfile
-
-```dockerfile
-FROM python:3.9-slim
-COPY . /app
-WORKDIR /app
-RUN pip install -r requirements.txt
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-```
+Utilisez la commande ping ou curl pour vérifier que les deux conteneurs peuvent communiquer.
 
 ---
 
-### Podmanfile
+# Correction :
 
-```dockerfile
-FROM docker.io/library/python:3.9-slim
-COPY . /app
-WORKDIR /app
-RUN pip install -r requirements.txt
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-```
+### Comment vérifier que les deux conteneurs peuvent communiquer ?
 
----
-
-### Podman-compose
-
-```yaml
-version: "3.8"
-services:
-  web:
-    image: python:3.9-slim
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./:/app
-```
-
----
-
-### Exécution de l'application
+Avec ping :
 
 ```bash
-podman-compose up
+podman exec -it my-pod-redis redis-cli ping
 ```
+
+Avec curl :
+
+```bash
+podman exec -it my-pod-nginx curl http://my-pod-redis:6379
+```
+---
+
+### Exercice plus complexe :
+
+Nous allons faire ensemble en live l'exercice suivant :
+
+Je vais vous fournir un back en nodejs et un front en reactjs.
+
+Vous allez devoir les mettre dans un pod et faire en sorte que le front puisse accéder au back.
+
+En suite vous allez devoir ajouter un conteneur mysql dans ce pod et faire en sorte que le front puisse accéder au back et au database.
 
 ---
 
