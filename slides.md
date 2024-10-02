@@ -2345,6 +2345,155 @@ Explication :
 </small>
 
 ---
+
+# CNAME et CGroup avec Podman
+
+## Introduction
+
+- Présentation des concepts CNAME et CGroup
+- Leur rôle dans la gestion des conteneurs avec Podman
+
+---
+
+## CNAME - Qu'est-ce que c'est ?
+
+**Définition du CNAME (Canonical Name)**
+
+- En DNS, CNAME est un enregistrement qui mappe un nom de domaine à un autre nom de domaine.
+- Utilisé pour rediriger les sous-domaines ou noms alternatifs vers un domaine principal.
+- Exemple : `www.exemple.com` → `exemple.com`
+
+---
+
+### Utilisation de CNAME dans les conteneurs
+**CNAME et Podman**
+
+- Podman n'utilise pas directement les CNAME dans la gestion des conteneurs.
+- Cependant, les concepts DNS comme CNAME peuvent être utiles pour diriger les requêtes réseau entre conteneurs.
+
+En effet, Podman ne gère pas directement les enregistrements DNS de type **CNAME** (Canonical Name), car ce type d'enregistrement est spécifique au système de **Domain Name System (DNS)** sur Internet, et non aux réseaux internes ou à la gestion de conteneurs.
+
+---
+
+Cependant, il existe des alternatives pour configurer des noms et gérer la communication réseau entre conteneurs dans un environnement Podman. 
+
+Il existe plusieurs solutions pour résoudre les noms entre conteneurs :
+
+### 1. **Fichier `/etc/hosts`**
+   - **Podman** crée automatiquement un fichier `/etc/hosts` à l'intérieur de chaque conteneur pour la résolution de noms locaux.
+   - Tu peux éditer manuellement ce fichier pour ajouter des correspondances de noms entre conteneurs.
+   Exemple : ajouter une entrée dans le fichier `/etc/hosts` pour mapper un nom de domaine à une adresse IP locale.
+
+   ```bash
+   echo "172.17.0.2 backend" >> /etc/hosts
+   ```
+
+---
+
+### 2. **DNS interne de Podman**
+   - Podman configure des réseaux internes pour permettre aux conteneurs de communiquer entre eux. Chaque conteneur peut être référencé par son **nom de conteneur**.
+   - Si les conteneurs sont dans le même réseau Podman (par défaut), ils peuvent se résoudre par nom directement, sans besoin de DNS externe.
+
+   Exemple : Si vous avez un conteneur nommé `backend`, un autre conteneur dans le même réseau peut accéder à `backend` par son nom sans configuration supplémentaire.
+
+   Ça nous l'avons déjà vu dans les slides précédents.
+
+---
+
+### 3. **Alias DNS avec `--network-alias` (via Docker Compose/Podman Compose)**
+   - Si vous utilisez **Podman Compose** pour orchestrer plusieurs conteneurs, vous pouvez utiliser l'option **`network-alias`** pour attribuer des alias DNS aux conteneurs dans le même réseau.
+
+   Exemple avec Podman Compose :
+   ```yaml
+   version: '3'
+   services:
+     frontend:
+       image: mon_frontend
+       networks:
+         app_net:
+           aliases:
+             - www.monsite.com
+     backend:
+       image: mon_backend
+       networks:
+         app_net:
+   networks:
+     app_net:
+       driver: bridge
+   ```
+---
+
+   Ici, `frontend` aura l'alias DNS `www.monsite.com`, que les autres conteneurs pourront utiliser pour le contacter.
+
+---
+
+### 4. **Serveur DNS personnalisé**
+   - Si vous avez besoin d'une gestion DNS plus avancée (par exemple, utiliser des CNAME), vous pouvez déployer un serveur **DNS** dans votre réseau de conteneurs et le configurer pour gérer les enregistrements DNS.
+   - Vous pouvez configurer Podman pour utiliser ce serveur DNS à l’aide de l’option `--dns` lors du lancement des conteneurs.
+
+   Exemple :
+   ```bash
+   podman run --dns 10.88.0.10 --name mon_conteneur mon_image
+   ```
+
+   Ici, `10.88.0.10` serait l'adresse IP de votre serveur DNS personnalisé.
+
+---
+
+### Conclusion
+Bien que **CNAME** ne soit pas utilisable directement avec Podman pour les conteneurs, vous pouvez utiliser les alternatives suivantes :
+
+- Résolution par nom de conteneur dans le même réseau.
+- Ajout d'alias avec Podman Compose.
+- Utilisation d'un serveur DNS personnalisé pour gérer des noms plus complexes.
+
+Ces solutions permettent d'obtenir une gestion efficace des noms et de la communication réseau entre conteneurs.
+
+---
+
+## CGroup - Qu'est-ce que c'est ?
+
+- Les CGroup sont des fonctionnalités du noyau Linux permettant de limiter et surveiller l'utilisation des ressources par des groupes de processus (CPU, mémoire, disque, etc.).
+- Podman utilise les CGroup pour gérer les ressources des conteneurs.
+
+---
+
+## CGroup et Podman
+**Comment Podman utilise CGroup**
+
+- Lorsqu’un conteneur est lancé avec Podman, il est encapsulé dans un CGroup.
+- Cela permet de contrôler les ressources disponibles pour chaque conteneur.
+- Exemple : Limiter l’utilisation CPU d’un conteneur avec `--cpus`.
+
+---
+
+## Exemple d'utilisation avec Podman
+**Exemple de gestion des CGroup avec Podman**
+
+```bash
+podman run --rm -d --name mon_conteneur --cpus=1 --memory=512m mon_image
+```
+
+- Ici, on limite le CPU à 1 et la mémoire à 512 MB pour le conteneur.
+- Le conteneur est isolé grâce aux CGroup.
+
+---
+
+## Avantages des CGroup dans Podman
+**Pourquoi utiliser les CGroup ?**
+
+- Meilleure gestion des ressources.
+- Prévention des débordements de ressources par des conteneurs.
+- Surveillance des performances et ajustement des limites.
+
+---
+
+## Conclusion
+
+- CNAME : utilisé principalement en DNS, moins directement pertinent pour Podman mais utilisable avec des solutions de "contournement".
+- CGroup : un composant essentiel pour la gestion des ressources avec Podman.
+
+---
 class: 'grid text-center align-self-center justify-self-center'
 ---
 
