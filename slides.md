@@ -32,9 +32,9 @@ routeAlias: 'sommaire'
 
 # SOMMAIRE 📜
 
-### Voici le sommaire de cette formation sur PHP, Laravel et Symfony:
+Voici le sommaire de cette formation sur PHP, Laravel et Symfony:
 
-<br>
+<small>
 
 <div class="flex flex-col gap-2">
 <Link to="introduction-php">🚀 Introduction à PHP</Link>
@@ -49,7 +49,11 @@ routeAlias: 'sommaire'
 <Link to="bases-donnees-php">💾 Bases de données avec PHP</Link>
 </div>
 
+</small>
+
 ::right::
+
+<small>
 
 <div class="flex flex-col gap-2">
 <Link to="composer">📦 Composer et gestion des dépendances</Link>
@@ -71,6 +75,8 @@ routeAlias: 'sommaire'
 <Link to="ressources-apprentissage">📖 Ressources pour continuer l'apprentissage</Link>
 <Link to="questions-discussion">💬 Questions et discussion</Link>
 </div>
+
+</small>
 
 ---
 routeAlias: 'introduction-php'
@@ -711,6 +717,30 @@ routeAlias: 'composer'
 </small>
 
 ---
+
+# Installation de composer
+
+- Installer composer sur linux : `sudo apt install composer`
+- Installer composer sur windows : https://getcomposer.org/download/
+- Installer composer sur macos : `brew install composer`
+
+<small>
+
+<br>
+
+> Attention dans la plus part des cas quand vous avez installer php avec homebrew, composer est déjà installer
+
+<br>
+
+> Sur Windows : Ajouter le dossier bin de php à votre variable d'environnement PATH
+
+</small>
+
+<br>
+
+- Vérifier l'installation de composer : `composer --version`
+
+---
 routeAlias: 'exercice-mise-en-place-projet-composer'
 ---
 
@@ -747,15 +777,91 @@ routeAlias: 'introduction-laravel'
 </small>
 
 ---
+
+# Schéma d'un projet Laravel
+
+```mermaid
+graph LR
+    A[index.php] --> B[routes]
+    B --> C[Controllers]
+    C --> D[Models]
+    D --> E[Views]
+    E --> F[Layouts]
+    F --> G[Partials]
+```
+
+<small>
+
+En clair :
+
+- index.php est le point d'entrée de l'application
+- routes.php est le fichier qui contient les routes de l'application (une route est une URL qui est appelée lorsqu'on accède à une page)
+- controllers contient les controllers de l'application (un controller est une classe qui contient des méthodes qui sont appelées lorsqu'on accède à une route)
+- models contient les models de l'application (un model est une classe qui représente une table de la base de données)
+- views contient les views de l'application (un view est un template qui est inclus dans un layout)
+- layouts contient les layouts de l'application (un layout est un template qui est inclus dans un autre template)
+- partials contient les partials de l'application (un partial est un template qui est inclus dans un autre template)
+
+</small>
+
+---
+
+# Comment le tout communique ensemble ?
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Route
+    participant Controller
+    participant Model
+    participant View
+    participant Layout
+    participant Partial
+
+    Client->>Route: Envoie une requête HTTP
+    Route->>Controller: Appelle le contrôleur approprié
+    Controller->>Model: Interroge ou modifie les données
+    Model-->>Controller: Retourne les données
+    Controller->>View: Passe les données à la vue
+    View->>Layout: Utilise le layout pour le rendu
+    Layout->>Partial: Inclut des templates partiels
+    Partial-->>Layout: Retourne le contenu partiel
+    Layout-->>View: Retourne le layout complet
+    View-->>Client: Retourne la réponse HTML
+```
+
+---
 routeAlias: 'exercice-mise-en-place-projet-laravel'
 ---
 
 ## Exercice : Création d'un projet Laravel
 
 1. Installez Laravel via Composer.
+
+<small>
+```bash
+composer create-project laravel/laravel nom_du_projet
+```
+</small>
+
 2. Explorez la structure du projet créé.
 3. Utilisez Artisan pour créer un contrôleur et un modèle.
+
+<small>
+
+```bash
+php artisan make:controller NomDuController
+php artisan make:model NomDuModel
+```
+</small>
+
 4. Lancez le serveur de développement et accédez à la page d'accueil.
+
+<small>
+```bash
+php artisan serve
+```
+</small>
 
 ---
 routeAlias: 'fonctionnalites-laravel'
