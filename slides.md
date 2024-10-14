@@ -127,6 +127,18 @@ routeAlias: 'exercice-configuration-environnement-php'
 4. Accédez à ce fichier via votre navigateur et vérifiez les informations affichées.
 
 ---
+routeAlias: 'correction-exercice-configuration-environnement-php'
+---
+
+## Correction de l'exercice : Configuration de l'environnement PHP
+
+```php
+<?php
+phpinfo();
+?>
+```
+
+---
 routeAlias: 'syntaxe-base-php'
 ---
 
@@ -154,6 +166,26 @@ Créez un script PHP qui :
 1. Affiche "Bonjour, monde !" à l'écran.
 2. Utilise des commentaires pour expliquer chaque ligne de code.
 3. Utilise à la fois `echo` et `print` pour comparer leur utilisation.
+
+---
+routeAlias: 'correction-exercice-votre-premier-script-php'
+---
+
+## Correction de l'exercice : Votre premier script PHP
+
+```php
+<?php
+// Affichage avec echo
+echo "Bonjour, monde !<br>";
+
+// Affichage avec print
+print "Ceci est mon premier script PHP.<br>";
+
+// Comparaison entre echo et print
+echo "Echo est généralement plus rapide que print.<br>";
+print "Print retourne toujours 1.<br>";
+?>
+```
 
 ---
 routeAlias: 'variables-types'
@@ -190,6 +222,36 @@ Créez un script PHP qui :
 1. Déclare des variables de différents types (int, float, string, boolean, array).
 2. Effectue des opérations de base sur ces variables (addition, concaténation, etc.).
 3. Utilise la fonction `var_dump()` pour afficher le type et la valeur de chaque variable.
+
+---
+routeAlias: 'correction-exercice-manipulation-types-donnees'
+---
+
+## Correction de l'exercice : Manipulation des types de données
+
+```php
+<?php
+// Déclaration des variables
+$entier = 42;
+$flottant = 3.14;
+$chaine = "Hello, PHP!";
+$booleen = true;
+$tableau = [1, 2, 3, 4, 5];
+
+// Opérations de base
+$somme = $entier + $flottant;
+$concatenation = $chaine . " J'aime les nombres comme " . $entier;
+
+// Affichage des types et valeurs
+var_dump($entier);
+var_dump($flottant);
+var_dump($chaine);
+var_dump($booleen);
+var_dump($tableau);
+var_dump($somme);
+var_dump($concatenation);
+?>
+```
 
 ---
 routeAlias: 'structures-controle'
@@ -433,6 +495,7 @@ routeAlias: 'correction-exercice-organisation-code-namespaces'
 
 ```php
 <?php
+// Fichier: src/Controllers/UserController.php
 namespace App\Controllers;
 
 class UserController {
@@ -441,6 +504,7 @@ class UserController {
     }
 }
 
+// Fichier: src/Models/User.php
 namespace App\Models;
 
 class User {
@@ -452,6 +516,27 @@ class User {
         $this->email = $email;
     }
 }
+
+// Fichier: composer.json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
+
+// Fichier: index.php
+require_once 'vendor/autoload.php';
+
+use App\Controllers\UserController;
+use App\Models\User;
+
+$controller = new UserController();
+$controller->index();
+
+$user = new User("John Doe", "john@example.com");
+var_dump($user);
 ?>
 ```
 
@@ -495,14 +580,30 @@ routeAlias: 'correction-exercice-gestion-erreurs-exceptions'
 
 ```php
 <?php
-function invalidParameterException($param) {
-    throw new Exception("Paramètre invalide : $param");
+class AgeInvalideException extends Exception {}
+
+function verifierAge($age) {
+    if ($age < 0 || $age > 120) {
+        throw new AgeInvalideException("L'âge doit être compris entre 0 et 120 ans.");
+    }
+    return true;
+}
+
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
+try {
+    verifierAge(150);
+} catch (AgeInvalideException $e) {
+    echo "Erreur : " . $e->getMessage() . "\n";
 }
 
 try {
-    invalidParameterException("test");
-} catch (Exception $e) {
-    echo "Erreur : " . $e->getMessage();
+    // Provoque une erreur PHP
+    echo $variableInexistante;
+} catch (ErrorException $e) {
+    echo "Erreur PHP convertie en exception : " . $e->getMessage() . "\n";
 }
 ?>
 ```
