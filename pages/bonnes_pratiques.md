@@ -111,3 +111,145 @@ emailService.sendEmail(user.email, 'Bienvenue', 'Bienvenue sur notre plateforme 
 ```
 
 Ce refactoring sépare les responsabilités en différentes classes et utilise un Factory pour la création d'utilisateurs.
+
+---
+routeAlias: 'bonnes-pratiques-optimisation'
+---
+
+# Bonnes pratiques et optimisation
+
+- **Structure du projet**
+  - Organisation des fichiers et dossiers
+  - Utilisation de composants réutilisables
+
+- **Performance**
+  - Utilisation de `React.memo` pour éviter les re-rendus inutiles
+  - Optimisation des listes avec `FlatList` et `VirtualizedList`
+  - Lazy loading des composants et des images
+
+- **Gestion de l'état**
+  - Utilisation appropriée des hooks (useState, useEffect, useCallback, useMemo)
+  - Mise en place d'un état global avec Context API ou Redux
+
+- **Debugging**
+  - Utilisation de React Native Debugger
+  - Mise en place de logs appropriés
+
+- **Tests**
+  - Mise en place de tests unitaires avec Jest
+  - Tests d'intégration avec React Native Testing Library
+
+---
+routeAlias: 'exercice-optimisation-application'
+---
+
+## Exercice : Optimisation de l'application TinderLikeApp
+
+Optimisons notre application TinderLikeApp en appliquant certaines des meilleures pratiques.
+
+1. Optimisez le rendu de la liste des profils :
+
+```jsx
+import React, { memo } from 'react';
+import { FlatList } from 'react-native';
+
+const ProfileItem = memo(({ profile, onPress }) => {
+  // Composant d'item de profil optimisé
+});
+
+const ProfileList = ({ profiles, onProfilePress }) => {
+  const renderItem = ({ item }) => (
+    <ProfileItem profile={item} onPress={() => onProfilePress(item)} />
+  );
+
+  return (
+    <FlatList
+      data={profiles}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      initialNumToRender={10}
+      maxToRenderPerBatch={20}
+      windowSize={21}
+    />
+  );
+};
+
+export default ProfileList;
+```
+
+2. Implémentez le lazy loading des images :
+
+```jsx
+import React, { useState } from 'react';
+import { Image, View } from 'react-native';
+
+const LazyImage = ({ source, style }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <View>
+      {!loaded && <View style={[style, { backgroundColor: '#ccc' }]} />}
+      <Image
+        source={source}
+        style={[style, { display: loaded ? 'flex' : 'none' }]}
+        onLoad={() => setLoaded(true)}
+      />
+    </View>
+  );
+};
+
+export default LazyImage;
+```
+
+3. Mettez en place un système de logging :
+
+```jsx
+// utils/logger.js
+const logger = {
+  info: (message) => {
+    if (__DEV__) {
+      console.log(`[INFO] ${message}`);
+    }
+  },
+  error: (message, error) => {
+    if (__DEV__) {
+      console.error(`[ERROR] ${message}`, error);
+    }
+    // Ici, vous pourriez également envoyer les erreurs à un service de suivi des erreurs
+  }
+};
+
+export default logger;
+```
+
+4. Ajoutez un test unitaire simple :
+
+```jsx
+// __tests__/ProfileItem.test.js
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react-native';
+import ProfileItem from '../components/ProfileItem';
+
+describe('ProfileItem', () => {
+  it('renders correctly', () => {
+    const profile = { id: '1', name: 'John Doe', bio: 'Test bio' };
+    const { getByText } = render(<ProfileItem profile={profile} />);
+    
+    expect(getByText('John Doe')).toBeTruthy();
+    expect(getByText('Test bio')).toBeTruthy();
+  });
+
+  it('calls onPress when pressed', () => {
+    const profile = { id: '1', name: 'John Doe', bio: 'Test bio' };
+    const onPressMock = jest.fn();
+    const { getByTestId } = render(<ProfileItem profile={profile} onPress={onPressMock} />);
+    
+    fireEvent.press(getByTestId('profile-item'));
+    expect(onPressMock).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+Ces optimisations et bonnes pratiques amélioreront les performances et la maintenabilité de votre application TinderLikeApp. N'oubliez pas de les appliquer tout au long du développement de votre application.
+
+Félicitations ! Vous avez maintenant terminé cette formation sur React Native et Expo. Vous avez appris à créer une application mobile complète, de la configuration initiale à l'optimisation et au déploiement. Continuez à pratiquer et à explorer les nombreuses possibilités offertes par React Native pour créer des applications mobiles performantes et attrayantes.

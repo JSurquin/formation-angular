@@ -3,19 +3,19 @@ theme: ./
 colorSchema: "auto"
 layout: intro
 highlighter: shiki
-title: Formation JavaScript, Node.js et React
+title: Formation React Native et Expo
 transition: slide-left
 themeConfig:
   logoHeader: "/avatar.png"
-  eventLogo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"
-  eventUrl: "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-  twitter: "@javascript"
-  twitterUrl: "https://twitter.com/javascript"
+  eventLogo: "https://d33wubrfki0l68.cloudfront.net/554c3b0e09cf167f0281fda839a5433f2040b349/ecfc9/img/header_logo.svg"
+  eventUrl: "https://reactnative.dev/"
+  twitter: "@reactnative"
+  twitterUrl: "https://twitter.com/reactnative"
 ---
 
-# JavaScript, Node.js et React
+# React Native et Expo
 
-Une formation complète sur le développement web moderne avec JavaScript.
+Une formation complète sur le développement d'applications mobiles avec React Native et Expo.
 
 <div class="pt-12">
   <span @click="next" class="px-2 p-1 rounded cursor-pointer hover:bg-white hover:bg-opacity-10">
@@ -24,101 +24,78 @@ Une formation complète sur le développement web moderne avec JavaScript.
 </div>
 
 ---
+layout: two-cols
+routeAlias: 'sommaire'
+---
+
+<a name="SOMMAIRE" id="sommaire"></a>
+
+# SOMMAIRE 📜
+
+Voici le sommaire de cette formation sur React Native et Expo:
+
+<small>
+
+<div class="flex flex-col gap-2">
+<Link to="introduction-react-native">🚀 Introduction à React Native et Expo</Link>
+<Link to="configuration-environnement">💻 Configuration de l'environnement de développement</Link>
+<Link to="bases-react-native">🔧 Bases de React Native</Link>
+<Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
+<Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
+</div>
+
+</small>
+
+::right::
+
+<small>
+
+<div class="flex flex-col gap-2">
+<Link to="integration-api-donnees">🌐 Intégration d'API et gestion des données</Link>
+<Link to="camera-medias">📸 Utilisation de la caméra et des médias</Link>
+<Link to="animations-gestes">🎨 Animations et gestes</Link>
+<Link to="publication-application">📦 Publication de l'application</Link>
+<Link to="bonnes-pratiques-optimisation">🔍 Bonnes pratiques et optimisation</Link>
+</div>
+
+</small>
+
+---
 src: ./pages/introduction.md
 ---
 
 ---
-src: ./pages/installation.md
+src: ./pages/configuration.md
 ---
 
 ---
-src: ./pages/syntaxe_base.md
+src: ./pages/bases_react_native.md
 ---
 
 ---
-src: ./pages/variables_types.md
+src: ./pages/composants_natifs.md
 ---
 
 ---
-src: ./pages/structures_controle.md
+src: ./pages/gestion_etat.md
 ---
 
 ---
-src: ./pages/fonctions.md
+src: ./pages/integration_api.md
 ---
 
 ---
-src: ./pages/poo.md
+src: ./pages/camera_medias.md
 ---
 
 ---
-src: ./pages/modules.md
+src: ./pages/animations_gestes.md
 ---
 
 ---
-src: ./pages/gestion_erreurs.md
----
-
----
-src: ./pages/asynchrone.md
----
-
----
-src: ./pages/npm.md
----
-
----
-src: ./pages/nodejs.md
----
-
----
-src: ./pages/express.md
----
-
----
-src: ./pages/react.md
----
-
----
-src: ./pages/hooks.md
----
-
----
-src: ./pages/redux.md
----
-
----
-src: ./pages/api_rest.md
----
-
----
-src: ./pages/tests_unitaires.md
+src: ./pages/publication.md
 ---
 
 ---
 src: ./pages/bonnes_pratiques.md
----
-
----
-src: ./pages/securite.md
----
-
----
-src: ./pages/performance.md
----
-
----
-src: ./pages/deploiement.md
----
-
----
-src: ./pages/tendances_futures.md
----
-
----
-src: ./pages/ressources.md
----
-
----
-src: ./pages/questions.md
 ---
