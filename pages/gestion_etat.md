@@ -352,4 +352,6 @@ export default function App() {
 }
 ```
 
+---
+
 Cet exercice vous permet de pratiquer la mise en place d'une navigation de base entre écrans, le passage de paramètres, et la mise à jour dynamique des titres d'écran.

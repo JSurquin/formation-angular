@@ -246,6 +246,6 @@ const loadCachedProfiles = async () => {
   }
 };
 ```
+---
 
 Cet exercice vous permet de pratiquer l'intégration d'API, la gestion des états de chargement et d'erreur, ainsi que le stockage local des données dans votre application React Native.
-</rewritten_file>

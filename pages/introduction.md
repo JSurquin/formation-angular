@@ -169,6 +169,10 @@ expo eject
   - Support expérimental de React Native
   - Communauté grandissante
 
+---
+
+# Mais aussi
+
 - **esbuild**
   - Ultra rapide
   - Écrit en Go

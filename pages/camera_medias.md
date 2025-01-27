@@ -89,6 +89,8 @@ await fetch('https://monapi.com/upload', {
     );
     ```
 
+---
+
 - **Stockage des médias**
   - Sauvegarde locale avec Expo FileSystem
     ```js
@@ -213,7 +215,13 @@ Fin du code pour `ProfileImagePicker.js` :
     </View>
   );
 };
+```
 
+---
+
+# Style
+
+```jsx
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -291,6 +299,8 @@ const styles = StyleSheet.create({
 
 export default UserProfile;
 ```
+
+---
 
 Cet exercice vous permet de pratiquer l'utilisation de la caméra et de la galerie d'images dans une application React Native.
 
