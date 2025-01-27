@@ -4,21 +4,146 @@ routeAlias: 'bonnes-pratiques'
 
 # Bonnes pratiques de développement JavaScript
 
-- **ESLint et Prettier**
-  - Linting et formatage automatique du code
-  ```js
-  // Exemple de règle ESLint
-  {
-    "rules": {
-      "no-console": "error", // Interdit console.log
-      "indent": ["error", 2] // Force indentation 2 espaces
-    }
-  }
-  ```
+## Configuration ESLint
 
-- **Design Patterns**
-  - Module, Factory, Observer, etc.
-  - Quand et comment les utiliser
+```js
+// Configuration de base ESLint
+{
+  "rules": {
+    "no-console": "error",
+    "indent": ["error", 2]
+  }
+}
+```
+
+---
+
+## Design Pattern - Module
+
+```js
+// Pattern Module
+const monModule = (function() {
+  let compteur = 0;
+  
+  return {
+    increment() {
+      compteur++;
+      return compteur;
+    }
+  };
+})();
+```
+
+---
+
+## Clean Code - Nommage
+
+```js
+// Mauvais
+const x = users.filter(u => u.a > 5);
+
+// Bon
+const usersActifs = utilisateurs.filter(user => user.age > 5);
+```
+
+---
+
+## Clean Code - Fonctions
+
+```js
+// Mauvais
+function gererUtilisateur(user) {
+  // 50 lignes qui font plein de choses
+}
+
+// Bon 
+function validerUtilisateur(user) {
+  return user.age >= 18;
+}
+
+function sauvegarderUtilisateur(user) {
+  // Sauvegarde uniquement
+}
+```
+
+---
+
+## Principes SOLID - Single Responsibility
+
+```js
+// Single Responsibility
+class UtilisateurService {
+  creerUtilisateur() {}
+  supprimerUtilisateur() {}
+}
+
+class EmailService {
+  envoyerEmail() {}
+}
+```
+
+---
+
+# Exercice de Refactoring
+
+## Code Initial
+
+```javascript
+// Avant refactoring
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+
+  save() {
+    // Logique de sauvegarde
+  }
+
+  sendEmail(subject, body) {
+    // Logique d'envoi d'email
+  }
+}
+```
+
+---
+
+## Code Refactorisé - Partie 1
+
+```javascript
+// Classes séparées
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+}
+
+class UserRepository {
+  save(user) {
+    // Logique de sauvegarde
+  }
+}
+```
+
+---
+
+## Code Refactorisé - Partie 2
+
+```javascript
+// Services séparés
+class EmailService {
+  sendEmail(to, subject, body) {
+    // Logique d'envoi d'email
+  }
+}
+
+class UserFactory {
+  static createUser(name, email) {
+    return new User(name, email);
+  }
+}
+```
 
 ---
 
@@ -199,11 +324,110 @@ emailService.sendEmail(user.email, 'Bienvenue', 'Bienvenue sur notre plateforme 
 routeAlias: 'bonnes-pratiques-optimisation'
 ---
 
-# Bonnes pratiques et optimisation
+# Bonnes pratiques React Native
 
-- **Structure du projet**
-  - Organisation des fichiers et dossiers
-  - Utilisation de composants réutilisables
+## Architecture des composants - Partie 1
+
+```jsx
+// Mauvaise pratique
+const MauvaisComposant = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('https://api.example.com/data')
+      .then(response => response.json())
+      .then(data => setData(data))
+      .catch(error => setError(error))
+      .finally(() => setLoading(false));
+  }, []);
+};
+```
+
+---
+
+## Architecture des composants - Partie 2
+
+```jsx
+// Bonne pratique - Hook personnalisé
+const useData = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('https://api.example.com/data');
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return { data, loading, error };
+};
+```
+
+---
+
+## Architecture des composants - Partie 3
+
+```jsx
+// Utilisation du hook personnalisé
+const BonComposant = () => {
+  const { data, loading, error } = useData();
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+
+  return (
+    <View>
+      {data.map(item => (
+        <ItemComponent key={item.id} item={item} />
+      ))}
+    </View>
+  );
+};
+```
+
+---
+
+## Optimisation des performances - Partie 1
+
+```jsx
+// Utilisation de useMemo pour les calculs coûteux
+const MemoizedComponent = () => {
+  const expensiveValue = useMemo(() => {
+    return someExpensiveCalculation(props);
+  }, [props]);
+
+  return <Text>{expensiveValue}</Text>;
+};
+```
+
+---
+
+## Optimisation des performances - Partie 2
+
+```jsx
+// Utilisation de useCallback pour les fonctions
+const OptimizedComponent = () => {
+  const handlePress = useCallback(() => {
+    // Logique de gestion du clic
+  }, []);
+
+  return <TouchableOpacity onPress={handlePress} />;
+};
+```
 
 ---
 
@@ -237,6 +461,8 @@ routeAlias: 'exercice-optimisation-application'
 ## Exercice : Optimisation de l'application TinderLikeApp
 
 Optimisons notre application TinderLikeApp en appliquant certaines des meilleures pratiques.
+
+---
 
 1. Optimisez le rendu de la liste des profils :
 
