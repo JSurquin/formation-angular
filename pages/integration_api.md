@@ -2,172 +2,250 @@
 routeAlias: 'integration-api-donnees'
 ---
 
-# Intégration d'API et gestion des données
+# Appels API
 
-- **Appels API avec Fetch ou Axios**
-  - Utilisation de Fetch (intégré à React Native)
-  - Axios comme alternative populaire
+## Fetch
 
-- **Gestion des états de chargement et d'erreur**
-  - Affichage de spinners pendant le chargement
-  - Gestion des erreurs et affichage de messages d'erreur
+```js
+// Exemple avec Fetch
+fetch('https://api.monsite.com/users')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  // Équivalent à $.ajax en jQuery
+```
 
----
+## Axios
 
-# Intégration d'API et gestion des données (suite)
-
-- **Stockage local avec AsyncStorage**
-  - Sauvegarde de données sur l'appareil
-  - Persistance de l'état de l'application
-
-- **Gestion de l'état global avec Context API ou Redux**
-  - Partage de données entre composants
-  - Gestion d'un état complexe de l'application
-
----
-routeAlias: 'exercice-integration-api'
----
-
-## Exercice : Intégration d'une API de profils
-
-Améliorons notre application TinderLikeApp en intégrant une API réelle pour récupérer des profils d'utilisateurs.
-
-1. Utilisez l'API gratuite [Random User Generator](https://randomuser.me/) pour obtenir des profils aléatoires
-2. Créez une fonction pour récupérer plusieurs profils
-3. Implémentez un état de chargement et de gestion d'erreur
-4. Stockez les profils récupérés dans le state de l'application
+```js
+// Exemple avec Axios 
+axios.get('https://api.monsite.com/users')
+  .then(response => console.log(response.data))
+  // Plus simple que Fetch car pas besoin de .json()
+```
 
 ---
 
-## Exercice : Intégration d'une API de profils (suite)
+# Gestion des états de chargement
 
-Voici le code pour un nouveau fichier `api.js` :
+## Loading Spinner
 
 ```jsx
-import axios from 'axios';
+// Comme un loader en CSS mais en natif
+const [isLoading, setIsLoading] = useState(true);
 
-export const fetchProfiles = async (count = 10) => {
+return (
+  <View>
+    {isLoading && <ActivityIndicator size="large" />}
+    {data && <DataComponent data={data} />}
+  </View>
+);
+```
+
+## Gestion des erreurs
+
+```jsx
+// Comme une div .error en CSS
+const [error, setError] = useState(null);
+
+return (
+  <View>
+    {error && <Text style={{color: 'red'}}>{error}</Text>}
+  </View>
+);
+```
+
+---
+
+# Stockage local
+
+## AsyncStorage - Sauvegarde
+
+```js
+// Comme localStorage en web
+const saveUserData = async (userData) => {
   try {
-    const response = await axios.get(`https://randomuser.me/api/?results=${count}`);
-    return response.data.results.map(user => ({
-      id: user.login.uuid,
-      name: `${user.name.first} ${user.name.last}`,
-      bio: `Je suis ${user.dob.age} ans et je viens de ${user.location.city}, ${user.location.country}.`,
-      imageUrl: user.picture.large
-    }));
+    await AsyncStorage.setItem(
+      'user', 
+      JSON.stringify(userData)
+    );
   } catch (error) {
-    console.error('Erreur lors de la récupération des profils:', error);
-    throw error;
+    console.error('Erreur de sauvegarde:', error);
   }
 };
 ```
 
 ---
 
-## Exercice : Intégration d'une API de profils (suite)
+## AsyncStorage - Récupération
 
-Maintenant, mettons à jour `ProfileList.js` pour utiliser cette API :
+```js
+// Pour garder des données même après fermeture de l'app
+const loadUserData = async () => {
+  try {
+    const userData = await AsyncStorage.getItem('user');
+    return userData != null ? JSON.parse(userData) : null;
+  } catch (error) {
+    console.error('Erreur de chargement:', error);
+    return null;
+  }
+};
+```
+
+---
+
+# Gestion de l'état global
+
+## Context API
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { fetchProfiles } from '../api';
+// Comme une variable globale accessible partout
+const ThemeContext = React.createContext('light');
 
-const ProfileList = ({ navigation }) => {
+// Dans un composant parent
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <MainApp />
+    </ThemeContext.Provider>
+  );
+}
+
+// Dans n'importe quel composant enfant
+function ThemedButton() {
+  const theme = useContext(ThemeContext);
+  return <Button theme={theme} />;
+}
+```
+
+---
+
+## État global complexe
+
+```js
+// Comme un grand objet qui contient tout l'état
+const initialState = {
+  user: null,
+  theme: 'light',
+  notifications: [],
+  settings: {
+    language: 'fr',
+    notifications: true
+  }
+};
+
+// Gestion avec useReducer ou Redux
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+---
+routeAlias: 'exercice-integration-api'
+---
+
+# Exercice : Intégration API de profils
+
+## Objectifs
+1. Utiliser l'API Random User Generator
+2. Gérer le chargement et les erreurs
+3. Stocker les profils localement
+4. Implémenter un pull-to-refresh
+
+---
+
+## Service API
+
+```js
+// services/api.js
+const fetchProfiles = async (count = 10) => {
+  try {
+    const response = await fetch(
+      `https://randomuser.me/api/?results=${count}`
+    );
+    const data = await response.json();
+    return data.results.map(user => ({
+      id: user.login.uuid,
+      name: `${user.name.first} ${user.name.last}`,
+      bio: `${user.location.city}, ${user.location.country}`,
+      imageUrl: user.picture.large
+    }));
+  } catch (error) {
+    throw new Error('Erreur lors du chargement des profils');
+  }
+};
+```
+
+---
+
+## Composant ProfileList avec API
+
+```jsx
+const ProfileList = () => {
   const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const loadProfiles = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await fetchProfiles(10);
+      setProfiles(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     loadProfiles();
   }, []);
 
-  const loadProfiles = async () => {
-    try {
-      setLoading(true);
-      const fetchedProfiles = await fetchProfiles(20);
-      setProfiles(fetchedProfiles);
-      setError(null);
-    } catch (err) {
-      setError('Impossible de charger les profils. Veuillez réessayer.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => navigation.navigate('UserProfile', item)}
-    >
-      <Text style={styles.name}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+  if (isLoading) {
+    return <ActivityIndicator size="large" />;
   }
 
   if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.error}>{error}</Text>
-        <TouchableOpacity style={styles.button} onPress={loadProfiles}>
-          <Text style={styles.buttonText}>Réessayer</Text>
-        </TouchableOpacity>
-      </View>
-    );
+    return <Text style={styles.error}>{error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={profiles}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        refreshing={loading}
-        onRefresh={loadProfiles}
-      />
-    </View>
+    <FlatList
+      data={profiles}
+      renderItem={renderProfile}
+      keyExtractor={item => item.id}
+      refreshing={isLoading}
+      onRefresh={loadProfiles}
+    />
   );
 };
+```
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-  name: {
-    fontSize: 18,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  error: {
-    color: 'red',
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-});
+---
 
-export default ProfileList;
+## Stockage local des profils
+
+```jsx
+const saveProfiles = async (profiles) => {
+  try {
+    await AsyncStorage.setItem(
+      'cached_profiles',
+      JSON.stringify(profiles)
+    );
+  } catch (error) {
+    console.error('Erreur de cache:', error);
+  }
+};
+
+const loadCachedProfiles = async () => {
+  try {
+    const cached = await AsyncStorage.getItem('cached_profiles');
+    return cached ? JSON.parse(cached) : [];
+  } catch (error) {
+    console.error('Erreur de lecture du cache:', error);
+    return [];
+  }
+};
+```
+
+Cet exercice vous permet de pratiquer l'intégration d'API, la gestion des états de chargement et d'erreur, ainsi que le stockage local des données dans votre application React Native.
+</rewritten_file>

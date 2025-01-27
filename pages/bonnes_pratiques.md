@@ -6,17 +6,92 @@ routeAlias: 'bonnes-pratiques'
 
 - **ESLint et Prettier**
   - Linting et formatage automatique du code
+  ```js
+  // Exemple de règle ESLint
+  {
+    "rules": {
+      "no-console": "error", // Interdit console.log
+      "indent": ["error", 2] // Force indentation 2 espaces
+    }
+  }
+  ```
 
 - **Design Patterns**
   - Module, Factory, Observer, etc.
   - Quand et comment les utiliser
 
-- **Clean Code**
-  - Nommage significatif
-  - Fonctions courtes et focalisées
+---
 
-- **Principes SOLID**
-  - Adaptés au contexte JavaScript/TypeScript
+# Design Patterns (suite)
+
+```js
+// Pattern Module (comme en web)
+const monModule = (function() {
+  // Variables privées
+  let compteur = 0;
+  
+  // Méthodes publiques
+  return {
+    increment() {
+      compteur++;
+      return compteur;
+    }
+  };
+})();
+```
+
+---
+
+# Clean Code
+
+- **Nommage significatif**
+```js
+// Mauvais
+const x = users.filter(u => u.a > 5);
+
+// Bon
+const usersActifs = utilisateurs.filter(user => user.age > 5);
+```
+
+---
+
+# Clean Code (suite)
+
+- **Fonctions courtes et focalisées**
+```js
+// Mauvais
+function gererUtilisateur(user) {
+  // 50 lignes qui font plein de choses
+}
+
+// Bon 
+function validerUtilisateur(user) {
+  return user.age >= 18;
+}
+
+function sauvegarderUtilisateur(user) {
+  // Sauvegarde uniquement
+}
+```
+
+---
+
+# Principes SOLID
+
+- **Adaptés au contexte JavaScript/TypeScript**
+```js
+// Single Responsibility
+class UtilisateurService {
+  // Une seule responsabilité : gestion utilisateur
+  creerUtilisateur() {}
+  supprimerUtilisateur() {}
+}
+
+class EmailService {
+  // Une seule responsabilité : envoi d'emails
+  envoyerEmail() {}
+}
+```
 
 ---
 routeAlias: 'principes-solid-javascript'
@@ -29,6 +104,10 @@ routeAlias: 'principes-solid-javascript'
 
 - **Open/Closed Principle (OCP)**
   - Les entités logicielles doivent être ouvertes à l'extension, mais fermées à la modification
+
+---
+
+# Principes SOLID (suite)
 
 - **Liskov Substitution Principle (LSP)**
   - Les objets d'une superclasse doivent pouvoir être remplacés par des objets de ses sous-classes sans altérer le fonctionnement du programme
@@ -74,7 +153,13 @@ class User {
     // Logique pour envoyer un email
   }
 }
+```
 
+---
+
+## Correction de l'exercice (suite)
+
+```javascript
 // Après
 class User {
   constructor(name, email) {
@@ -110,8 +195,6 @@ const emailService = new EmailService()
 emailService.sendEmail(user.email, 'Bienvenue', 'Bienvenue sur notre plateforme !')
 ```
 
-Ce refactoring sépare les responsabilités en différentes classes et utilise un Factory pour la création d'utilisateurs.
-
 ---
 routeAlias: 'bonnes-pratiques-optimisation'
 ---
@@ -122,6 +205,10 @@ routeAlias: 'bonnes-pratiques-optimisation'
   - Organisation des fichiers et dossiers
   - Utilisation de composants réutilisables
 
+---
+
+# Performance et État
+
 - **Performance**
   - Utilisation de `React.memo` pour éviter les re-rendus inutiles
   - Optimisation des listes avec `FlatList` et `VirtualizedList`
@@ -130,6 +217,10 @@ routeAlias: 'bonnes-pratiques-optimisation'
 - **Gestion de l'état**
   - Utilisation appropriée des hooks (useState, useEffect, useCallback, useMemo)
   - Mise en place d'un état global avec Context API ou Redux
+
+---
+
+# Debugging et Tests
 
 - **Debugging**
   - Utilisation de React Native Debugger
@@ -177,6 +268,10 @@ const ProfileList = ({ profiles, onProfilePress }) => {
 export default ProfileList;
 ```
 
+---
+
+## Exercice : Optimisation (suite)
+
 2. Implémentez le lazy loading des images :
 
 ```jsx
@@ -201,6 +296,10 @@ const LazyImage = ({ source, style }) => {
 export default LazyImage;
 ```
 
+---
+
+## Exercice : Optimisation (suite)
+
 3. Mettez en place un système de logging :
 
 ```jsx
@@ -221,6 +320,10 @@ const logger = {
 
 export default logger;
 ```
+
+---
+
+## Exercice : Optimisation (fin)
 
 4. Ajoutez un test unitaire simple :
 

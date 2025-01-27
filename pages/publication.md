@@ -2,57 +2,219 @@
 routeAlias: 'publication-application'
 ---
 
-# Publication de l'application
+# Préparation pour la production
 
-- **Préparation de l'application pour la production**
-  - Configuration des icônes et des écrans de démarrage
-  - Optimisation des performances
+## Configuration des icônes et splash screen
 
-- **Publication sur l'App Store (iOS)**
-  - Création d'un compte développeur Apple
-  - Utilisation d'Xcode pour générer l'archive
-  - Soumission via App Store Connect
+```json
+// app.json - Partie 1
+{
+  "expo": {
+    "name": "TinderLikeApp",
+    "slug": "tinder-like-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
+```
 
 ---
 
-# Publication de l'application (suite)
+## Configuration des plateformes
 
-- **Publication sur le Google Play Store (Android)**
-  - Création d'un compte développeur Google Play
-  - Génération du bundle Android signé
-  - Soumission via la Google Play Console
+```json
+// app.json - Partie 2
+{
+  "expo": {
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.tinderlikeapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.yourcompany.tinderlikeapp"
+    }
+  }
+}
+```
 
-- **Utilisation d'Expo EAS (Expo Application Services)**
-  - Configuration d'EAS Build
-  - Création de builds pour iOS et Android
-  - Soumission automatisée aux stores
+---
+
+## Optimisation des performances
+
+```js
+// Optimisation des images
+const optimizedImage = await Image.prefetch(imageUrl);
+
+// Activation du mode production
+enableProduction();
+
+// Configuration du cache
+const cacheConfig = {
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+  maxEntries: 150
+};
+```
+
+---
+
+# Publication iOS
+
+## Compte développeur Apple
+
+```bash
+# Création du certificat
+xcodebuild archive -scheme TinderLikeApp -configuration Release
+
+# Génération de l'archive
+xcodebuild -exportArchive -archivePath TinderLikeApp.xcarchive \
+           -exportPath ./build -exportOptionsPlist ExportOptions.plist
+```
+
+---
+
+## Soumission App Store
+
+```bash
+# Validation du build
+xcrun altool --validate-app -f build/TinderLikeApp.ipa \
+             -t ios -u user@email.com -p pass
+
+# Upload sur App Store Connect
+xcrun altool --upload-app -f build/TinderLikeApp.ipa \
+             -t ios -u user@email.com -p pass
+```
+
+---
+
+# Publication Android
+
+## Génération du bundle
+
+```bash
+# Génération de la keystore
+keytool -genkey -v -keystore tinder-like-app.keystore \
+        -alias tinder-like-app -keyalg RSA -validity 10000
+
+# Build du bundle
+./gradlew bundleRelease
+```
+
+---
+
+## Soumission Play Store
+
+```bash
+# Génération des APKs
+bundletool build-apks --bundle=./app/build/outputs/bundle/release/app.aab \
+                      --output=./app/build/outputs/apks/release/app.apks \
+                      --ks=tinder-like-app.keystore \
+                      --ks-key-alias=tinder-like-app
+```
+
+---
+
+# Expo EAS
+
+## Configuration initiale
+
+```bash
+# Installation d'EAS CLI
+npm install -g eas-cli
+
+# Login et configuration
+eas login
+eas build:configure
+```
+
+---
+
+## Configuration EAS
+
+```json
+// eas.json
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "distribution": "store"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Commandes de build
+
+```bash
+# Build iOS
+eas build --platform ios
+
+# Build Android
+eas build --platform android
+
+# Soumission
+eas submit -p ios
+eas submit -p android
+```
+
+---
+
+# Bonnes pratiques de publication
+
+## Checklist avant soumission
+
+1. Tests approfondis sur différents appareils
+2. Vérification des performances
+3. Validation des assets (icônes, splash screen)
+4. Préparation des captures d'écran
+5. Rédaction de la description
+6. Configuration de la confidentialité
+
+N'oubliez pas de tester minutieusement votre application avant la soumission, et assurez-vous de respecter les directives de chaque store pour maximiser vos chances d'approbation.
 
 ---
 routeAlias: 'exercice-preparation-publication'
 ---
 
-## Exercice : Préparation de l'application pour la publication
+# Exercice : Préparation publication
 
-Préparons notre application TinderLikeApp pour la publication sur les stores.
+## Étapes initiales
 
-1. Configurez les icônes et l'écran de démarrage :
-   - Remplacez les icônes par défaut dans le dossier `assets`
-   - Modifiez `app.json` pour inclure les configurations d'icônes et d'écran de démarrage
+1. Configuration des icônes et splash screen
+   - Remplacer les icônes dans `assets`
+   - Modifier `app.json`
 
-2. Optimisez les performances :
-   - Utilisez des images optimisées
-   - Implémentez la pagination pour le chargement des profils
+2. Optimisation des performances
+   - Images optimisées
+   - Pagination des profils
 
-3. Configurez EAS Build :
-   - Installez EAS CLI : `npm install -g eas-cli`
-   - Initialisez EAS : `eas init`
-   - Configurez les profils de build dans `eas.json`
+3. Configuration EAS
+   - Installation : `npm install -g eas-cli`
+   - Initialisation : `eas init`
 
 ---
 
-## Exercice : Préparation de l'application pour la publication (suite)
-
-Voici un exemple de configuration `app.json` :
+## Configuration app.json
 
 ```json
 {
@@ -93,9 +255,7 @@ Voici un exemple de configuration `app.json` :
 
 ---
 
-## Exercice : Préparation de l'application pour la publication (suite)
-
-Et un exemple de configuration `eas.json` :
+## Configuration eas.json
 
 ```json
 {
@@ -118,13 +278,20 @@ Et un exemple de configuration `eas.json` :
 }
 ```
 
+---
+
+## Commandes de build
+
 Pour créer un build de production :
 
 ```bash
-eas build --platform android
+# Build iOS
 eas build --platform ios
+
+# Build Android
+eas build --platform android
 ```
 
-Ces commandes généreront des builds pour Android et iOS respectivement, que vous pourrez ensuite soumettre aux stores.
+Ces commandes généreront des builds que vous pourrez soumettre aux stores.
 
-N'oubliez pas de tester minutieusement votre application avant de la soumettre, et assurez-vous de respecter les directives de chaque store pour maximiser vos chances d'approbation.
+N'oubliez pas de tester minutieusement votre application avant la soumission, et assurez-vous de respecter les directives de chaque store pour maximiser vos chances d'approbation.

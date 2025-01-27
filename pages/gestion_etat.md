@@ -2,57 +2,267 @@
 routeAlias: 'gestion-etat-navigation'
 ---
 
-# Gestion de l'état et navigation
+# Gestion de l'état local
 
-- **Gestion de l'état local**
-  - useState pour l'état local des composants
-  - useReducer pour des états plus complexes
+## useState
 
-- **Gestion de l'état global**
-  - Context API pour partager l'état entre composants
-  - Redux ou MobX pour des applications plus complexes
+```jsx
+// État simple
+const [count, setCount] = useState(0);
+
+// État objet
+const [user, setUser] = useState({ 
+  name: '', 
+  age: 0 
+});
+```
 
 ---
 
-# Gestion de l'état et navigation (suite)
+## useReducer
 
-- **Navigation avec React Navigation**
-  - Stack Navigator pour la navigation entre écrans
-  - Tab Navigator pour les onglets
-  - Drawer Navigator pour les menus latéraux
+```jsx
+// Définition du reducer
+const [state, dispatch] = useReducer(reducer, { count: 0 });
 
-- **Passage de paramètres entre écrans**
-  - Utilisation de route.params
-  - Mise à jour du titre de l'écran dynamiquement
+function reducer(state, action) {
+  switch(action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+```
+
+---
+
+# Gestion de l'état global
+
+## Context API - Création
+
+```jsx
+// Création du context
+const UserContext = createContext();
+
+// Provider au niveau supérieur
+function App() {
+  return (
+    <UserContext.Provider value={user}>
+      <MainApp />
+    </UserContext.Provider>
+  );
+}
+```
+
+---
+
+## Context API - Utilisation
+
+```jsx
+// Utilisation dans un composant
+function Profile() {
+  const user = useContext(UserContext);
+  return <Text>{user.name}</Text>;
+}
+```
+
+---
+
+## Redux - Configuration
+
+```jsx
+// Store Redux
+const store = {
+  user: { 
+    name: 'John', 
+    age: 25 
+  },
+  theme: 'dark',
+  notifications: []
+}
+```
+
+---
+
+## Redux - Actions
+
+```jsx
+// Action
+const updateUser = (userData) => ({
+  type: 'UPDATE_USER',
+  payload: userData
+});
+```
+
+---
+
+# Navigation avec React Navigation
+
+## Stack Navigator - Structure
+
+```jsx
+// Configuration de base
+const Stack = createStackNavigator();
+```
+
+---
+
+## Stack Navigator - Composant
+
+```jsx
+function App() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Home" 
+        component={HomeScreen} 
+      />
+      <Stack.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+      />
+    </Stack.Navigator>
+  );
+}
+```
+
+---
+
+## Tab Navigator - Structure
+
+```jsx
+// Configuration de base
+const Tab = createBottomTabNavigator();
+```
+
+---
+
+## Tab Navigator - Composant
+
+```jsx
+function App() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen 
+        name="Feed" 
+        component={FeedScreen} 
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon name="home" color={color} />
+          )
+        }}
+      />
+      <Tab.Screen 
+        name="Messages" 
+        component={MessagesScreen} 
+      />
+    </Tab.Navigator>
+  );
+}
+```
+
+---
+
+## Drawer Navigator - Configuration
+
+```jsx
+const Drawer = createDrawerNavigator();
+
+function App() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen 
+        name="Home" 
+        component={HomeScreen} 
+      />
+      <Drawer.Screen 
+        name="Settings" 
+        component={SettingsScreen} 
+      />
+    </Drawer.Navigator>
+  );
+}
+```
+
+---
+
+# Navigation avec paramètres
+
+## Navigation vers un écran
+
+```jsx
+// Navigation avec paramètres
+navigation.navigate('Profile', { 
+  userId: 123,
+  userName: 'John'
+});
+
+// Récupération dans l'écran de destination
+function ProfileScreen({ route }) {
+  const { userId, userName } = route.params;
+  return <Text>Profil de {userName}</Text>;
+}
+```
+
+---
+
+## Mise à jour du titre
+
+```jsx
+// Mise à jour dynamique du titre
+React.useLayoutEffect(() => {
+  navigation.setOptions({
+    title: `Profil de ${route.params.userName}`
+  });
+}, [navigation, route.params.userName]);
+```
 
 ---
 routeAlias: 'exercice-navigation-profils'
 ---
 
-## Exercice : Ajout de navigation entre profils
+# Exercice : Navigation entre profils
 
-Créons une navigation simple entre plusieurs profils d'utilisateurs pour notre application TinderLikeApp.
+## Configuration initiale
 
-1. Installez React Navigation : `npm install @react-navigation/native @react-navigation/stack`
-2. Créez un nouveau composant `ProfileList` qui affiche une liste de profils
-3. Implémentez une navigation stack entre `ProfileList` et `UserProfile`
+1. Installation des dépendances :
+```bash
+npm install @react-navigation/native @react-navigation/stack
+```
+
+2. Création des composants nécessaires :
+- ProfileList
+- UserProfile
 
 ---
 
-## Exercice : Ajout de navigation entre profils (suite)
+## Structure ProfileList - Imports et données
 
-Voici le code pour `ProfileList.js` :
-
-```
+```jsx
+// ProfileList.js - Partie 1
 import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const profiles = [
-  { id: '1', name: 'John Doe', bio: 'Passionné de voyages', imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg' },
-  { id: '2', name: 'Jane Smith', bio: 'Amoureuse de la nature', imageUrl: 'https://randomuser.me/api/portraits/women/1.jpg' },
-  { id: '3', name: 'Mike Johnson', bio: 'Sportif et aventurier', imageUrl: 'https://randomuser.me/api/portraits/men/2.jpg' },
+  { 
+    id: '1', 
+    name: 'John Doe', 
+    bio: 'Passionné de voyages', 
+    imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg' 
+  },
+  // ... autres profils
 ];
+```
 
+---
+
+## Structure ProfileList - Composant
+
+```jsx
+// ProfileList.js - Partie 2
 const ProfileList = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -73,7 +283,14 @@ const ProfileList = ({ navigation }) => {
     </View>
   );
 };
+```
 
+---
+
+## Styles ProfileList
+
+```jsx
+// ProfileList.js - Partie 3
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -94,11 +311,10 @@ export default ProfileList;
 
 ---
 
-## Exercice : Ajout de navigation entre profils (suite)
-
-Maintenant, mettez à jour `App.js` pour implémenter la navigation :
+## Configuration de la navigation - Structure
 
 ```jsx
+// App.js - Partie 1
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -106,7 +322,14 @@ import ProfileList from './components/ProfileList';
 import UserProfile from './components/UserProfile';
 
 const Stack = createStackNavigator();
+```
 
+---
+
+## Configuration de la navigation - Composant
+
+```jsx
+// App.js - Partie 2
 export default function App() {
   return (
     <NavigationContainer>
@@ -119,7 +342,9 @@ export default function App() {
         <Stack.Screen 
           name="UserProfile" 
           component={UserProfile} 
-          options={({ route }) => ({ title: route.params.name })}
+          options={({ route }) => ({ 
+            title: route.params.name 
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -127,4 +352,4 @@ export default function App() {
 }
 ```
 
-Cet exercice vous permet de pratiquer la mise en place d'une navigation de base entre écrans, le passage de paramètres entre les écrans, et la mise à jour dynamique du titre de l'écran.
+Cet exercice vous permet de pratiquer la mise en place d'une navigation de base entre écrans, le passage de paramètres, et la mise à jour dynamique des titres d'écran.

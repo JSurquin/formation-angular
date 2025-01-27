@@ -7,6 +7,7 @@ routeAlias: 'configuration-environnement'
 - **Installation de Node.js et npm**
   - Téléchargez et installez Node.js depuis [nodejs.org](https://nodejs.org/)
   - npm (Node Package Manager) est inclus avec Node.js
+  - ou alors NVM que je conseille fortement plutot : [nvm](https://github.com/nvm-sh/nvm)
 
 - **Installation d'Expo CLI**
   - Ouvrez un terminal et exécutez : `npm install -g expo-cli`

@@ -5,31 +5,106 @@ routeAlias: 'composants-natifs-styling'
 # Composants natifs et styling
 
 - **Composants spécifiques à la plateforme**
-  - SafeAreaView : gestion des zones sûres sur iOS
-  - StatusBar : personnalisation de la barre de statut
-  - Platform : détection et conditionnement selon la plateforme
+  - SafeAreaView : équivalent à padding-top pour éviter la notch sur iOS (pas d'équivalent web)
+  - StatusBar : équivalent à la balise meta theme-color en web
+  - Platform : équivalent à @media queries en CSS pour détecter le device
 
 ---
 
-# Composants natifs et styling (suite)
+## Platform API
 
-- **Styling avancé**
-  - Flexbox pour la mise en page
-  - Dimensions pour obtenir la taille de l'écran
-  - Utilisation de StyleSheet pour optimiser les performances
+```jsx
+import { Platform } from 'react-native';
+
+const styles = {
+  padding: Platform.OS === 'ios' ? 20 : 16,
+  ...Platform.select({
+    ios: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+    },
+    android: {
+      elevation: 4,
+    },
+  }),
+};
+```
 
 ---
 
-# Composants natifs et styling (suite)
+# Styling en React Native
 
-- **Composants d'interaction**
-  - TouchableOpacity : zone tactile avec effet d'opacité
-  - TouchableHighlight : zone tactile avec effet de surbrillance
-  - Button : bouton standard de la plateforme
+## Flexbox Layout
 
-- **Composants de saisie**
-  - TextInput : champ de saisie de texte
-  - Switch : interrupteur on/off
+```jsx
+const styles = {
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  item: {
+    flex: 1,
+    margin: 5,
+  }
+};
+```
+
+---
+
+## StyleSheet et Dimensions
+
+```jsx
+const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get('window').width,
+    backgroundColor: '#fff'
+  }
+});
+```
+
+---
+
+# Composants d'interaction
+
+## TouchableOpacity Example
+
+```jsx
+<TouchableOpacity onPress={() => console.log('Pressed!')}>
+  <Text>Appuyez ici</Text>
+</TouchableOpacity>
+```
+
+## TouchableHighlight Example
+
+```jsx
+<TouchableHighlight underlayColor="#DDDDDD">
+  <Text>Avec effet de surbrillance</Text>
+</TouchableHighlight>
+```
+
+---
+
+# Composants de saisie
+
+## TextInput Example
+
+```jsx
+<TextInput
+  placeholder="Entrez votre texte"
+  onChangeText={text => setTexte(text)}
+/>
+```
+
+## Switch Example
+
+```jsx
+<Switch
+  value={isEnabled}
+  onValueChange={toggleSwitch}
+/>
+```
 
 ---
 routeAlias: 'exercice-amelioration-profil'
@@ -45,11 +120,10 @@ Améliorons notre composant UserProfile en ajoutant plus d'interactivité et en 
 
 ---
 
-## Exercice : Amélioration du profil utilisateur (suite)
-
-Voici le début du code mis à jour pour `UserProfile.js` :
+## Imports et structure de base
 
 ```jsx
+// UserProfile.js - Partie 1
 import React, { useState } from 'react';
 import { 
   View, 
@@ -65,17 +139,14 @@ import {
 const UserProfile = ({ name, bio, imageUrl }) => {
   const [liked, setLiked] = useState(false);
   const [message, setMessage] = useState('');
-
-  // ... (suite du code dans la prochaine slide)
 ```
 
 ---
 
-## Exercice : Amélioration du profil utilisateur (suite)
-
-Suite du code pour `UserProfile.js` :
+## Rendu du composant
 
 ```jsx
+// UserProfile.js - Partie 2
   return (
     <SafeAreaView style={styles.container}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
@@ -85,7 +156,9 @@ Suite du code pour `UserProfile.js` :
         style={[styles.button, liked && styles.buttonLiked]} 
         onPress={() => setLiked(!liked)}
       >
-        <Text style={styles.buttonText}>{liked ? 'Liked!' : 'Like'}</Text>
+        <Text style={styles.buttonText}>
+          {liked ? 'Liked!' : 'Like'}
+        </Text>
       </TouchableOpacity>
       <TextInput
         style={styles.input}
@@ -96,17 +169,14 @@ Suite du code pour `UserProfile.js` :
     </SafeAreaView>
   );
 };
-
-// ... (styles dans la prochaine slide)
 ```
 
 ---
 
-## Exercice : Amélioration du profil utilisateur (suite)
-
-Styles pour `UserProfile.js` :
+## Styles - Première partie
 
 ```jsx
+// UserProfile.js - Partie 3
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -132,6 +202,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+```
+
+---
+
+## Styles - Deuxième partie
+
+```jsx
+// UserProfile.js - Partie 4
   bio: {
     fontSize: 16,
     textAlign: 'center',
@@ -165,11 +243,10 @@ export default UserProfile;
 
 ---
 
-## Exercice : Amélioration du profil utilisateur (suite)
-
-Mettez à jour `App.js` pour utiliser ce composant amélioré :
+## Utilisation dans App.js
 
 ```jsx
+// App.js - Partie 1
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import UserProfile from './components/UserProfile';
@@ -179,13 +256,20 @@ export default function App() {
     <View style={styles.container}>
       <UserProfile
         name="John Doe"
-        bio="Passionné de voyages et de photographie. Toujours à la recherche de nouvelles aventures !"
+        bio="Passionné de voyages et de photographie."
         imageUrl="https://randomuser.me/api/portraits/men/1.jpg"
       />
     </View>
   );
 }
+```
 
+---
+
+## Styles App.js
+
+```jsx
+// App.js - Partie 2
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -2,85 +2,287 @@
 routeAlias: 'animations-gestes'
 ---
 
-# Animations et gestes
+# Animations de base
 
-- **Animations avec React Native Animated**
-  - Création d'animations de base
-  - Animations parallèles et séquentielles
-  - Interpolation de valeurs
+## Animated Value - Configuration
 
-- **Gestes avec PanResponder**
-  - Détection des gestes de base (tap, swipe, pinch)
-  - Création d'interactions personnalisées
+```jsx
+// Création de la valeur animée
+const fadeAnim = useRef(new Animated.Value(0)).current;
+```
 
 ---
 
-# Animations et gestes (suite)
+## Animated Value - Animation
 
-- **Animations de mise en page**
-  - LayoutAnimation pour des transitions fluides
-  - Animations de liste avec FlatList
+```jsx
+// Configuration et démarrage de l'animation
+Animated.timing(fadeAnim, {
+  toValue: 1,
+  duration: 1000,
+  useNativeDriver: true,
+}).start();
+```
 
-- **Bibliothèques tierces populaires**
-  - React Native Reanimated pour des animations performantes
-  - React Native Gesture Handler pour une gestion avancée des gestes
+---
+
+## Animations parallèles - Configuration
+
+```jsx
+// Configuration des animations multiples
+const fadeAnim = useRef(new Animated.Value(0)).current;
+const scaleAnim = useRef(new Animated.Value(1)).current;
+```
+
+---
+
+## Animations parallèles - Exécution
+
+```jsx
+// Exécution des animations en parallèle
+Animated.parallel([
+  Animated.timing(fadeAnim, {
+    toValue: 1,
+    duration: 1000,
+  }),
+  Animated.spring(scaleAnim, {
+    toValue: 1.2,
+    friction: 2,
+  }),
+]).start();
+```
+
+---
+
+## Animations séquentielles
+
+```jsx
+// Animations l'une après l'autre
+Animated.sequence([
+  Animated.timing(fadeAnim, { 
+    toValue: 1,
+    duration: 500,
+  }),
+  Animated.timing(slideAnim, { 
+    toValue: 100,
+    duration: 500,
+  }),
+]).start();
+```
+
+---
+
+## Interpolation de valeurs
+
+```jsx
+// Transformation d'une valeur en une autre
+const rotation = animValue.interpolate({
+  inputRange: [0, 1],
+  outputRange: ['0deg', '360deg'],
+});
+
+return (
+  <Animated.View
+    style={{
+      transform: [{ rotate: rotation }]
+    }}
+  />
+);
+```
+
+---
+
+# Gestion des gestes
+
+## Configuration PanResponder
+
+```jsx
+const panResponder = PanResponder.create({
+  onStartShouldSetPanResponder: () => true,
+  onPanResponderMove: (evt, gestureState) => {
+    // Gestion du déplacement
+    console.log(gestureState.dx, gestureState.dy);
+  },
+  onPanResponderRelease: () => {
+    // Gestion du relâchement
+  },
+});
+```
+
+---
+
+## Gestion du tap (appui simple)
+
+```jsx
+const tapGesture = {
+  onStartShouldSetPanResponder: () => true,
+  onPanResponderRelease: (e, gestureState) => {
+    if (Math.abs(gestureState.dx) < 5 && 
+        Math.abs(gestureState.dy) < 5) {
+      // C'est un tap
+      handleTap();
+    }
+  },
+};
+```
+
+---
+
+## Gestion du swipe
+
+```jsx
+const isSwipe = (gestureState) => {
+  return Math.abs(gestureState.dx) > 50;
+};
+
+const handleSwipe = (gestureState) => {
+  if (gestureState.dx > 50) {
+    // Swipe vers la droite
+    handleRightSwipe();
+  } else if (gestureState.dx < -50) {
+    // Swipe vers la gauche
+    handleLeftSwipe();
+  }
+};
+```
+
+---
+
+## Gestion du pinch (zoom)
+
+```jsx
+const calculatePinchDistance = (evt) => {
+  const touches = evt.nativeEvent.touches;
+  if (touches.length !== 2) return 0;
+  
+  const [touch1, touch2] = touches;
+  return Math.sqrt(
+    Math.pow(touch2.pageX - touch1.pageX, 2) +
+    Math.pow(touch2.pageY - touch1.pageY, 2)
+  );
+};
+```
+
+---
+
+# Animations avancées
+
+## LayoutAnimation
+
+```jsx
+const toggleLayout = () => {
+  LayoutAnimation.configureNext(
+    LayoutAnimation.Presets.spring
+  );
+  setExpanded(!expanded);
+};
+```
+
+---
+
+## Animations de liste
+
+```jsx
+<FlatList
+  data={items}
+  renderItem={({ item, index }) => (
+    <Animated.View
+      style={{
+        opacity: fadeAnim,
+        transform: [{
+          translateY: slideAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [50 * index, 0]
+          })
+        }]
+      }}
+    >
+      <ListItem item={item} />
+    </Animated.View>
+  )}
+/>
+```
+
+---
+
+# Bibliothèques tierces
+
+## React Native Reanimated
+
+```jsx
+import Animated, {
+  withSpring,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+
+const animatedStyle = useAnimatedStyle(() => {
+  return {
+    transform: [{ scale: withSpring(1.2) }],
+  };
+});
+```
+
+---
+
+## React Native Gesture Handler
+
+```jsx
+import { PanGestureHandler } from 'react-native-gesture-handler';
+
+const onGestureEvent = useAnimatedGestureHandler({
+  onStart: (_, ctx) => {
+    ctx.startX = translateX.value;
+  },
+  onActive: (event, ctx) => {
+    translateX.value = ctx.startX + event.translationX;
+  },
+});
+```
 
 ---
 routeAlias: 'exercice-carte-swipeable'
 ---
 
-## Exercice : Création d'une carte swipeable
+# Exercice : Carte swipeable
 
-Créons une carte de profil swipeable pour notre application TinderLikeApp, similaire à l'interface de Tinder.
-
-1. Installez react-native-gesture-handler : `npm install react-native-gesture-handler`
-2. Créez un nouveau composant `SwipeableCard.js`
-3. Implémentez la logique de swipe avec des animations
-
----
-
-## Exercice : Création d'une carte swipeable (suite)
-
-Voici le début du code pour `SwipeableCard.js` :
+## Configuration initiale
 
 ```jsx
-import React, { useRef } from 'react';
-import { Animated, PanResponder, View, Text, Image, StyleSheet, Dimensions } from 'react-native';
+// Installation
+import { PanGestureHandler } from 'react-native-gesture-handler';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
-
-const SwipeableCard = ({ profile, onSwipeLeft, onSwipeRight }) => {
-  const position = useRef(new Animated.ValueXY()).current;
-
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      position.setValue({ x: gesture.dx, y: gesture.dy });
-    },
-    onPanResponderRelease: (_, gesture) => {
-      if (gesture.dx > SWIPE_THRESHOLD) {
-        forceSwipe('right');
-      } else if (gesture.dx < -SWIPE_THRESHOLD) {
-        forceSwipe('left');
-      } else {
-        resetPosition();
-      }
-    },
-  });
-
-  // ... (suite dans la prochaine slide)
 ```
 
 ---
 
-## Exercice : Création d'une carte swipeable (suite)
+## Logique de base du swipe
 
-Suite du code pour `SwipeableCard.js` :
+```jsx
+const SwipeableCard = ({ profile, onSwipeLeft, onSwipeRight }) => {
+  const position = useRef(new Animated.ValueXY()).current;
+  
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (_, gesture) => {
+      position.setValue({ 
+        x: gesture.dx, 
+        y: gesture.dy 
+      });
+    },
+  });
+```
+
+---
+
+## Gestion des swipes
 
 ```jsx
   const forceSwipe = (direction) => {
-    const x = direction === 'right' ? SCREEN_WIDTH : -SCREEN_WIDTH;
+    const x = direction === 'right' ? 
+      SCREEN_WIDTH : -SCREEN_WIDTH;
+    
     Animated.timing(position, {
       toValue: { x, y: 0 },
       duration: 250,
@@ -92,139 +294,52 @@ Suite du code pour `SwipeableCard.js` :
     direction === 'right' ? onSwipeRight() : onSwipeLeft();
     position.setValue({ x: 0, y: 0 });
   };
-
-  const resetPosition = () => {
-    Animated.spring(position, {
-      toValue: { x: 0, y: 0 },
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const getCardStyle = () => {
-    const rotate = position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH * 1.5, 0, SCREEN_WIDTH * 1.5],
-      outputRange: ['-120deg', '0deg', '120deg'],
-    });
-
-    return {
-      ...position.getLayout(),
-      transform: [{ rotate }],
-    };
-  };
-
-  // ... (suite dans la prochaine slide)
 ```
 
 ---
 
-## Exercice : Création d'une carte swipeable (suite)
-
-Fin du code pour `SwipeableCard.js` :
+## Styles et animations - Partie 1
 
 ```jsx
-  return (
-    <Animated.View style={[styles.card, getCardStyle()]} {...panResponder.panHandlers}>
-      <Image source={{ uri: profile.imageUrl }} style={styles.image} />
-      <View style={styles.textContainer}>
-        <Text style={styles.name}>{profile.name}</Text>
-        <Text style={styles.bio}>{profile.bio}</Text>
-      </View>
-    </Animated.View>
-  );
+// Configuration du style de la carte
+const getCardStyle = () => {
+  const rotate = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH * 1.5, 0, SCREEN_WIDTH * 1.5],
+    outputRange: ['-120deg', '0deg', '120deg'],
+  });
+
+  return {
+    ...position.getLayout(),
+    transform: [{ rotate }],
+  };
 };
-
-const styles = StyleSheet.create({
-  card: {
-    position: 'absolute',
-    width: SCREEN_WIDTH * 0.9,
-    height: SCREEN_WIDTH * 1.2,
-    borderRadius: 20,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 3,
-  },
-  image: {
-    width: '100%',
-    height: '70%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  textContainer: {
-    padding: 20,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  bio: {
-    fontSize: 16,
-    color: '#666',
-  },
-});
-
-export default SwipeableCard;
 ```
 
 ---
 
-## Exercice : Création d'une carte swipeable (suite)
-
-Maintenant, intégrez ce composant dans votre écran principal :
+## Styles et animations - Partie 2
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import SwipeableCard from './SwipeableCard';
-import { fetchProfiles } from '../api';
-
-const MainScreen = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    loadProfiles();
-  }, []);
-
-  const loadProfiles = async () => {
-    const fetchedProfiles = await fetchProfiles(10);
-    setProfiles(fetchedProfiles);
-  };
-
-  const handleSwipeLeft = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  const handleSwipeRight = () => {
-    // Ici, vous pourriez implémenter une logique de "match"
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  return (
-    <View style={styles.container}>
-      {profiles.length > currentIndex && (
-        <SwipeableCard
-          profile={profiles[currentIndex]}
-          onSwipeLeft={handleSwipeLeft}
-          onSwipeRight={handleSwipeRight}
-        />
-      )}
+// Rendu du composant
+return (
+  <Animated.View 
+    style={[styles.card, getCardStyle()]} 
+    {...panResponder.panHandlers}
+  >
+    <Image 
+      source={{ uri: profile.imageUrl }} 
+      style={styles.image} 
+    />
+    <View style={styles.textContainer}>
+      <Text style={styles.name}>{profile.name}</Text>
+      <Text style={styles.bio}>{profile.bio}</Text>
     </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default MainScreen;
+  </Animated.View>
+);
 ```
 
-Cet exercice vous permet de pratiquer la création d'animations complexes et la gestion des gestes dans React Native. Vous avez créé une interface de swipe similaire à celle de Tinder, ce qui rend votre application TinderLikeApp plus interactive et engageante.
+---
+
+# Résultat de l'exercice
+
+Cet exercice vous permet de créer une interface de swipe interactive et fluide, similaire à celle de Tinder, en utilisant les animations et gestes de React Native.
