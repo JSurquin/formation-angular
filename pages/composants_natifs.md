@@ -11,13 +11,22 @@ routeAlias: 'composants-natifs-styling'
 
 ---
 
-## Platform API
+## Platform API - Configuration
 
 ```jsx
 import { Platform } from 'react-native';
 
 const styles = {
   padding: Platform.OS === 'ios' ? 20 : 16,
+};
+```
+
+---
+
+## Platform API - Sélection
+
+```jsx
+const styles = {
   ...Platform.select({
     ios: {
       shadowColor: '#000',
@@ -27,27 +36,6 @@ const styles = {
       elevation: 4,
     },
   }),
-};
-```
-
----
-
-# Styling en React Native
-
-## Flexbox Layout
-
-```jsx
-const styles = {
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  item: {
-    flex: 1,
-    margin: 5,
-  }
 };
 ```
 
@@ -76,6 +64,8 @@ const styles = StyleSheet.create({
 </TouchableOpacity>
 ```
 
+---
+
 ## TouchableHighlight Example
 
 ```jsx
@@ -97,6 +87,8 @@ const styles = StyleSheet.create({
 />
 ```
 
+---
+
 ## Switch Example
 
 ```jsx
@@ -110,7 +102,7 @@ const styles = StyleSheet.create({
 routeAlias: 'exercice-amelioration-profil'
 ---
 
-## Exercice : Amélioration du profil utilisateur
+# Exercice : Amélioration du profil utilisateur
 
 Améliorons notre composant UserProfile en ajoutant plus d'interactivité et en utilisant des composants natifs avancés.
 
@@ -120,10 +112,9 @@ Améliorons notre composant UserProfile en ajoutant plus d'interactivité et en 
 
 ---
 
-## Imports et structure de base
+## Structure du composant - Partie 1
 
 ```jsx
-// UserProfile.js - Partie 1
 import React, { useState } from 'react';
 import { 
   View, 
@@ -135,20 +126,18 @@ import {
   SafeAreaView, 
   Platform 
 } from 'react-native';
-
-const UserProfile = ({ name, bio, imageUrl }) => {
-  const [liked, setLiked] = useState(false);
-  const [message, setMessage] = useState('');
 ```
 
 ---
 
-## Rendu du composant
+## Structure du composant - Partie 2
 
 ```jsx
-// UserProfile.js - Partie 2
+const UserProfile = ({ name, bio, imageUrl }) => {
+  const [liked, setLiked] = useState(false);
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.bio}>{bio}</Text>
@@ -160,23 +149,16 @@ const UserProfile = ({ name, bio, imageUrl }) => {
           {liked ? 'Liked!' : 'Like'}
         </Text>
       </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        placeholder="Envoyer un message..."
-        value={message}
-        onChangeText={setMessage}
-      />
-    </SafeAreaView>
+    </View>
   );
 };
 ```
 
 ---
 
-## Styles - Première partie
+## Styles - Partie 1
 
 ```jsx
-// UserProfile.js - Partie 3
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -197,19 +179,20 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     marginBottom: 20,
   },
+});
+```
+
+---
+
+## Styles - Partie 2
+
+```jsx
+const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-```
-
----
-
-## Styles - Deuxième partie
-
-```jsx
-// UserProfile.js - Partie 4
   bio: {
     fontSize: 16,
     textAlign: 'center',
@@ -229,13 +212,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    borderRadius: 5,
-  },
 });
 
 export default UserProfile;
@@ -243,38 +219,6 @@ export default UserProfile;
 
 ---
 
-## Utilisation dans App.js
-
-```jsx
-// App.js - Partie 1
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import UserProfile from './components/UserProfile';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <UserProfile
-        name="John Doe"
-        bio="Passionné de voyages et de photographie."
-        imageUrl="https://randomuser.me/api/portraits/men/1.jpg"
-      />
-    </View>
-  );
-}
-```
-
----
-
-## Styles App.js
-
-```jsx
-// App.js - Partie 2
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-```
+# Résultat de l'exercice
 
 Cet exercice vous permet de pratiquer l'utilisation de composants natifs plus avancés, la gestion d'état local avec useState, et l'application de styles conditionnels basés sur la plateforme.

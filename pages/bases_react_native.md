@@ -30,12 +30,16 @@ routeAlias: 'bases-react-native'
 
 # Props et State
 
-## Props : Passage de données parent-enfant
+## Props - Structure
 
 ```jsx
 // Composant parent
 <UserProfile name="John" age={25} />
 ```
+
+---
+
+## Props - Utilisation
 
 ```jsx
 // Composant enfant UserProfile
@@ -53,9 +57,10 @@ const UserProfile = (props) => {
 
 ---
 
-## State : Gestion de l'état interne
+## State - Structure
 
 ```jsx
+// Gestion de l'état avec useState
 const Counter = () => {
   const [count, setCount] = useState(0)
   
@@ -72,30 +77,14 @@ const Counter = () => {
 }
 ```
 
-- **Gestion des événements**
-  - Utilisation de props comme onPress pour gérer les interactions
-
-**Car oui sur mobile ce n'est pas un onClick mais un onPress**
-
----
-routeAlias: 'exercice-profil-utilisateur'
 ---
 
-## Exercice : Création d'un profil utilisateur simple
+# Exercice : Création d'un profil utilisateur
 
-Créons un composant de profil utilisateur pour notre application **TinderLikeApp**.
-
-1. Créez un nouveau fichier `components/UserProfile.js`
-2. Implémentez un composant fonctionnel avec une image, un nom et une courte bio
-3. Utilisez ce composant dans `App.js`
-
----
-
-## Exercice : Création d'un profil utilisateur simple (suite)
-
-Voici le code pour `UserProfile.js` :
+## Structure du composant - Partie 1
 
 ```jsx
+// UserProfile.js - Structure
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
@@ -108,7 +97,14 @@ const UserProfile = ({ name, bio, imageUrl }) => {
     </View>
   );
 };
+```
 
+---
+
+## Structure du composant - Partie 2
+
+```jsx
+// UserProfile.js - Styles
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -136,11 +132,10 @@ export default UserProfile;
 
 ---
 
-## Exercice : Création d'un profil utilisateur simple (suite)
-
-Maintenant, modifiez `App.js` pour utiliser ce composant :
+## Utilisation du composant
 
 ```jsx
+// App.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import UserProfile from './components/UserProfile';
@@ -150,13 +145,20 @@ export default function App() {
     <View style={styles.container}>
       <UserProfile
         name="John Doe"
-        bio="Passionné de voyages et de photographie. Toujours à la recherche de nouvelles aventures !"
+        bio="Passionné de voyages et de photographie."
         imageUrl="https://randomuser.me/api/portraits/men/1.jpg"
       />
     </View>
   );
 }
+```
 
+---
+
+## Styles de l'application
+
+```jsx
+// App.js - Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -167,4 +169,8 @@ const styles = StyleSheet.create({
 });
 ```
 
-Ce exercice vous permet de pratiquer la création de composants, l'utilisation de props, et le styling en React Native. Dans les prochaines sections, nous allons enrichir ce profil et ajouter plus de fonctionnalités à notre application TinderLikeApp.
+---
+
+# Résultat de l'exercice
+
+Cet exercice vous permet de pratiquer la création de composants, l'utilisation de props, et le styling en React Native.

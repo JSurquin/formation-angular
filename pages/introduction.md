@@ -179,47 +179,53 @@ expo eject
 routeAlias: 'exercice-hello-world'
 ---
 
-## Exercice : Créer votre première application "Hello World"
+## Installation d'Expo CLI
 
-1. Installez Expo CLI globalement :
-   ```
-   npm install -g expo-cli
-   ```
-2. Créez un nouveau projet :
-   ```
-   expo init TinderLikeApp
-   ```
-3. Choisissez le template "blank"
-4. Naviguez dans le dossier du projet :
-   ```
-   cd TinderLikeApp
-   ```
-5. Lancez l'application :
-   ```
-   expo start
-   ```
+```bash
+# Installation globale d'Expo CLI
+npm install -g expo-cli
+```
 
 ---
 
-Voila nous avons déjà un squelette d'un projet mobile compatible sur ios et android
+## Création du projet
 
-### Vous voulez tester ?
+```bash
+# Création d'un nouveau projet
+expo init TinderLikeApp
+```
+
+---
+
+## Navigation et lancement
+
+```bash
+# Navigation dans le dossier
+cd TinderLikeApp
+
+# Lancement de l'application
+expo start
+```
+
+---
+
+# Test de l'application
 
 Vous pouvez tester rapidement le développement moderne :
 
-Installer expo sur android/ios (play store ou app store)
-
-Scanner le QRcode dans votre terminal (Metro)
-
-Ça va automatiquement ouvrir expo sur votre mobile et pré compiler
-
-Vous pouvez voir votre application en temps réel, et à chaque changement le HMR (Hot module reload) se lance , vous êtes donc toujours à jour !
+- Installer expo sur android/ios (play store ou app store)
+- Scanner le QRcode dans votre terminal (Metro)
+- Ça va automatiquement ouvrir expo sur votre mobile et pré compiler
 
 ---
 
-## Exercice : Créer votre première application "Hello World" (suite)
+# Hot Module Reload
 
-Modifiez le fichier `App.js` :
+Vous pouvez voir votre application en temps réel, et à chaque changement le HMR (Hot module reload) se lance, vous êtes donc toujours à jour !
+
+---
+
+## Structure du composant Hello World
 
 ```jsx
 // Structure du composant

@@ -2,15 +2,133 @@
 routeAlias: 'configuration-environnement'
 ---
 
-# Configuration de l'environnement de développement
+# Configuration de l'environnement
 
-- **Installation de Node.js et npm**
-  - Téléchargez et installez Node.js depuis [nodejs.org](https://nodejs.org/)
-  - npm (Node Package Manager) est inclus avec Node.js
-  - ou alors NVM que je conseille fortement plutot : [nvm](https://github.com/nvm-sh/nvm)
+## Installation de Node.js
 
-- **Installation d'Expo CLI**
-  - Ouvrez un terminal et exécutez : `npm install -g expo-cli`
+```bash
+# Téléchargement et installation de Node.js
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install node
+```
+
+---
+
+## Installation d'Expo CLI
+
+```bash
+# Installation globale d'Expo CLI
+npm install -g expo-cli
+```
+
+---
+
+## Configuration de l'éditeur
+
+```json
+// settings.json - Partie 1
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
+
+---
+
+## Configuration de l'éditeur (suite)
+
+```json
+// settings.json - Partie 2
+{
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 80,
+  "prettier.tabWidth": 2
+}
+```
+
+---
+
+## Configuration ESLint
+
+```json
+// .eslintrc.js - Partie 1
+module.exports = {
+  root: true,
+  extends: '@react-native-community',
+  rules: {
+    'prettier/prettier': 'error',
+    'react-native/no-inline-styles': 'error'
+  }
+}
+```
+
+---
+
+## Configuration ESLint (suite)
+
+```json
+// .eslintrc.js - Partie 2
+{
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
+```
+
+---
+
+# Installation des dépendances
+
+## Dépendances de base
+
+```bash
+npm install @react-navigation/native @react-navigation/stack
+```
+
+---
+
+## Dépendances supplémentaires
+
+```bash
+expo install react-native-gesture-handler react-native-reanimated
+```
+
+---
+
+# Configuration de l'émulateur
+
+## Android Studio
+
+```bash
+# Configuration des variables d'environnement
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+```
+
+---
+
+## Xcode (macOS uniquement)
+
+```bash
+# Installation de CocoaPods
+sudo gem install cocoapods
+```
+
+---
+
+# Résultat
+
+Votre environnement de développement est maintenant configuré pour React Native et Expo.
 
 ---
 
@@ -90,6 +208,8 @@ TinderLikeApp/
 ├── package.json
 └── node_modules/
 ```
+
+---
 
 - `App.js` : Point d'entrée de votre application
 - `app.json` : Configuration de l'application Expo
