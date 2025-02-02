@@ -49,24 +49,6 @@ routeAlias: 'publication-application'
 
 ---
 
-## Optimisation des performances
-
-```js
-// Optimisation des images
-const optimizedImage = await Image.prefetch(imageUrl);
-
-// Activation du mode production
-enableProduction();
-
-// Configuration du cache
-const cacheConfig = {
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-  maxEntries: 150
-};
-```
-
----
-
 # Publication iOS
 
 ## Compte développeur Apple
@@ -94,6 +76,8 @@ xcrun altool --upload-app -f build/TinderLikeApp.ipa \
              -t ios -u user@email.com -p pass
 ```
 
+Nous n'allons pas nous attarder sur cette façon de faire car cela demande un compte payant developpeur pour chacun d'entre vous.
+
 ---
 
 # Publication Android
@@ -108,6 +92,8 @@ keytool -genkey -v -keystore tinder-like-app.keystore \
 # Build du bundle
 ./gradlew bundleRelease
 ```
+
+Pareil dans ce cas de figure
 
 ---
 
@@ -171,6 +157,17 @@ eas build --platform ios
 
 # Build Android
 eas build --platform android
+
+# Pour tester
+
+# Build pour simulateur iOS
+eas build --platform ios --profile development --simulator
+
+# Une fois le build terminé, téléchargez et installez sur le simulateur
+eas build:run -p ios
+
+# Ou directement avec le lien de téléchargement fourni par EAS
+# Ouvrez le .tar.gz et glissez le .app dans le simulateur iOS
 
 # Soumission
 eas submit -p ios

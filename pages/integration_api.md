@@ -2,250 +2,232 @@
 routeAlias: 'integration-api-donnees'
 ---
 
-# Appels API
+# Intégration d'API et Gestion des Données (2024/2025)
 
-## Fetch
+## Appels API avec React Query
 
-```js
-// Exemple avec Fetch
-fetch('https://api.monsite.com/users')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  // Équivalent à $.ajax en jQuery
-```
+```tsx
+// hooks/useProfiles.ts
+import { useQuery } from '@tanstack/react-query';
 
-## Axios
-
-```js
-// Exemple avec Axios 
-axios.get('https://api.monsite.com/users')
-  .then(response => console.log(response.data))
-  // Plus simple que Fetch car pas besoin de .json()
+export function useProfiles() {
+  return useQuery({
+    queryKey: ['profiles'],
+    queryFn: async () => {
+      const response = await fetch('https://api.example.com/profiles');
+      if (!response.ok) {
+        throw new Error('Erreur réseau');
+      }
+      return response.json();
+    }
+  });
+}
 ```
 
 ---
 
-# Gestion des états de chargement
+## Utilisation dans un composant
 
-## Loading Spinner
+```tsx
+// app/(tabs)/home.tsx
+export default function Home() {
+  const { data: profiles, isLoading, error } = useProfiles();
 
-```jsx
-// Comme un loader en CSS mais en natif
-const [isLoading, setIsLoading] = useState(true);
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
-return (
-  <View>
-    {isLoading && <ActivityIndicator size="large" />}
-    {data && <DataComponent data={data} />}
-  </View>
-);
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
+
+  return (
+    <View className="flex-1">
+      <Swiper
+        cards={profiles}
+        renderCard={(profile) => (
+          <ProfileCard {...profile} />
+        )}
+      />
+    </View>
+  );
+}
 ```
+
+---
+
+## Mutations avec React Query
+
+```tsx
+// hooks/useLikeProfile.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+export function useLikeProfile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (profileId: string) => {
+      const response = await fetch(`https://api.example.com/like/${profileId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['matches'] });
+    },
+  });
+}
+```
+
+---
+
+## Stockage local avec MMKV
+
+```tsx
+// utils/storage.ts
+import { MMKV } from 'react-native-mmkv';
+
+export const storage = new MMKV();
+
+// Stockage de données
+export function storeData(key: string, value: any) {
+  storage.set(key, JSON.stringify(value));
+}
+
+// Récupération de données
+export function getData(key: string) {
+  const value = storage.getString(key);
+  return value ? JSON.parse(value) : null;
+}
+```
+
+---
+
+## Hook personnalisé pour le stockage persistant
+
+```tsx
+// hooks/usePersistedState.ts
+import { useState, useEffect } from 'react';
+import { storage } from '../utils/storage';
+
+export function usePersistedState<T>(key: string, initialValue: T) {
+  const [state, setState] = useState<T>(() => {
+    const storedValue = storage.getString(key);
+    return storedValue ? JSON.parse(storedValue) : initialValue;
+  });
+
+  useEffect(() => {
+    storage.set(key, JSON.stringify(state));
+  }, [key, state]);
+
+  return [state, setState] as const;
+}
+```
+
+---
+
+## Configuration de l'API
+
+```tsx
+// services/api.ts
+import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Intercepteur pour le token
+api.interceptors.request.use((config) => {
+  const token = storage.getString('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+```
+
+---
 
 ## Gestion des erreurs
 
-```jsx
-// Comme une div .error en CSS
-const [error, setError] = useState(null);
+```tsx
+// components/ErrorBoundary.tsx
+import { isRouteErrorResponse, useRouteError } from 'expo-router';
 
-return (
-  <View>
-    {error && <Text style={{color: 'red'}}>{error}</Text>}
-  </View>
-);
-```
+export function ErrorBoundary() {
+  const error = useRouteError();
 
----
-
-# Stockage local
-
-## AsyncStorage - Sauvegarde
-
-```js
-// Comme localStorage en web
-const saveUserData = async (userData) => {
-  try {
-    await AsyncStorage.setItem(
-      'user', 
-      JSON.stringify(userData)
+  if (isRouteErrorResponse(error)) {
+    return (
+      <View className="flex-1 items-center justify-center p-4">
+        <Text className="text-xl font-bold">
+          {error.status} {error.statusText}
+        </Text>
+        <Text className="mt-2 text-gray-600">{error.data?.message}</Text>
+      </View>
     );
-  } catch (error) {
-    console.error('Erreur de sauvegarde:', error);
   }
-};
-```
 
----
-
-## AsyncStorage - Récupération
-
-```js
-// Pour garder des données même après fermeture de l'app
-const loadUserData = async () => {
-  try {
-    const userData = await AsyncStorage.getItem('user');
-    return userData != null ? JSON.parse(userData) : null;
-  } catch (error) {
-    console.error('Erreur de chargement:', error);
-    return null;
-  }
-};
-```
-
----
-
-# Gestion de l'état global
-
-## Context API
-
-```jsx
-// Comme une variable globale accessible partout
-const ThemeContext = React.createContext('light');
-
-// Dans un composant parent
-function App() {
   return (
-    <ThemeContext.Provider value="dark">
-      <MainApp />
-    </ThemeContext.Provider>
+    <View className="flex-1 items-center justify-center p-4">
+      <Text className="text-xl font-bold">Oops!</Text>
+      <Text className="mt-2 text-gray-600">
+        Une erreur inattendue s'est produite
+      </Text>
+    </View>
   );
 }
-
-// Dans n'importe quel composant enfant
-function ThemedButton() {
-  const theme = useContext(ThemeContext);
-  return <Button theme={theme} />;
-}
 ```
 
----
-
-## État global complexe
-
-```js
-// Comme un grand objet qui contient tout l'état
-const initialState = {
-  user: null,
-  theme: 'light',
-  notifications: [],
-  settings: {
-    language: 'fr',
-    notifications: true
-  }
-};
-
-// Gestion avec useReducer ou Redux
-const [state, dispatch] = useReducer(reducer, initialState);
-```
-
----
-routeAlias: 'exercice-integration-api'
 ---
 
 # Exercice : Intégration API de profils
 
-## Objectifs
-1. Utiliser l'API Random User Generator
-2. Gérer le chargement et les erreurs
-3. Stocker les profils localement
-4. Implémenter un pull-to-refresh
+Créez une application de rencontre qui :
+
+1. Utilise React Query pour la gestion des données
+2. Implémente un système de cache avec MMKV
+3. Gère les erreurs avec ErrorBoundary
+4. Utilise des indicateurs de chargement
 
 ---
 
-## Service API
+## Solution de l'exercice
 
-```js
-// services/api.js
-const fetchProfiles = async (count = 10) => {
-  try {
-    const response = await fetch(
-      `https://randomuser.me/api/?results=${count}`
-    );
-    const data = await response.json();
-    return data.results.map(user => ({
-      id: user.login.uuid,
-      name: `${user.name.first} ${user.name.last}`,
-      bio: `${user.location.city}, ${user.location.country}`,
-      imageUrl: user.picture.large
-    }));
-  } catch (error) {
-    throw new Error('Erreur lors du chargement des profils');
-  }
-};
-```
+```tsx
+// app/(tabs)/matches.tsx
+import { useMatches } from '../../hooks/useMatches';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 
----
-
-## Composant ProfileList avec API
-
-```jsx
-const ProfileList = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const loadProfiles = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchProfiles(10);
-      setProfiles(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadProfiles();
-  }, []);
+export default function Matches() {
+  const { data: matches, isLoading } = useMatches();
 
   if (isLoading) {
-    return <ActivityIndicator size="large" />;
-  }
-
-  if (error) {
-    return <Text style={styles.error}>{error}</Text>;
+    return <LoadingView />;
   }
 
   return (
-    <FlatList
-      data={profiles}
-      renderItem={renderProfile}
-      keyExtractor={item => item.id}
-      refreshing={isLoading}
-      onRefresh={loadProfiles}
-    />
+    <View className="flex-1 p-4">
+      <FlatList
+        data={matches}
+        renderItem={({ item }) => (
+          <MatchCard match={item} />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
-};
+}
+
+// Définir le boundary pour la route
+Matches.ErrorBoundary = ErrorBoundary;
 ```
 
----
-
-## Stockage local des profils
-
-```jsx
-const saveProfiles = async (profiles) => {
-  try {
-    await AsyncStorage.setItem(
-      'cached_profiles',
-      JSON.stringify(profiles)
-    );
-  } catch (error) {
-    console.error('Erreur de cache:', error);
-  }
-};
-
-const loadCachedProfiles = async () => {
-  try {
-    const cached = await AsyncStorage.getItem('cached_profiles');
-    return cached ? JSON.parse(cached) : [];
-  } catch (error) {
-    console.error('Erreur de lecture du cache:', error);
-    return [];
-  }
-};
-```
----
-
-Cet exercice vous permet de pratiquer l'intégration d'API, la gestion des états de chargement et d'erreur, ainsi que le stockage local des données dans votre application React Native.
+Cette version modernisée utilise les meilleures pratiques actuelles pour la gestion des données dans une application React Native/Expo.

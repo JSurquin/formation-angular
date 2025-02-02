@@ -2,16 +2,16 @@
 routeAlias: 'gestion-etat-navigation'
 ---
 
-# Gestion de l'état local
+# Gestion de l'état et Navigation (2024/2025)
 
-## useState
+## État Local avec Hooks
 
-```jsx
-// État simple
+```tsx
+// Exemple basique de useState
 const [count, setCount] = useState(0);
 
-// État objet
-const [user, setUser] = useState({ 
+// État avec objet
+const [user, setUser] = useState<User>({ 
   name: '', 
   age: 0 
 });
@@ -19,18 +19,22 @@ const [user, setUser] = useState({
 
 ---
 
-## useReducer
+## Gestion d'état complexe
 
-```jsx
-// Définition du reducer
-const [state, dispatch] = useReducer(reducer, { count: 0 });
+```tsx
+// useReducer pour état complexe
+const [state, dispatch] = useReducer(reducer, { 
+  matches: [],
+  likes: 0,
+  messages: [] 
+});
 
 function reducer(state, action) {
   switch(action.type) {
-    case 'increment':
-      return { count: state.count + 1 };
-    case 'decrement':
-      return { count: state.count - 1 };
+    case 'ADD_MATCH':
+      return { ...state, matches: [...state.matches, action.payload] };
+    case 'INCREMENT_LIKES':
+      return { ...state, likes: state.likes + 1 };
     default:
       return state;
   }
@@ -39,319 +43,192 @@ function reducer(state, action) {
 
 ---
 
-# Gestion de l'état global
+# Navigation Moderne avec Expo Router
 
-## Context API - Création
+## Structure de base (2024/2025)
 
-```jsx
-// Création du context
-const UserContext = createContext();
+```
+app/
+├── _layout.tsx
+├── index.tsx
+├── (tabs)/
+│   ├── _layout.tsx
+│   ├── home.tsx
+│   ├── matches.tsx
+│   └── profile.tsx
+└── (auth)/
+    ├── login.tsx
+    └── register.tsx
+```
 
-// Provider au niveau supérieur
-function App() {
+---
+
+## Layout Principal
+
+```tsx
+// app/_layout.tsx
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
   return (
-    <UserContext.Provider value={user}>
-      <MainApp />
-    </UserContext.Provider>
+    <Stack>
+      <Stack.Screen 
+        name="(tabs)" 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="(auth)" 
+        options={{ headerShown: false }} 
+      />
+    </Stack>
   );
 }
 ```
 
 ---
 
-## Context API - Utilisation
+## Navigation par Tabs
 
-```jsx
-// Utilisation dans un composant
-function Profile() {
-  const user = useContext(UserContext);
-  return <Text>{user.name}</Text>;
-}
-```
+```tsx
+// app/(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
+import { Home, Heart, User } from 'lucide-react-native';
 
----
-
-## Redux - Configuration
-
-```jsx
-// Store Redux
-const store = {
-  user: { 
-    name: 'John', 
-    age: 25 
-  },
-  theme: 'dark',
-  notifications: []
-}
-```
-
----
-
-## Redux - Actions
-
-```jsx
-// Action
-const updateUser = (userData) => ({
-  type: 'UPDATE_USER',
-  payload: userData
-});
-```
-
----
-
-# Navigation avec React Navigation
-
-## Stack Navigator - Structure
-
-```jsx
-// Configuration de base
-const Stack = createStackNavigator();
-```
-
----
-
-## Stack Navigator - Composant
-
-```jsx
-function App() {
+export default function TabsLayout() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="Home" 
-        component={HomeScreen} 
-      />
-      <Stack.Screen 
-        name="Profile" 
-        component={ProfileScreen} 
-      />
-    </Stack.Navigator>
-  );
-}
-```
-
----
-
-## Tab Navigator - Structure
-
-```jsx
-// Configuration de base
-const Tab = createBottomTabNavigator();
-```
-
----
-
-## Tab Navigator - Composant
-
-```jsx
-function App() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen 
-        name="Feed" 
-        component={FeedScreen} 
+    <Tabs screenOptions={{
+      tabBarActiveTintColor: '#FF6B6B',
+    }}>
+      <Tabs.Screen
+        name="home"
         options={{
+          title: 'Découvrir',
           tabBarIcon: ({ color }) => (
-            <Icon name="home" color={color} />
-          )
+            <Home size={24} color={color} />
+          ),
         }}
       />
-      <Tab.Screen 
-        name="Messages" 
-        component={MessagesScreen} 
+      <Tabs.Screen
+        name="matches"
+        options={{
+          title: 'Matches',
+          tabBarIcon: ({ color }) => (
+            <Heart size={24} color={color} />
+          ),
+        }}
       />
-    </Tab.Navigator>
+    </Tabs>
   );
 }
 ```
 
 ---
 
-## Drawer Navigator - Configuration
+## Navigation vers un profil
 
-```jsx
-const Drawer = createDrawerNavigator();
+```tsx
+// app/(tabs)/home.tsx
+import { Link } from 'expo-router';
 
-function App() {
+export default function Home() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen 
-        name="Home" 
-        component={HomeScreen} 
-      />
-      <Drawer.Screen 
-        name="Settings" 
-        component={SettingsScreen} 
-      />
-    </Drawer.Navigator>
+    <View className="flex-1 p-4">
+      <Link href="/profile/123" asChild>
+        <TouchableOpacity className="bg-primary p-4 rounded-lg">
+          <Text className="text-white">Voir Profil</Text>
+        </TouchableOpacity>
+      </Link>
+    </View>
   );
 }
 ```
 
 ---
 
-# Navigation avec paramètres
+## Pages dynamiques
 
-## Navigation vers un écran
+```tsx
+// app/profile/[id].tsx
+import { useLocalSearchParams } from 'expo-router';
 
-```jsx
-// Navigation avec paramètres
-navigation.navigate('Profile', { 
-  userId: 123,
-  userName: 'John'
-});
-
-// Récupération dans l'écran de destination
-function ProfileScreen({ route }) {
-  const { userId, userName } = route.params;
-  return <Text>Profil de {userName}</Text>;
+export default function Profile() {
+  const { id } = useLocalSearchParams();
+  
+  return (
+    <View className="flex-1 p-4">
+      <Text className="text-xl">Profil {id}</Text>
+    </View>
+  );
 }
 ```
 
 ---
 
-## Mise à jour du titre
+# Exercice : Application de rencontre
 
-```jsx
-// Mise à jour dynamique du titre
-React.useLayoutEffect(() => {
-  navigation.setOptions({
-    title: `Profil de ${route.params.userName}`
-  });
-}, [navigation, route.params.userName]);
-```
+Créez une application de rencontre avec :
 
----
-routeAlias: 'exercice-navigation-profils'
----
-
-# Exercice : Navigation entre profils
-
-## Configuration initiale
-
-1. Installation des dépendances :
-```bash
-npm install @react-navigation/native @react-navigation/stack
-```
-
-2. Création des composants nécessaires :
-- ProfileList
-- UserProfile
+1. Navigation par tabs (Découvrir, Matches, Profil)
+2. Système de likes avec useReducer
+3. Pages de profil dynamiques
+4. Authentification protégée
 
 ---
 
-## Structure ProfileList - Imports et données
+## Structure de l'exercice
 
-```jsx
-// ProfileList.js - Partie 1
-import React from 'react';
-import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-const profiles = [
-  { 
-    id: '1', 
-    name: 'John Doe', 
-    bio: 'Passionné de voyages', 
-    imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg' 
-  },
-  // ... autres profils
-];
-```
-
----
-
-## Structure ProfileList - Composant
-
-```jsx
-// ProfileList.js - Partie 2
-const ProfileList = ({ navigation }) => {
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => navigation.navigate('UserProfile', item)}
-    >
-      <Text style={styles.name}>{item.name}</Text>
-    </TouchableOpacity>
-  );
+```tsx
+// app/(tabs)/home.tsx
+export default function Home() {
+  const [profiles, dispatch] = useReducer(profilesReducer, []);
+  
+  const handleLike = (profile) => {
+    dispatch({ type: 'LIKE_PROFILE', payload: profile });
+  };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={profiles}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
+    <View className="flex-1">
+      <Swiper
+        cards={profiles}
+        onSwipedRight={(cardIndex) => {
+          handleLike(profiles[cardIndex]);
+        }}
+        renderCard={(card) => (
+          <ProfileCard {...card} />
+        )}
       />
     </View>
   );
-};
-```
-
----
-
-## Styles ProfileList
-
-```jsx
-// ProfileList.js - Partie 3
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 22,
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-  },
-  name: {
-    fontSize: 18,
-  },
-});
-
-export default ProfileList;
-```
-
----
-
-## Configuration de la navigation - Structure
-
-```jsx
-// App.js - Partie 1
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import ProfileList from './components/ProfileList';
-import UserProfile from './components/UserProfile';
-
-const Stack = createStackNavigator();
-```
-
----
-
-## Configuration de la navigation - Composant
-
-```jsx
-// App.js - Partie 2
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="ProfileList">
-        <Stack.Screen 
-          name="ProfileList" 
-          component={ProfileList} 
-          options={{ title: 'Profils' }}
-        />
-        <Stack.Screen 
-          name="UserProfile" 
-          component={UserProfile} 
-          options={({ route }) => ({ 
-            title: route.params.name 
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
 }
 ```
 
 ---
 
-Cet exercice vous permet de pratiquer la mise en place d'une navigation de base entre écrans, le passage de paramètres, et la mise à jour dynamique des titres d'écran.
+## Authentification sécurisée
+
+```tsx
+// app/_layout.tsx
+import { useAuth } from '../hooks/useAuth';
+
+export default function RootLayout() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Stack>
+      {isAuthenticated ? (
+        <Stack.Screen 
+          name="(tabs)" 
+          options={{ headerShown: false }} 
+        />
+      ) : (
+        <Stack.Screen 
+          name="(auth)" 
+          options={{ headerShown: false }} 
+        />
+      )}
+    </Stack>
+  );
+}
+```
+
+Cette version modernisée reflète les pratiques actuelles de 2024/2025 avec Expo Router, tout en gardant les concepts fondamentaux de la gestion d'état.

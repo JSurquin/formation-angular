@@ -21,7 +21,7 @@ if (status === 'granted') {
 ```jsx
 // Composant de capture photo
 <Camera ref={cameraRef}>
-  <Button title="Photo" onPress={() => {
+  <Button title="Photo" onPress={async () => {
     const photo = await cameraRef.current.takePictureAsync();
     console.log(photo.uri);
   }} />

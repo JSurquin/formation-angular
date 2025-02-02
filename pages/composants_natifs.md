@@ -2,223 +2,250 @@
 routeAlias: 'composants-natifs-styling'
 ---
 
-# Composants natifs et styling
+# Composants Natifs et Styling (2024/2025)
 
-- **Composants spécifiques à la plateforme**
-  - SafeAreaView : équivalent à padding-top pour éviter la notch sur iOS (pas d'équivalent web)
-  - StatusBar : équivalent à la balise meta theme-color en web
-  - Platform : équivalent à @media queries en CSS pour détecter le device
+## Styling avec NativeWind
 
----
-
-## Platform API - Configuration
-
-```jsx
-import { Platform } from 'react-native';
-
-const styles = {
-  padding: Platform.OS === 'ios' ? 20 : 16,
-};
-```
-
----
-
-## Platform API - Sélection
-
-```jsx
-const styles = {
-  ...Platform.select({
-    ios: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-    },
-    android: {
-      elevation: 4,
-    },
-  }),
-};
-```
-
----
-
-## StyleSheet et Dimensions
-
-```jsx
-const styles = StyleSheet.create({
-  container: {
-    width: Dimensions.get('window').width,
-    backgroundColor: '#fff'
-  }
-});
-```
-
----
-
-# Composants d'interaction
-
-## TouchableOpacity Example
-
-```jsx
-<TouchableOpacity onPress={() => console.log('Pressed!')}>
-  <Text>Appuyez ici</Text>
-</TouchableOpacity>
-```
-
----
-
-## TouchableHighlight Example
-
-```jsx
-<TouchableHighlight underlayColor="#DDDDDD">
-  <Text>Avec effet de surbrillance</Text>
-</TouchableHighlight>
-```
-
----
-
-# Composants de saisie
-
-## TextInput Example
-
-```jsx
-<TextInput
-  placeholder="Entrez votre texte"
-  onChangeText={text => setTexte(text)}
-/>
-```
-
----
-
-## Switch Example
-
-```jsx
-<Switch
-  value={isEnabled}
-  onValueChange={toggleSwitch}
-/>
-```
-
----
-routeAlias: 'exercice-amelioration-profil'
----
-
-# Exercice : Amélioration du profil utilisateur
-
-Améliorons notre composant UserProfile en ajoutant plus d'interactivité et en utilisant des composants natifs avancés.
-
-1. Modifiez `components/UserProfile.js` pour inclure un bouton "Like" et un champ de saisie pour un message
-2. Utilisez SafeAreaView pour gérer les zones sûres sur iOS
-3. Ajoutez un style conditionnel basé sur la plateforme
-
----
-
-## Structure du composant - Partie 1
-
-```jsx
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  Image, 
-  StyleSheet, 
-  TouchableOpacity, 
-  TextInput, 
-  SafeAreaView, 
-  Platform 
-} from 'react-native';
-```
-
----
-
-## Structure du composant - Partie 2
-
-```jsx
-const UserProfile = ({ name, bio, imageUrl }) => {
-  const [liked, setLiked] = useState(false);
-
+```tsx
+// components/Card.tsx
+export function Card({ children }) {
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.bio}>{bio}</Text>
-      <TouchableOpacity 
-        style={[styles.button, liked && styles.buttonLiked]} 
-        onPress={() => setLiked(!liked)}
-      >
-        <Text style={styles.buttonText}>
-          {liked ? 'Liked!' : 'Like'}
-        </Text>
-      </TouchableOpacity>
+    <View className="bg-white rounded-2xl shadow-lg p-4 m-2">
+      {children}
     </View>
   );
-};
+}
 ```
 
 ---
 
-## Styles - Partie 1
+## Composants de base stylisés
 
-```jsx
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
-    ...Platform.select({
-      ios: {
-        backgroundColor: '#F0F0F0',
-      },
-      android: {
-        backgroundColor: '#E0E0E0',
-      },
-    }),
-  },
-  image: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 20,
-  },
-});
+```tsx
+// components/StyledComponents.tsx
+export function Button({ onPress, children }) {
+  return (
+    <TouchableOpacity 
+      onPress={onPress}
+      className="bg-primary-500 px-4 py-2 rounded-lg active:bg-primary-600"
+    >
+      <Text className="text-white font-medium text-center">
+        {children}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+export function Input({ placeholder, ...props }) {
+  return (
+    <TextInput 
+      placeholder={placeholder}
+      className="w-full px-4 py-2 bg-gray-100 rounded-lg"
+      placeholderTextColor="#9CA3AF"
+      {...props}
+    />
+  );
+}
 ```
 
 ---
 
-## Styles - Partie 2
+## Composants Safe Area et Platform
 
-```jsx
-const styles = StyleSheet.create({
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  bio: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#FF6B6B',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  buttonLiked: {
-    backgroundColor: '#4ECDC4',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+```tsx
+// app/_layout.tsx
+import { Stack } from 'expo-router';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default UserProfile;
+export default function Layout() {
+  return (
+    <SafeAreaProvider>
+      <Stack 
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#fff',
+          },
+          headerShadowVisible: false,
+          headerBlurEffect: 'regular',
+        }}
+      />
+    </SafeAreaProvider>
+  );
+}
 ```
 
 ---
 
-# Résultat de l'exercice
+## Gestion des images avec Expo Image
 
-Cet exercice vous permet de pratiquer l'utilisation de composants natifs plus avancés, la gestion d'état local avec useState, et l'application de styles conditionnels basés sur la plateforme.
+```tsx
+// components/ProfileImage.tsx
+import { Image } from 'expo-image';
+
+export function ProfileImage({ uri }) {
+  return (
+    <Image
+      source={uri}
+      className="w-32 h-32 rounded-full"
+      transition={1000}
+      contentFit="cover"
+      placeholder={blurhash}
+      cachePolicy="memory-disk"
+    />
+  );
+}
+```
+
+---
+
+## Animations avec Reanimated
+
+```tsx
+// components/AnimatedCard.tsx
+import Animated, { 
+  useAnimatedStyle, 
+  withSpring 
+} from 'react-native-reanimated';
+
+export function AnimatedCard({ isVisible }) {
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { 
+          scale: withSpring(isVisible ? 1 : 0.8),
+        },
+      ],
+      opacity: withSpring(isVisible ? 1 : 0),
+    };
+  });
+
+  return (
+    <Animated.View 
+      className="bg-white rounded-2xl p-4"
+      style={animatedStyles}
+    >
+      {/* Contenu de la carte */}
+    </Animated.View>
+  );
+}
+```
+
+---
+
+## Gestes avec Reanimated
+
+```tsx
+// components/SwipeableCard.tsx
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
+export function SwipeableCard() {
+  const gesture = Gesture.Pan()
+    .onUpdate((event) => {
+      // Logique de mise à jour
+    })
+    .onEnd((event) => {
+      // Logique de fin de geste
+    });
+
+  return (
+    <GestureDetector gesture={gesture}>
+      <Animated.View className="w-full aspect-[3/4] bg-white rounded-2xl">
+        {/* Contenu de la carte */}
+      </Animated.View>
+    </GestureDetector>
+  );
+}
+```
+
+---
+
+## Composants spécifiques à la plateforme
+
+```tsx
+// components/PlatformSpecific.tsx
+import { Platform } from 'react-native';
+
+export function StatusBarHeight() {
+  return (
+    <View 
+      className={Platform.select({
+        ios: 'h-11',
+        android: 'h-7',
+        default: 'h-0'
+      })}
+    />
+  );
+}
+
+export function PlatformShadow() {
+  return (
+    <View
+      className={Platform.select({
+        ios: 'shadow-lg',
+        android: 'elevation-5',
+        default: 'shadow-sm'
+      })}
+    />
+  );
+}
+```
+
+---
+
+# Exercice : Création d'une carte de profil
+
+Créez une carte de profil pour l'application de rencontre avec :
+
+1. Styling avec NativeWind
+2. Animations fluides avec Reanimated
+3. Gestion optimisée des images
+4. Gestes de swipe
+
+---
+
+## Solution de l'exercice
+
+```tsx
+// components/ProfileCard.tsx
+import { Image } from 'expo-image';
+import Animated, { 
+  useAnimatedStyle, 
+  withSpring 
+} from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
+export function ProfileCard({ profile, onSwipe }) {
+  const gesture = Gesture.Pan()
+    .onUpdate((event) => {
+      // Logique de swipe
+    })
+    .onEnd((event) => {
+      if (Math.abs(event.velocityX) > 500) {
+        onSwipe(event.velocityX > 0 ? 'right' : 'left');
+      }
+    });
+
+  return (
+    <GestureDetector gesture={gesture}>
+      <Animated.View className="w-full aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-xl">
+        <Image
+          source={profile.photos[0]}
+          className="w-full h-3/4"
+          contentFit="cover"
+          transition={500}
+        />
+        <View className="p-4">
+          <Text className="text-2xl font-bold">
+            {profile.name}, {profile.age}
+          </Text>
+          <Text className="text-gray-600 mt-1">
+            {profile.bio}
+          </Text>
+        </View>
+      </Animated.View>
+    </GestureDetector>
+  );
+}
+```
+
+Cette version modernisée utilise les dernières pratiques et composants disponibles dans l'écosystème React Native/Expo en 2024/2025.

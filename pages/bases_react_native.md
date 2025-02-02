@@ -67,15 +67,27 @@ const Counter = () => {
   return (
     <TouchableOpacity 
       onPress={() => setCount(count + 1)}
+      {/* quand j'appuie, l'état d'avant de la variable count se met à jour donc 0 + 1 , au prochain appuie 1 + 1 , etc */}
     >
       <Text>
         Compteur: 
-        {count}
+        {count} 
+        {/* count se met à jour automatiquement dans la vue */}
       </Text>
     </TouchableOpacity>
   )
 }
 ```
+
+---
+
+Si vous n'avez aucune expérience avec ce concept :
+
+Ce sont des variables en fait, juste React relis plusieurs fois la page à chaque changement, donc ça voudrais dire que si il relis il reverrais :
+
+let count = 0
+
+donc il ferais toujours 0 + 1, puis au prochain tour 0 + 1 ce qui n'as aucun sens quand on veux incrémenter un bouton
 
 ---
 

@@ -10,7 +10,7 @@ routeAlias: 'introduction-react-native'
 
 - **Avantages de React Native**
   - Développement multiplateforme (iOS et Android)
-  - Performance proche du natif (avec quelques ajustements nécessaires pour certains modules)
+  - Performance proche du natif (avec quelques ajustements nécessaires pour certains modules via des bridges etc)
   - Large communauté et écosystème riche
   - Basé sur React, courbe d'apprentissage très facile au début.
 
@@ -20,12 +20,47 @@ routeAlias: 'introduction-react-native'
 
 - **Qu'est-ce qu'Expo ?**
   - Ensemble d'outils et de services pour React Native
-  - Simplifie le développement et le déploiement énormement
+  - Simplifie le développement et le déploiement énormement !
 
 - **Pourquoi utiliser Expo ?**
   - Configuration rapide et facile
   - Accès aux API natives sans configuration complexe
   - Mise à jour Over-The-Air (OTA)
+
+---
+
+# Expo Go
+
+- **Présentation d'Expo Go**
+  - Application mobile gratuite disponible sur iOS et Android
+  - Permet de tester les applications en développement
+  - Pas besoin de compiler ou déployer pour tester
+
+- **Fonctionnement**
+  - Scanner un QR code depuis l'application Expo Go
+  - Visualisation instantanée des modifications en temps réel
+  - Accès aux APIs natives d'Expo directement
+
+- **Avantages**
+  - Développement et tests rapides
+  - Partage facile avec l'équipe et les clients
+  - Pas besoin d'Apple Developer Account pour tester sur iOS
+
+---
+
+# Limitations d'Expo Go
+
+- **Restrictions**
+  - Ne peut pas utiliser de modules natifs personnalisés
+  - Certaines fonctionnalités natives avancées non disponibles
+  - Non utilisable en production
+
+- **Quand passer au "bare workflow"**
+  - Besoin de modules natifs personnalisés
+  - Nécessité d'optimisations natives
+  - Publication sur les stores
+
+Pensez à installer dès maintenant expo go sur votre iphone ou sur votre android.
 
 ---
 
@@ -44,9 +79,9 @@ routeAlias: 'introduction-react-native'
   - Certaines fonctionnalités nécessitent du code natif (Kotlin/Swift)
   - Besoin de compétences natives pour des fonctionnalités complexes
   - Exemples :
-    - Modules natifs personnalisés
+    - Modules natifs personnalisés (serveur torrent dans l'app etc)
     - Optimisations de performance spécifiques
-    - Intégrations matérielles avancées
+    - Intégrations matérielles avancées (il faut comprendre android studio/xcode , les manipuler)
 
 ---
 
@@ -77,7 +112,7 @@ routeAlias: 'introduction-react-native'
 - **Dépendance à Expo**
   - Mises à jour forcées de l'écosystème Expo
   - Difficultés potentielles pour "éjecter" le projet plus tard
-  - Dépendance aux serveurs Expo pour certaines fonctionnalités
+  - Dépendance aux serveurs Expo pour certaines fonctionnalités (eas build et je vais vous en parler)
 
 ---
 
@@ -190,9 +225,25 @@ routeAlias: 'exercice-hello-world'
 npm install -g expo-cli
 ```
 
+Ça c'est la façon globale.
+
+> Cependant, nous devrions plutot utiliser npx qui permet de télécharger la dernière dépendance, de l'éxecuter et de ne pas la stocker sur notre pc , ce qui permet d'avoir toujours la commande à jour sans prise de tête
+
+de toute façon si vous utilisez cette commande, vous aurez un jolie deprecated et le expo init ne marchera pas, donc si vous lisez un tuto en ligne pensez y
+
+---
+
+Donc lisons la doc officiel et lançons plutot la commande :
+
+```bash
+npx create-expo-app@latest leNomDeVotreApp
+```
+
 ---
 
 ## Création du projet
+
+(l'ancienne façon de faire)
 
 ```bash
 # Création d'un nouveau projet

@@ -2,40 +2,6 @@
 routeAlias: 'bonnes-pratiques'
 ---
 
-# Bonnes pratiques de développement JavaScript
-
-## Configuration ESLint
-
-```js
-// Configuration de base ESLint
-{
-  "rules": {
-    "no-console": "error",
-    "indent": ["error", 2]
-  }
-}
-```
-
----
-
-## Design Pattern - Module
-
-```js
-// Pattern Module
-const monModule = (function() {
-  let compteur = 0;
-  
-  return {
-    increment() {
-      compteur++;
-      return compteur;
-    }
-  };
-})();
-```
-
----
-
 ## Clean Code - Nommage
 
 ```js
@@ -413,6 +379,8 @@ const MemoizedComponent = () => {
   return <Text>{expensiveValue}</Text>;
 };
 ```
+
+Bientot il n'y aura plus besoin de l'utiliser grace a react forget compiler donc ne vous prenez pas trop la tête pour l'instant avec ça , c'est du bonus à savoir au cas ou (dans du legacy)
 
 ---
 
