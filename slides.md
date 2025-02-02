@@ -56,6 +56,7 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <Link to="animations-gestes">🎨 Animations et gestes</Link>
 <Link to="publication-application">📦 Publication de l'application</Link>
 <Link to="bonnes-pratiques-optimisation">🔍 Bonnes pratiques et optimisation</Link>
+<Link to="code-source">🧑‍💻 Code source du projet</Link>
 </div>
 
 </small>
@@ -99,3 +100,13 @@ src: ./pages/publication.md
 ---
 src: ./pages/bonnes_pratiques.md
 ---
+
+---
+routeAlias: 'code-source'
+---
+
+# Code source du projet d'exercice : 
+
+*Ci dessous le lien du projet :*
+
+[Lien du projet - Github](https://github.com/JSurquin/expo-tinder-like-sample)

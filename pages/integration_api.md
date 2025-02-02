@@ -2,232 +2,193 @@
 routeAlias: 'integration-api-donnees'
 ---
 
-# Intégration d'API et Gestion des Données (2024/2025)
+# Intégration API pour l'application de rencontre
 
-## Appels API avec React Query
+## Types et configuration
+
+```tsx
+// types/profile.ts
+export interface Profile {
+  id: string;
+  name: {
+    first: string;
+    last: string;
+  };
+  picture: {
+    large: string;
+    medium: string;
+  };
+  dob: {
+    age: number;
+  };
+  location: {
+    city: string;
+    country: string;
+  };
+}
+```
+
+---
+
+## Hook personnalisé pour les profils
 
 ```tsx
 // hooks/useProfiles.ts
 import { useQuery } from '@tanstack/react-query';
 
-export function useProfiles() {
+export function useProfiles(count: number = 10) {
   return useQuery({
     queryKey: ['profiles'],
-    queryFn: async () => {
-      const response = await fetch('https://api.example.com/profiles');
+    queryFn: async (): Promise<Profile[]> => {
+      const response = await fetch(
+        `https://randomuser.me/api/?results=${count}&inc=name,picture,dob,location&nat=fr`
+      );
+      
       if (!response.ok) {
-        throw new Error('Erreur réseau');
+        throw new Error('Erreur lors du chargement des profils');
       }
-      return response.json();
-    }
+
+      const { results } = await response.json();
+      return results.map((profile: any) => ({
+        ...profile,
+        id: profile.login.uuid
+      }));
+    },
+    staleTime: 5 * 60 * 1000, // Cache de 5 minutes
   });
 }
 ```
 
 ---
 
-## Utilisation dans un composant
+## Utilisation dans le Swiper
 
 ```tsx
 // app/(tabs)/home.tsx
-export default function Home() {
-  const { data: profiles, isLoading, error } = useProfiles();
+import { useProfiles } from '../../hooks/useProfiles';
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (error) {
-    return <ErrorMessage message={error.message} />;
-  }
-
-  return (
-    <View className="flex-1">
-      <Swiper
-        cards={profiles}
-        renderCard={(profile) => (
-          <ProfileCard {...profile} />
-        )}
-      />
-    </View>
-  );
-}
-```
-
----
-
-## Mutations avec React Query
-
-```tsx
-// hooks/useLikeProfile.ts
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-export function useLikeProfile() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (profileId: string) => {
-      const response = await fetch(`https://api.example.com/like/${profileId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['matches'] });
-    },
-  });
-}
-```
-
----
-
-## Stockage local avec MMKV
-
-```tsx
-// utils/storage.ts
-import { MMKV } from 'react-native-mmkv';
-
-export const storage = new MMKV();
-
-// Stockage de données
-export function storeData(key: string, value: any) {
-  storage.set(key, JSON.stringify(value));
-}
-
-// Récupération de données
-export function getData(key: string) {
-  const value = storage.getString(key);
-  return value ? JSON.parse(value) : null;
-}
-```
-
----
-
-## Hook personnalisé pour le stockage persistant
-
-```tsx
-// hooks/usePersistedState.ts
-import { useState, useEffect } from 'react';
-import { storage } from '../utils/storage';
-
-export function usePersistedState<T>(key: string, initialValue: T) {
-  const [state, setState] = useState<T>(() => {
-    const storedValue = storage.getString(key);
-    return storedValue ? JSON.parse(storedValue) : initialValue;
-  });
-
-  useEffect(() => {
-    storage.set(key, JSON.stringify(state));
-  }, [key, state]);
-
-  return [state, setState] as const;
-}
-```
-
----
-
-## Configuration de l'API
-
-```tsx
-// services/api.ts
-import axios from 'axios';
-
-export const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Intercepteur pour le token
-api.interceptors.request.use((config) => {
-  const token = storage.getString('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-```
-
----
-
-## Gestion des erreurs
-
-```tsx
-// components/ErrorBoundary.tsx
-import { isRouteErrorResponse, useRouteError } from 'expo-router';
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <View className="flex-1 items-center justify-center p-4">
-        <Text className="text-xl font-bold">
-          {error.status} {error.statusText}
-        </Text>
-        <Text className="mt-2 text-gray-600">{error.data?.message}</Text>
-      </View>
-    );
-  }
-
-  return (
-    <View className="flex-1 items-center justify-center p-4">
-      <Text className="text-xl font-bold">Oops!</Text>
-      <Text className="mt-2 text-gray-600">
-        Une erreur inattendue s'est produite
-      </Text>
-    </View>
-  );
-}
-```
-
----
-
-# Exercice : Intégration API de profils
-
-Créez une application de rencontre qui :
-
-1. Utilise React Query pour la gestion des données
-2. Implémente un système de cache avec MMKV
-3. Gère les erreurs avec ErrorBoundary
-4. Utilise des indicateurs de chargement
-
----
-
-## Solution de l'exercice
-
-```tsx
-// app/(tabs)/matches.tsx
-import { useMatches } from '../../hooks/useMatches';
-import { ErrorBoundary } from '../../components/ErrorBoundary';
-
-export default function Matches() {
-  const { data: matches, isLoading } = useMatches();
+export default function HomeScreen() {
+  const swiperRef = React.useRef<Swiper<Profile>>(null);
+  const { data: profiles, isLoading, error } = useProfiles(20);
 
   if (isLoading) {
     return <LoadingView />;
   }
 
+  if (error) {
+    return <ErrorView error={error} />;
+  }
+
   return (
-    <View className="flex-1 p-4">
-      <FlatList
-        data={matches}
-        renderItem={({ item }) => (
-          <MatchCard match={item} />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+    <SafeAreaView className="bg-background flex-1">
+      <View className="flex-1 px-4">
+        <Swiper
+          ref={swiperRef}
+          cards={profiles}
+          renderCard={(profile) =>
+            profile ? (
+              <ProfileCard
+                name={`${profile.name.first} ${profile.name.last}`}
+                age={profile.dob.age}
+                location={`${profile.location.city}, ${profile.location.country}`}
+                image={profile.picture.large}
+              />
+            ) : null
+          }
+          onSwipedLeft={(cardIndex) => {
+            console.log(`Disliked ${profiles[cardIndex].name.first}`);
+          }}
+          onSwipedRight={(cardIndex) => {
+            console.log(`Liked ${profiles[cardIndex].name.first}`);
+          }}
+          backgroundColor="transparent"
+          stackSize={10}
+          // ... autres props du Swiper
+        />
+      </View>
+    </SafeAreaView>
+  );
+}
+```
+
+---
+
+## Gestion du cache et mise à jour
+
+```tsx
+// hooks/useUpdateProfile.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (profileId: string) => {
+      // Simuler un délai réseau
+      await new Promise(resolve => setTimeout(resolve, 300));
+      return profileId;
+    },
+    onSuccess: (profileId) => {
+      // Mettre à jour le cache en retirant le profil
+      queryClient.setQueryData(['profiles'], (oldData: Profile[]) => 
+        oldData.filter(profile => profile.id !== profileId)
+      );
+
+      // Si le cache est vide, recharger de nouveaux profils
+      const profiles = queryClient.getQueryData(['profiles']) as Profile[];
+      if (profiles?.length < 5) {
+        queryClient.invalidateQueries({ queryKey: ['profiles'] });
+      }
+    },
+  });
+}
+```
+
+---
+
+## Composants d'UI optimisés
+
+```tsx
+// components/LoadingView.tsx
+export function LoadingView() {
+  return (
+    <View className="flex-1 items-center justify-center">
+      <ActivityIndicator size="large" color="#FF6B6B" />
+      <Text className="mt-4 text-gray-600">
+        Recherche de profils...
+      </Text>
     </View>
   );
 }
 
-// Définir le boundary pour la route
-Matches.ErrorBoundary = ErrorBoundary;
+// components/ErrorView.tsx
+export function ErrorView({ error, onRetry }: { error: Error; onRetry: () => void }) {
+  return (
+    <View className="flex-1 items-center justify-center p-4">
+      <Text className="text-xl font-bold text-red-500">
+        Oops!
+      </Text>
+      <Text className="mt-2 text-center text-gray-600">
+        {error.message}
+      </Text>
+      <Button
+        onPress={onRetry}
+        className="mt-4 bg-primary px-6 py-2 rounded-full"
+      >
+        <Text className="text-white font-medium">Réessayer</Text>
+      </Button>
+    </View>
+  );
+}
 ```
 
-Cette version modernisée utilise les meilleures pratiques actuelles pour la gestion des données dans une application React Native/Expo.
+---
+
+Cette implémentation simplifiée :
+- Utilise uniquement React Query avec fetch
+- Gère le cache et les mises à jour optimistes
+- Recharge automatiquement quand il reste peu de profils
+- Inclut une gestion d'erreur et de chargement élégante
+- Reste performante grâce au staleTime et au cache
+
+Le tout sans dépendance supplémentaire autre que React Query.

@@ -2,17 +2,162 @@
 routeAlias: 'configuration-environnement'
 ---
 
-# Configuration de l'environnement
+# Configuration de l'environnement (2024/2025)
 
-Reparlons rapidement de tout ce que nous avons du installer et ce que nous allons configurer.
-
-## Installation de Node.js
+## Installation de Node.js et des outils de base
 
 ```bash
-# Téléchargement et installation de Node.js
+# Installation de Node.js via nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 nvm install node
+
+# Installation des outils globaux
+npm install -g typescript
 ```
+
+---
+
+## Création d'un projet Expo moderne
+
+```bash
+# Création du projet avec le template TypeScript
+npx create-expo-app@latest -t expo-template-typescript
+
+# OU avec le template Tabs (recommandé pour une app type Tinder)
+npx create-expo-app@latest -t tabs
+```
+
+---
+
+## Installation des dépendances essentielles
+
+```bash
+npx expo install nativewind@3.0.0
+npm install tailwindcss@3.3.2 --save-dev
+
+# Animations et gestes
+npx expo install react-native-reanimated
+npx expo install react-native-gesture-handler
+
+# UI et effets
+npx expo install expo-linear-gradient
+npm install react-native-deck-swiper
+```
+
+---
+
+## Configuration de NativeWind
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}"
+  ],
+  presets: [require("nativewind/preset")],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          500: '#FF6B6B',
+          600: '#FF5252',
+        }
+      }
+    },
+  },
+}
+```
+
+---
+
+## Configuration de Babel pour Reanimated
+
+```js
+// babel.config.js
+module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      'nativewind/babel',
+      'react-native-reanimated/plugin',
+    ],
+  };
+};
+```
+
+---
+
+## Configuration de Metro
+
+```js
+// metro.config.js
+const { getDefaultConfig } = require('expo/metro-config');
+const { withNativeWind } = require('nativewind/metro');
+
+const config = getDefaultConfig(__dirname);
+
+module.exports = withNativeWind(config, {
+  input: './global.css',
+});
+```
+
+---
+
+## Création des fichiers de style
+
+```css
+/* global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+---
+
+## Configuration TypeScript
+
+```json
+// tsconfig.json
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}
+```
+
+---
+
+## Structure du projet recommandée (2024/2025)
+
+```
+MonProjet/
+├── app/                    # Routing avec Expo Router
+├── components/            # Composants réutilisables
+├── hooks/                # Custom hooks
+├── services/            # Services (API, etc.)
+├── types/               # Types TypeScript
+├── utils/               # Utilitaires
+├── assets/             # Images, fonts
+├── global.css          # Styles Tailwind
+├── tailwind.config.js  # Config Tailwind
+├── babel.config.js     # Config Babel
+├── metro.config.js     # Config Metro
+└── tsconfig.json       # Config TypeScript
+```
+
+Cette configuration moderne permet de développer des applications React Native performantes avec un excellent DX (Developer Experience).
 
 ---
 
@@ -70,41 +215,7 @@ npm install @react-navigation/native @react-navigation/stack
 
 ---
 
-## Dépendances supplémentaires
-
-```bash
-npx expo install react-native-gesture-handler react-native-reanimated
-```
-
----
-
-# Configuration de l'émulateur
-
-## Android Studio
-
-```bash
-# Configuration des variables d'environnement
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-```
-
-Pour android studio, nous n'allons pas nous attarder dessus dans cette formation.
-Cependant si nous avons le temps nous allons essayer de l'utiliser pour une build.
-
----
-
-## Xcode (macOS uniquement)
-
-Ne pas oubliez d'installer [brew.sh](https://brew.sh/)
-
-```bash
-# Installation de CocoaPods
-sudo gem install cocoapods
-```
-
----
-
-# Résultat
+## Résultat
 
 Votre environnement de développement est maintenant configuré pour React Native et Expo.
 

@@ -232,3 +232,212 @@ export default function RootLayout() {
 ```
 
 Cette version modernisée reflète les pratiques actuelles de 2024/2025 avec Expo Router, tout en gardant les concepts fondamentaux de la gestion d'état.
+
+---
+
+# Implémentation du Swiper
+
+## Composant HomeScreen complet
+
+```tsx
+// app/(tabs)/home.tsx
+import React from "react";
+import { View, SafeAreaView } from "react-native";
+import Swiper from "react-native-deck-swiper";
+import ProfileCard from "../components/ProfileCard";
+import { User, users } from "../data/users";
+import { X, Heart } from "lucide-react-native";
+import { Button } from "~/components/ui/button";
+
+export default function HomeScreen() {
+  const swiperRef = React.useRef<Swiper<User>>(null);
+  
+  const handleLike = (cardIndex: number) => {
+    console.log(`Liked ${users[cardIndex].name}`);
+  };
+
+  const handleDislike = (cardIndex: number) => {
+    console.log(`Disliked ${users[cardIndex].name}`);
+  };
+
+  return (
+    <SafeAreaView className="bg-background flex-1">
+      <View className="flex-1 px-4">
+        <View className="flex-1 pt-4">
+          <Swiper
+            cards={users}
+            renderCard={(card: any) =>
+              card ? <ProfileCard user={card} /> : null
+            }
+            onSwipedLeft={handleDislike}
+            onSwipedRight={handleLike}
+            cardIndex={0}
+            backgroundColor="transparent"
+            stackSize={10}
+            stackScale={10}
+            stackSeparation={14}
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            disableTopSwipe
+            disableBottomSwipe
+            overlayLabels={{
+              left: {
+                title: "NON",
+                style: {
+                  label: {
+                    backgroundColor: "red",
+                    color: "white",
+                    fontSize: 24,
+                  },
+                  wrapper: {
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-start",
+                    marginTop: 30,
+                    marginLeft: -30,
+                  },
+                },
+              },
+              right: {
+                title: "OUI",
+                style: {
+                  label: {
+                    backgroundColor: "#4DED30",
+                    color: "white",
+                    fontSize: 24,
+                  },
+                  wrapper: {
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    marginTop: 30,
+                    marginLeft: 30,
+                  },
+                },
+              },
+            }}
+          />
+        </View>
+
+        <View className="flex-row items-center justify-center gap-4 pb-24">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-16 w-16 rounded-full border-2 border-red-500 bg-white"
+            onPress={() => {
+              if (swiperRef.current) {
+                swiperRef.current.swipeLeft();
+              }
+            }}
+          >
+            <X className="h-8 w-8 text-red-500" />
+          </Button>
+
+          <Button
+            size="icon"
+            className="bg-primary h-16 w-16 rounded-full"
+            onPress={() => {
+              if (swiperRef.current) {
+                swiperRef.current.swipeRight();
+              }
+            }}
+          >
+            <Heart className="h-8 w-8 text-white" />
+          </Button>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+```
+
+---
+
+## Explications des fonctionnalités clés
+
+### 1. Configuration du Swiper
+
+```tsx
+// Props importantes du Swiper
+<Swiper
+  stackSize={10}        // Nombre de cartes visibles dans la pile
+  stackScale={10}       // Échelle de réduction pour les cartes empilées
+  stackSeparation={14}  // Espacement vertical entre les cartes
+  animateOverlayLabelsOpacity  // Animation des labels OUI/NON
+  animateCardOpacity          // Fondu des cartes
+  disableTopSwipe            // Désactive le swipe vers le haut
+  disableBottomSwipe         // Désactive le swipe vers le bas
+/>
+```
+
+---
+
+### 2. Gestion des labels de swipe
+
+```tsx
+// Configuration des labels OUI/NON
+overlayLabels={{
+  left: {
+    title: "NON",
+    style: {
+      label: {
+        backgroundColor: "red",
+        // ... styles du label
+      },
+      wrapper: {
+        // ... styles du wrapper
+      },
+    },
+  },
+  right: {
+    // ... configuration similaire pour "OUI"
+  },
+}}
+```
+
+---
+
+### 3. Boutons physiques avec refs
+
+```tsx
+// Utilisation de la ref pour contrôler le Swiper
+const swiperRef = React.useRef<Swiper<User>>(null);
+
+// Déclenchement manuel des swipes
+<Button
+  onPress={() => {
+    if (swiperRef.current) {
+      swiperRef.current.swipeLeft();
+    }
+  }}
+>
+  <X />
+</Button>
+```
+
+---
+
+### 4. Gestion des événements de swipe
+
+```tsx
+// Handlers pour les swipes
+const handleLike = (cardIndex: number) => {
+  console.log(`Liked ${users[cardIndex].name}`);
+  // Ici vous pouvez ajouter votre logique de match
+  // Par exemple : appel API, mise à jour du state, etc.
+};
+
+const handleDislike = (cardIndex: number) => {
+  console.log(`Disliked ${users[cardIndex].name}`);
+  // Logique de rejet
+};
+```
+
+Cette implémentation moderne combine :
+- Styling avec NativeWind
+- Gestion d'état avec TypeScript
+- Animations fluides
+- Interface utilisateur intuitive
+- Gestion des gestes tactiles
+
+Le tout dans un composant réutilisable et maintenable.
