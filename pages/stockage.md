@@ -6,8 +6,6 @@ routeAlias: 'stockage-local'
 
 # Stockage Local dans React Native (2024/2025)
 
-## Solutions disponibles
-
 - **AsyncStorage**
   - Simple key-value store
   - Stockage non sécurisé
