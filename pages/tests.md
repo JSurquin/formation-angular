@@ -30,6 +30,8 @@ Les tests sont essentiels dans le développement React Native pour :
 - Interactions entre composants
 - Communication avec les APIs
 
+---
+
 ### Tests End-to-End (E2E)
 - Tests sur device réel/émulateur
 - Scénarios utilisateur complets
@@ -242,3 +244,161 @@ jobs:
     - name: Upload test coverage
       uses: codecov/codecov-action@v2
 ```
+
+## Exemples concrets par type de test
+
+### 1. Tests Unitaires - Composant de Profil
+
+```tsx
+// components/ProfileCard.tsx
+export const ProfileCard = ({ user, onLike }) => (
+  <View>
+    <Image source={{ uri: user.photo }} />
+    <Text>{user.name}, {user.age}</Text>
+    <Button onPress={() => onLike(user.id)}>Like</Button>
+  </View>
+);
+
+// __tests__/ProfileCard.test.tsx
+describe('ProfileCard', () => {
+  const mockUser = {
+    id: '123',
+    name: 'John',
+    age: 25,
+    photo: 'https://example.com/photo.jpg'
+  };
+
+  it('affiche les informations utilisateur correctement', () => {
+    const { getByText } = render(
+      <ProfileCard user={mockUser} onLike={() => {}} />
+    );
+    
+    expect(getByText('John, 25')).toBeTruthy();
+  });
+
+  it('appelle onLike avec le bon ID', () => {
+    const onLike = jest.fn();
+    const { getByText } = render(
+      <ProfileCard user={mockUser} onLike={onLike} />
+    );
+    
+    fireEvent.press(getByText('Like'));
+    expect(onLike).toHaveBeenCalledWith('123');
+  });
+});
+```
+
+---
+
+### 2. Tests d'Intégration - Flux d'authentification
+
+```tsx
+// __tests__/AuthFlow.test.tsx
+import { AuthProvider, useAuth } from '../context/AuthContext';
+import { LoginScreen } from '../screens/LoginScreen';
+import { HomeScreen } from '../screens/HomeScreen';
+
+describe('Flux d\'authentification', () => {
+  it('permet la connexion et accès à l\'écran principal', async () => {
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <AuthProvider>
+        <LoginScreen />
+        <HomeScreen />
+      </AuthProvider>
+    );
+
+    // Remplir le formulaire
+    fireEvent.changeText(
+      getByPlaceholderText('Email'),
+      'test@example.com'
+    );
+    fireEvent.changeText(
+      getByPlaceholderText('Mot de passe'),
+      'password123'
+    );
+
+    // Soumettre
+    fireEvent.press(getByText('Se connecter'));
+
+    // Vérifier la redirection
+    await waitFor(() => {
+      expect(queryByText('Bienvenue sur TinderLike')).toBeTruthy();
+      expect(queryByText('Se connecter')).toBeNull();
+    });
+  });
+
+  it('affiche une erreur avec des identifiants invalides', async () => {
+    const { getByPlaceholderText, getByText } = render(
+      <AuthProvider>
+        <LoginScreen />
+      </AuthProvider>
+    );
+
+    fireEvent.changeText(
+      getByPlaceholderText('Email'),
+      'invalid@example.com'
+    );
+    fireEvent.press(getByText('Se connecter'));
+
+    await waitFor(() => {
+      expect(getByText('Identifiants invalides')).toBeTruthy();
+    });
+  });
+});
+```
+
+---
+
+### 3. Tests E2E avec Detox - Flux complet de l'application
+
+```js
+// e2e/app.test.js
+describe('Application TinderLike', () => {
+  beforeAll(async () => {
+    await device.launchApp();
+  });
+
+  beforeEach(async () => {
+    await device.reloadReactNative();
+  });
+
+  it('permet un flux complet de connexion et like', async () => {
+    // 1. Connexion
+    await element(by.id('email-input')).typeText('user@example.com');
+    await element(by.id('password-input')).typeText('password123');
+    await element(by.text('Se connecter')).tap();
+
+    // 2. Vérifier l'accès à l'écran principal
+    await expect(element(by.text('Découvrir'))).toBeVisible();
+
+    // 3. Interagir avec les profils
+    await element(by.id('profile-card')).swipe('right', 'fast');
+    await expect(element(by.text('Match !'))).toBeVisible();
+
+    // 4. Accéder au chat
+    await element(by.text('Messages')).tap();
+    await expect(element(by.id('chat-list'))).toBeVisible();
+
+    // 5. Déconnexion
+    await element(by.text('Profil')).tap();
+    await element(by.text('Déconnexion')).tap();
+    await expect(element(by.text('Se connecter'))).toBeVisible();
+  });
+
+  it('gère correctement les erreurs réseau', async () => {
+    // Simuler une perte de connexion
+    await device.setURLBlacklist(['.*']);
+    
+    await element(by.id('email-input')).typeText('user@example.com');
+    await element(by.id('password-input')).typeText('password123');
+    await element(by.text('Se connecter')).tap();
+
+    await expect(element(by.text('Erreur de connexion'))).toBeVisible();
+  });
+});
+```
+
+Ces exemples montrent des cas réels d'utilisation pour chaque type de test dans le contexte de notre application TinderLike, avec :
+- Tests unitaires pour les composants isolés
+- Tests d'intégration pour les flux fonctionnels
+- Tests E2E pour les scénarios utilisateur complets
