@@ -231,8 +231,6 @@ export default function RootLayout() {
 }
 ```
 
-Cette version modernisée reflète les pratiques actuelles de 2024/2025 avec Expo Router, tout en gardant les concepts fondamentaux de la gestion d'état.
-
 ---
 
 # Implémentation du Swiper

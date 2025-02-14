@@ -227,6 +227,10 @@ export default function Layout() {
    - Séparation des layouts
    - Typage des paramètres de navigation
 
+---
+
+## Bonnes pratiques
+
 4. **Sécurité**
    - Protection des routes authentifiées
    - Validation des paramètres

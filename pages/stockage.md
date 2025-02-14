@@ -158,6 +158,10 @@ const getMMKV = (key: string) => {
    - Services centralisés
    - Types forts
 
+---
+
+## Bonnes pratiques
+
 4. **Sécurité**
    - Ne jamais stocker de tokens JWT en clair
    - Chiffrement si nécessaire

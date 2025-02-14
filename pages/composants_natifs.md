@@ -247,5 +247,3 @@ export function ProfileCard({ profile, onSwipe }) {
   );
 }
 ```
-
-Cette version modernisée utilise les dernières pratiques et composants disponibles dans l'écosystème React Native/Expo en 2024/2025.
