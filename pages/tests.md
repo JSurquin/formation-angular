@@ -245,6 +245,8 @@ jobs:
       uses: codecov/codecov-action@v2
 ```
 
+---
+
 ## Exemples concrets par type de test
 
 ### 1. Tests Unitaires - Composant de Profil
@@ -397,6 +399,8 @@ describe('Application TinderLike', () => {
   });
 });
 ```
+
+---
 
 Ces exemples montrent des cas réels d'utilisation pour chaque type de test dans le contexte de notre application TinderLike, avec :
 - Tests unitaires pour les composants isolés
