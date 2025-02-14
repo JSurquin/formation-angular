@@ -3,6 +3,7 @@ theme: ./
 colorSchema: "auto"
 layout: intro
 highlighter: shiki
+editor: true
 title: Formation React Native et Expo
 #transition: slide-left
 download: "https://react-native.andromed.fr/slides.pdf"
@@ -40,6 +41,7 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <div class="flex flex-col gap-2">
 <Link to="introduction-react-native">🚀 Introduction à React Native et Expo</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement de développement</Link>
+<Link to="ejection-react-native">🔧 Éjection de React Native</Link>
 <Link to="bases-react-native">🔧 Bases de React Native</Link>
 <Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
 <Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
@@ -68,6 +70,10 @@ src: ./pages/introduction.md
 
 ---
 src: ./pages/configuration.md
+---
+
+---
+src: ./pages/ejection.md
 ---
 
 ---
