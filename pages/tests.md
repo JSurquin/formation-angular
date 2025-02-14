@@ -176,5 +176,3 @@ jobs:
     - name: Upload test coverage
       uses: codecov/codecov-action@v2
 ```
-
-Cette configuration complète couvre tous les aspects importants des tests dans une application React Native moderne, de l'unitaire à l'E2E, en passant par les tests de performance et d'accessibilité. 
