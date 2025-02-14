@@ -45,6 +45,8 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <Link to="bases-react-native">🔧 Bases de React Native</Link>
 <Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
 <Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
+<Link to="stockage-local">💾 Stockage local et sécurité</Link>
+<Link to="tests-react-native">🧪 Tests et qualité du code</Link>
 </div>
 
 </small>
@@ -112,8 +114,16 @@ src: ./pages/bonnes_pratiques.md
 routeAlias: 'code-source'
 ---
 
-# Code source du projet d'exercice : 
+# Code source du projet d'exercice :
 
 *Ci dessous le lien du projet :*
 
 [Lien du projet - Github](https://github.com/JSurquin/expo-tinder-like-sample)
+
+---
+src: ./pages/stockage.md
+---
+
+---
+src: ./pages/tests.md
+---
