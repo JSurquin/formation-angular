@@ -2,7 +2,73 @@
 routeAlias: 'tests-react-native'
 ---
 
-[... contenu précédent inchangé jusqu'à "Rapports de couverture" ...]
+<a name="tests-react-native"></a>
+
+# Tests dans React Native (2024/2025)
+
+## Introduction aux tests
+
+Les tests sont essentiels dans le développement React Native pour :
+- Assurer la qualité du code
+- Prévenir les régressions
+- Faciliter la maintenance
+- Documenter le comportement attendu
+
+---
+
+## Types de tests
+
+### Tests Unitaires
+- Tests de composants isolés
+- Tests de fonctions pures
+- Tests de hooks personnalisés
+- Utilisation de Jest et React Native Testing Library
+
+### Tests d'Intégration
+- Tests de flux complets
+- Tests de navigation
+- Interactions entre composants
+- Communication avec les APIs
+
+### Tests End-to-End (E2E)
+- Tests sur device réel/émulateur
+- Scénarios utilisateur complets
+- Utilisation de Detox
+- Tests de performance
+
+---
+
+## Tests unitaires avec Jest
+
+```tsx
+// components/__tests__/Button.test.tsx
+import { render, fireEvent } from '@testing-library/react-native'
+import { Button } from '../Button'
+
+describe('Button Component', () => {
+  it('appelle onPress quand cliqué', () => {
+    const onPress = jest.fn()
+    const { getByText } = render(
+      <Button onPress={onPress}>
+        Cliquez-moi
+      </Button>
+    )
+
+    fireEvent.press(getByText('Cliquez-moi'))
+    expect(onPress).toHaveBeenCalled()
+  })
+
+  it('affiche le texte correctement', () => {
+    const { getByText } = render(
+      <Button onPress={() => {}}>
+        Test
+      </Button>
+    )
+
+    expect(getByText('Test')).toBeTruthy()
+  })
+})
+```
 
 ---
 
