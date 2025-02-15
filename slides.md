@@ -42,6 +42,7 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <Link to="introduction-react-native">🚀 Introduction à React Native et Expo</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement de développement</Link>
 <Link to="ejection-react-native">🔧 Éjection de React Native</Link>
+<Link to="native-modules">🔌 Modules Natifs Personnalisés</Link>
 <Link to="bases-react-native">🔧 Bases de React Native</Link>
 <Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
 <Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
@@ -76,6 +77,10 @@ src: ./pages/configuration.md
 
 ---
 src: ./pages/ejection.md
+---
+
+---
+src: ./pages/native_modules.md
 ---
 
 ---
