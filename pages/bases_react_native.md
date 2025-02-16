@@ -30,7 +30,12 @@ routeAlias: 'bases-react-native'
 
 # Props et State
 
-## Props - Structure
+Les props sont comme les paramètres d'une fonction - ils permettent de passer des données d'un composant parent à un composant enfant.
+
+Prenons un exemple simple avec une fonction qui s'apelle un composant :
+
+(Car un composant est une fonction qui retourne du html tout simplement !)
+
 
 ```jsx
 // Composant parent
@@ -46,10 +51,8 @@ routeAlias: 'bases-react-native'
 const UserProfile = (props) => {
   return (
     <Text>
-      Nom: 
-      {props.name}
-      , Age: 
-      {props.age}
+      Nom: {props.name}, Age: {props.age}
+      {/* affiche "John Doe" et 25 */}
     </Text>
   )
 }
@@ -186,3 +189,88 @@ const styles = StyleSheet.create({
 # Résultat de l'exercice
 
 Cet exercice vous permet de pratiquer la création de composants, l'utilisation de props, et le styling en React Native.
+
+---
+
+# Composants de base - Visualisation
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+<img src="/view.png" class="h-60 rounded-lg" />
+<p class="text-sm text-center mt-2">Structure de base avec View</p>
+</div>
+<div>
+<img src="/text.png" class="h-40 rounded-lg" />
+<p class="text-sm text-center mt-2">Utilisation du composant Text</p>
+</div>
+</div>
+
+---
+
+<div class="-mt-4">
+
+### Exemple de Flex Direction
+
+Ici on peut voir comment on peut aligner les éléments en utilisant flexbox dans react native
+
+<iframe src="https://snack.expo.dev/@jsrq/flex-direction" class="h-[50vh] w-full rounded-lg" />
+
+</div>
+---
+
+<div class="-mt-4">
+
+### Layout et Flexbox
+
+Et ici le justifyContent qui permet de centrer les éléments horizontalement
+
+<iframe src="https://snack.expo.dev/@jsrq/justify-content" class="h-[50vh] w-full rounded-lg" />
+
+</div>
+
+---
+
+# Composants d'interaction
+
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-1">
+
+Boutons : comme un vrai bouton en HTML
+
+<img src="/button.png" class="h-60 rounded-lg" />
+</div>
+<div class="col-span-1">
+<p> TouchableOpacity : comme un bouton en HTML mais avec une animation</p>
+<img src="/touchable.png" class="h-60 rounded-lg" />
+</div>
+</div>
+
+---
+
+# TextInput pour la saisie
+
+<img src="/textinput.png" class="h-60 rounded-lg" />
+
+---
+
+<div class="-mt-4">
+
+### ScrollView
+
+Voici un exemple de ScrollView qui permet de faire défiler du contenu verticalement
+
+<iframe src="https://snack.expo.dev/@jsrq/scrollview-example" class="h-[50vh] w-full rounded-lg" />
+
+</div>
+
+---
+
+<div class="-mt-4">
+
+### FlatList 
+
+Et ici un exemple de FlatList qui permet d'afficher une grande liste de données de manière optimisée
+
+<iframe src="https://snack.expo.dev/@jsrq/flatlist-basics" class="h-[50vh] w-full rounded-lg" />
+
+</div>

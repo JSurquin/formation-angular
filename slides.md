@@ -41,13 +41,10 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <div class="flex flex-col gap-2">
 <Link to="introduction-react-native">🚀 Introduction à React Native et Expo</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement de développement</Link>
-<Link to="ejection-react-native">🔧 Éjection de React Native</Link>
-<Link to="native-modules">🔌 Modules Natifs Personnalisés</Link>
 <Link to="bases-react-native">🔧 Bases de React Native</Link>
 <Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
 <Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
 <Link to="stockage-local">💾 Stockage local et sécurité</Link>
-<Link to="tests-react-native">🧪 Tests et qualité du code</Link>
 </div>
 
 </small>
@@ -60,6 +57,9 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <Link to="integration-api-donnees">🌐 Intégration d'API et gestion des données</Link>
 <Link to="camera-medias">📸 Utilisation de la caméra et des médias</Link>
 <Link to="animations-gestes">🎨 Animations et gestes</Link>
+<Link to="ejection-react-native">🔧 Éjection de React Native</Link>
+<Link to="native-modules">🔌 Modules Natifs Personnalisés</Link>
+<Link to="tests-react-native">🧪 Tests et qualité du code</Link>
 <Link to="publication-application">📦 Publication de l'application</Link>
 <Link to="bonnes-pratiques-optimisation">🔍 Bonnes pratiques et optimisation</Link>
 <Link to="code-source">🧑‍💻 Code source du projet</Link>
@@ -76,14 +76,6 @@ src: ./pages/configuration.md
 ---
 
 ---
-src: ./pages/ejection.md
----
-
----
-src: ./pages/native_modules.md
----
-
----
 src: ./pages/bases_react_native.md
 ---
 
@@ -96,6 +88,10 @@ src: ./pages/gestion_etat.md
 ---
 
 ---
+src: ./pages/stockage.md
+---
+
+---
 src: ./pages/integration_api.md
 ---
 
@@ -105,6 +101,18 @@ src: ./pages/camera_medias.md
 
 ---
 src: ./pages/animations_gestes.md
+---
+
+---
+src: ./pages/ejection.md
+---
+
+---
+src: ./pages/native_modules.md
+---
+
+---
+src: ./pages/tests.md
 ---
 
 ---
@@ -124,11 +132,3 @@ routeAlias: 'code-source'
 *Ci dessous le lien du projet :*
 
 [Lien du projet - Github](https://github.com/JSurquin/expo-tinder-like-sample)
-
----
-src: ./pages/stockage.md
----
-
----
-src: ./pages/tests.md
----
