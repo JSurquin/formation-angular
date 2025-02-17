@@ -4,20 +4,20 @@ colorSchema: "auto"
 layout: intro
 highlighter: shiki
 editor: true
-title: Formation React Native et Expo
+title: Formation Angular 18/19
 #transition: slide-left
-download: "https://react-native.andromed.fr/slides.pdf"
+download: "https://angular.andromed.fr/slides.pdf"
 themeConfig:
   logoHeader: "/avatar.png"
-  eventLogo: "https://d33wubrfki0l68.cloudfront.net/554c3b0e09cf167f0281fda839a5433f2040b349/ecfc9/img/header_logo.svg"
-  eventUrl: "https://reactnative.dev/"
+  eventLogo: "https://angular.io/assets/images/logos/angular/angular.svg"
+  eventUrl: "https://angular.io/"
   twitter: ""
-  twitterUrl: "https://twitter.com/reactnative"
+  twitterUrl: "https://twitter.com/angular"
 ---
 
-# React Native et Expo
+# Angular 18/19
 
-Une formation complète sur le développement d'applications mobiles avec React Native et Expo.
+Une formation complète sur le développement d'applications web modernes avec Angular.
 
 <div class="pt-12">
   <span @click="next" class="px-2 p-1 rounded cursor-pointer hover:bg-white hover:bg-opacity-10">
@@ -34,17 +34,17 @@ routeAlias: 'sommaire'
 
 # SOMMAIRE 📜
 
-Voici le sommaire de cette formation sur React Native et Expo:
+Voici le sommaire de cette formation sur Angular 18/19:
 
 <small>
 
 <div class="flex flex-col gap-2">
-<Link to="introduction-react-native">🚀 Introduction à React Native et Expo</Link>
-<Link to="configuration-environnement">💻 Configuration de l'environnement de développement</Link>
-<Link to="bases-react-native">🔧 Bases de React Native</Link>
-<Link to="composants-natifs-styling">📱 Composants natifs et styling</Link>
-<Link to="gestion-etat-navigation">📊 Gestion de l'état et navigation</Link>
-<Link to="stockage-local">💾 Stockage local et sécurité</Link>
+<Link to="introduction-angular">🚀 Introduction à Angular</Link>
+<Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
+<Link to="composants-angular">🔧 Composants Angular</Link>
+<Link to="directives-pipes">📱 Directives et Pipes</Link>
+<Link to="services-dependency-injection">📊 Services et Injection de dépendances</Link>
+<Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 </div>
 
 </small>
@@ -54,15 +54,15 @@ Voici le sommaire de cette formation sur React Native et Expo:
 <small>
 
 <div class="flex flex-col gap-2">
-<Link to="integration-api-donnees">🌐 Intégration d'API et gestion des données</Link>
-<Link to="camera-medias">📸 Utilisation de la caméra et des médias</Link>
-<Link to="animations-gestes">🎨 Animations et gestes</Link>
-<Link to="ejection-react-native">🔧 Éjection de React Native</Link>
-<Link to="native-modules">🔌 Modules Natifs Personnalisés</Link>
-<Link to="tests-react-native">🧪 Tests et qualité du code</Link>
-<Link to="publication-application">📦 Publication de l'application</Link>
-<Link to="bonnes-pratiques-optimisation">🔍 Bonnes pratiques et optimisation</Link>
-<Link to="code-source">🧑‍💻 Code source du projet</Link>
+<Link to="forms-validation">📝 Formulaires et Validation</Link>
+<Link to="rxjs-observables">🔄 RxJS et Observables</Link>
+<Link to="http-client">🌐 HTTP Client et API REST</Link>
+<Link to="signals">⚡ Signals (Nouveauté Angular 18)</Link>
+<Link to="performance">🚀 Performance et Optimisation</Link>
+<Link to="testing">🧪 Tests unitaires et E2E</Link>
+<Link to="deployment">📦 Déploiement</Link>
+<Link to="best-practices">🔍 Bonnes pratiques</Link>
+<Link to="source-code">🧑‍💻 Code source du projet</Link>
 </div>
 
 </small>
@@ -76,59 +76,49 @@ src: ./pages/configuration.md
 ---
 
 ---
-src: ./pages/bases_react_native.md
+src: ./pages/composants.md
 ---
 
 ---
-src: ./pages/composants_natifs.md
+src: ./pages/directives.md
 ---
 
 ---
-src: ./pages/gestion_etat.md
+src: ./pages/services.md
 ---
 
 ---
-src: ./pages/stockage.md
+src: ./pages/routing.md
 ---
 
 ---
-src: ./pages/integration_api.md
+src: ./pages/forms.md
 ---
 
 ---
-src: ./pages/camera_medias.md
+src: ./pages/rxjs.md
 ---
 
 ---
-src: ./pages/animations_gestes.md
+src: ./pages/http.md
 ---
 
 ---
-src: ./pages/ejection.md
+src: ./pages/signals.md
 ---
 
 ---
-src: ./pages/native_modules.md
+src: ./pages/performance.md
 ---
 
 ---
-src: ./pages/tests.md
+src: ./pages/testing.md
 ---
 
 ---
-src: ./pages/publication.md
+src: ./pages/deployment.md
 ---
 
 ---
-src: ./pages/bonnes_pratiques.md
+src: ./pages/best_practices.md
 ---
-
----
-routeAlias: 'code-source'
----
-
-# Code source du projet d'exercice :
-
-*Ci dessous le lien du projet :*
-
-[Lien du projet - Github](https://github.com/JSurquin/expo-tinder-like-sample)

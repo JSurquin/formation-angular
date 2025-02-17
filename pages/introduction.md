@@ -1,324 +1,193 @@
 ---
-routeAlias: 'introduction-react-native'
+routeAlias: 'introduction-angular'
 ---
 
-# Introduction à React Native
+# Introduction à Angular 18/19
 
-- **Qu'est-ce que React Native ?**
-  - Framework pour développer des applications mobiles natives sur ios et android
-  - Utilise React et JavaScript pour créer des interfaces utilisateur
+- **Qu'est-ce qu'Angular ?**
+  - Framework complet pour le développement web
+  - Développé et maintenu par Google
+  - Écrit en TypeScript
+  - Version 18/19 avec de nombreuses améliorations
 
-- **Avantages de React Native**
-  - Développement multiplateforme (iOS et Android)
-  - Performance proche du natif (avec quelques ajustements nécessaires pour certains modules via des bridges etc)
-  - Large communauté et écosystème riche
-  - Basé sur React, courbe d'apprentissage très facile au début.
-
----
-
-# Introduction à Expo
-
-- **Qu'est-ce qu'Expo ?**
-  - Ensemble d'outils et de services pour React Native
-  - Simplifie le développement et le déploiement énormement !
-
-- **Pourquoi utiliser Expo ?**
-  - Configuration rapide et facile
-  - Accès aux API natives sans configuration complexe
-  - Mise à jour Over-The-Air (OTA)
+- **Avantages d'Angular**
+  - Architecture robuste et scalable
+  - Système de composants puissant
+  - Injection de dépendances intégrée
+  - Outils de développement avancés
+  - Grande communauté et écosystème riche
 
 ---
 
-# Expo Go
+# Nouveautés Angular 18/19
 
-- **Présentation d'Expo Go**
-  - Application mobile gratuite disponible sur iOS et Android
-  - Permet de tester les applications en développement
-  - Pas besoin de compiler ou déployer pour tester
+## Signals
 
-- **Fonctionnement**
-  - Scanner un QR code depuis l'application Expo Go
-  - Visualisation instantanée des modifications en temps réel
-  - Accès aux APIs natives d'Expo directement
+```typescript
+// Création d'un signal
+const count = signal(0);
 
-- **Avantages**
-  - Développement et tests rapides
-  - Partage facile avec l'équipe et les clients
-  - Pas besoin d'Apple Developer Account pour tester sur iOS
+// Lecture de la valeur
+console.log(count()); // 0
 
----
-
-# Limitations d'Expo Go
-
-- **Restrictions**
-  - Ne peut pas utiliser de modules natifs personnalisés
-  - Certaines fonctionnalités natives avancées non disponibles
-  - Non utilisable en production
-
-- **Quand passer au "bare workflow"**
-  - Besoin de modules natifs personnalisés
-  - Nécessité d'optimisations natives
-  - Publication sur les stores
-
-Pensez à installer dès maintenant expo go sur votre iphone ou sur votre android.
-
----
-
-# Disclaimer concernant React Native
-
-- **React Native n'est pas toujours nécessaire**
-  - Pour des applications simples, des solutions web peuvent suffire
-  - PWA (Progressive Web Apps) comme alternative viable
-  - Solutions natives pures parfois plus adaptées selon les besoins
-
----
-
-# Disclaimer concernant React Native (suite)
-
-- **React Native n'est pas toujours suffisant**
-  - Certaines fonctionnalités nécessitent du code natif (Kotlin/Swift)
-  - Besoin de compétences natives pour des fonctionnalités complexes
-  - Exemples :
-    - Modules natifs personnalisés (serveur torrent dans l'app etc)
-    - Optimisations de performance spécifiques
-    - Intégrations matérielles avancées (il faut comprendre android studio/xcode , les manipuler)
-
----
-
-# Disclaimer concernant React Native (suite)
-
-- **Compétences complémentaires requises**
-  - Connaissance basique d'Android (Kotlin/Java) peut être nécessaire
-  - Notions d'iOS (Swift/Objective-C) parfois indispensables
-  - Compréhension de l'architecture native mobile
-
----
-
-# Disclaimer concernant Expo
-
-- **Limitations de personnalisation**
-  - Accès limité aux modules natifs personnalisés
-  - Impossibilité d'utiliser certaines bibliothèques natives non supportées
-  - Configuration native restreinte
-
----
-
-# Disclaimer concernant Expo (suite)
-
-- **Taille des applications**
-  - Applications plus volumineuses car inclusion de nombreuses dépendances
-  - Impact sur le temps de téléchargement initial
-
-- **Dépendance à Expo**
-  - Mises à jour forcées de l'écosystème Expo
-  - Difficultés potentielles pour "éjecter" le projet plus tard
-  - Dépendance aux serveurs Expo pour certaines fonctionnalités (eas build et je vais vous en parler)
-
----
-
-# Disclaimer concernant Expo (suite)
-
-- **Performance**
-  - Légère baisse de performance par rapport à React Native pur
-  - Temps de compilation plus longs
-  - Consommation mémoire plus importante
-
----
-
-# Donc comment faire ?
-
-### Donc dans ce cas , il faudra ejecter expo avec dans votre terminal
-
-```bash
-expo eject
+// Mise à jour de la valeur
+count.set(1);
+count.update(value => value + 1);
 ```
 
 ---
 
-# Metro : Le bundler de React Native
+## Defer Loading
 
-- **Qu'est-ce que Metro ?**
-  - Bundler JavaScript par défaut pour React Native
-  - Compile et empaquette le code source
-  - Gère les assets (images, polices, etc.)
-
----
-
-# Metro : Fonctionnalités
-
-- **Fonctionnalités principales**
-  - Hot Reloading (HMR)
-  - Source maps pour le debugging
-  - Optimisation du bundle
-  - Gestion des dépendances
-
----
-
-# Metro : Architecture
-
-- **Architecture**
-  - Serveur de développement intégré
-  - Cache intelligent pour des builds rapides
-  - Support des transformations personnalisées
-  - Compatible avec les plugins Babel
-
----
-
-# Metro : Avantages
-
-- **Avantages**
-  - Rapide et optimisé pour mobile
-  - Configuration simple
-  - Intégration native avec React Native
-  - Support du Fast Refresh
-
----
-
-# A quoi ressemble Metro ?
-
-- **Interface de Metro**
-  - Console avec informations de build
-  - Affichage des erreurs et warnings
-  - QR code pour connexion des appareils
-  - Menu avec options de développement
-
-- **Fonctionnalités visibles**
-  - Logs en temps réel
-  - État du bundle et du HMR
-  - Liste des appareils connectés
-  - Statistiques de performance
-
----
-
-# Des concurrents à Metro ?
-
-- **Webpack**
-  - Plus généraliste
-  - Écosystème plus large
-  - Configuration plus complexe
-  - Moins optimisé pour mobile
-
-- **Vite**
-  - Plus récent et moderne
-  - Très rapide en développement
-  - Support expérimental de React Native
-  - Communauté grandissante
-
----
-
-# Mais aussi
-
-- **esbuild**
-  - Ultra rapide
-  - Écrit en Go
-  - Support limité pour React Native
-  - Utilisé comme dépendance par d'autres bundlers
-
----
-routeAlias: 'exercice-hello-world'
----
-
-## Installation d'Expo CLI
-
-```bash
-# Installation globale d'Expo CLI
-npm install -g expo-cli
-```
-
-Ça c'est la façon globale.
-
-> Cependant, nous devrions plutot utiliser npx qui permet de télécharger la dernière dépendance, de l'éxecuter et de ne pas la stocker sur notre pc , ce qui permet d'avoir toujours la commande à jour sans prise de tête
-
-de toute façon si vous utilisez cette commande, vous aurez un jolie deprecated et le expo init ne marchera pas, donc si vous lisez un tuto en ligne pensez y
-
----
-
-Donc lisons la doc officiel et lançons plutot la commande :
-
-```bash
-npx create-expo-app@latest leNomDeVotreApp
+```typescript
+@Component({
+  template: `
+    @defer {
+      <heavy-component />
+    } @loading {
+      <spinner />
+    }
+  `
+})
+export class AppComponent {}
 ```
 
 ---
 
-## Création du projet
+# Architecture Angular
 
-(l'ancienne façon de faire)
+## Structure d'une application
 
-```bash
-# Création d'un nouveau projet
-expo init TinderLikeApp
+```
+mon-app/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── models/
+│   │   └── app.component.ts
+│   ├── assets/
+│   └── main.ts
+└── package.json
 ```
 
 ---
 
-## Navigation et lancement
+# Composants de base
 
-```bash
-# Navigation dans le dossier
-cd TinderLikeApp
+## Exemple de composant
 
-# Lancement de l'application
-expo start
-```
-
----
-
-# Test de l'application
-
-Vous pouvez tester rapidement le développement moderne :
-
-- Installer expo sur android/ios (play store ou app store)
-- Scanner le QRcode dans votre terminal (Metro)
-- Ça va automatiquement ouvrir expo sur votre mobile et pré compiler
-
----
-
-# Hot Module Reload
-
-Vous pouvez voir votre application en temps réel, et à chaque changement le HMR (Hot module reload) se lance, vous êtes donc toujours à jour !
-
----
-
-## Structure du composant Hello World
-
-```jsx
-// Structure du composant
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hello World</Text>
-    </View>
-  );
+```typescript
+@Component({
+  selector: 'app-hello',
+  standalone: true,
+  template: `
+    <h1>Hello {{ name }}</h1>
+    <button (click)="updateName()">
+      Update Name
+    </button>
+  `
+})
+export class HelloComponent {
+  name = signal('Angular 18');
+  
+  updateName() {
+    this.name.update(n => n + '!');
+  }
 }
 ```
 
 ---
 
-## Styles de l'application
+# Concepts clés
 
-```jsx
-// Styles du composant
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
+- **Composants Standalone**
+  - Plus besoin de NgModule
+  - Configuration simplifiée
+  - Meilleure portabilité
+
+- **Hydration**
+  - Rendu côté serveur amélioré
+  - Meilleure performance initiale
+  - SEO optimisé
+
+- **Control Flow**
+  - Nouvelle syntaxe pour les conditions
+  - Boucles optimisées
+  - Meilleure lisibilité
+
+---
+
+# Exemple de Control Flow
+
+```typescript
+@Component({
+  template: `
+    @if (user()) {
+      <h1>Welcome {{ user().name }}</h1>
+    } @else {
+      <login-form />
+    }
+
+    @for (item of items(); track item.id) {
+      <item-card [data]="item" />
+    }
+  `
+})
+export class AppComponent {
+  user = signal<User | null>(null);
+  items = signal<Item[]>([]);
+}
 ```
 
 ---
 
-# Félicitations !
+# Performance et Optimisation
 
-Vous avez créé votre première application React Native avec Expo.
+- **Signals vs Zone.js**
+  - Détection des changements plus précise
+  - Meilleures performances
+  - Moins de re-rendus inutiles
+
+- **Vite & ESBuild**
+  - Compilation plus rapide
+  - Développement plus fluide
+  - Build optimisé
+
+---
+
+# Exercice : Premier composant Angular
+
+1. Créez un nouveau projet Angular :
+```bash
+npm create @angular@latest my-app
+cd my-app
+```
+
+2. Créez votre premier composant :
+```typescript
+@Component({
+  selector: 'app-counter',
+  standalone: true,
+  template: `
+    <div>
+      <h2>Counter: {{ count() }}</h2>
+      <button (click)="increment()">+</button>
+      <button (click)="decrement()">-</button>
+    </div>
+  `
+})
+export class CounterComponent {
+  count = signal(0);
+  
+  increment() {
+    this.count.update(n => n + 1);
+  }
+  
+  decrement() {
+    this.count.update(n => n - 1);
+  }
+}
+```
+
+Cet exercice vous permettra de comprendre les bases des composants Angular et l'utilisation des signals.
