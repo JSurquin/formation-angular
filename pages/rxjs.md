@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'rxjs'
+routeAlias: 'rxjs-observables'
 ---
 
 # RxJS et Observables

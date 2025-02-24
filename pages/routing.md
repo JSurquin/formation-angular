@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'routing'
+routeAlias: 'routing-navigation'
 ---
 
 # Routing et Navigation

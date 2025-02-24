@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'services'
+routeAlias: 'services-dependency-injection'
 ---
 
 # Services Angular

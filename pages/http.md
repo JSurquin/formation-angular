@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'http'
+routeAlias: 'http-client'
 ---
 
 # HTTP et Communication

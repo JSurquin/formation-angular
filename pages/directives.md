@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'directives'
+routeAlias: 'directives-pipes'
 ---
 
 # Directives

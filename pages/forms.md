@@ -1,6 +1,6 @@
 ---
 layout: new-section
-routeAlias: 'forms'
+routeAlias: 'forms-validation'
 ---
 
 # Formulaires Angular
