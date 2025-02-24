@@ -11,6 +11,8 @@ routeAlias: 'template-syntax'
 
 Nous avons déjà vu rapidement il y a quelques instants l'interpolation avec la syntaxe `{{ expression }}` mais nous allons revoir des cas concrets différents.
 
+---
+
 ```typescript
 @Component({
   template: `
@@ -206,7 +208,10 @@ routeAlias: 'exercice-template-post'
 
 ---
 
-1. Créez le composant PostCard :
+### 1. Créez le composant PostCard :
+
+---
+
 ```typescript
 // features/posts/post-card.component.ts
 @Component({

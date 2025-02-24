@@ -9,9 +9,16 @@ routeAlias: 'services-dependency-injection'
 
 ## Introduction aux services
 
-# Services et Injection de Dépendances (2024/2025)
+<br>
 
-## Service moderne avec Signals
+### Voyons un service moderne avec Signals
+
+<br>
+
+> Avant tout, je vous rapelle que vous n'êtes pas obligé d'utiliser Signals pour faire des services.
+Vous pouvez utiliser rxjs et les Observables comme Subject, BehaviorSubject, ReplaySubject, etc.
+
+---
 
 ```typescript
 @Injectable({
@@ -255,6 +262,8 @@ export interface Post {
 }
 ```
 
+---
+
 2. Créez le service PostService :
 ```typescript
 // features/posts/post.service.ts
@@ -286,77 +295,3 @@ export class PostService {
   }
 }
 ```
-
----
-
-# Exercice : Service de panier d'achat
-
-Créez un service de panier d'achat avec Signals :
-
-```typescript
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class CartService {
-  private items = signal<CartItem[]>([]);
-  
-  // Computed values
-  readonly totalItems = computed(() => 
-    this.items().reduce((sum, item) => sum + item.quantity, 0)
-  );
-  
-  readonly totalPrice = computed(() => 
-    this.items().reduce((sum, item) => sum + item.price * item.quantity, 0)
-  );
-  
-  addItem(product: Product, quantity: number = 1) {
-    this.items.update(items => {
-      const existingItem = items.find(item => item.id === product.id);
-      
-      if (existingItem) {
-        return items.map(item => 
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      }
-      
-      return [...items, { ...product, quantity }];
-    });
-  }
-  
-  removeItem(productId: number) {
-    this.items.update(items => 
-      items.filter(item => item.id !== productId)
-    );
-  }
-  
-  updateQuantity(productId: number, quantity: number) {
-    if (quantity <= 0) {
-      this.removeItem(productId);
-      return;
-    }
-    
-    this.items.update(items =>
-      items.map(item =>
-        item.id === productId
-          ? { ...item, quantity }
-          : item
-      )
-    );
-  }
-  
-  clearCart() {
-    this.items.set([]);
-  }
-}
-```
-
-Utilisez ce service dans vos composants pour gérer un panier d'achat avec état persistant et réactif. 

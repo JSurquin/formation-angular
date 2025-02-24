@@ -41,7 +41,30 @@ graph LR
 
 ---
 
+## Exemple concret du cycle de vie
+
+```mermaid
+graph LR
+    A[Création du Composant] --> B[constructor: Injection des services]
+    B --> C[ngOnChanges: Réception des @Input]
+    C --> D[ngOnInit: Chargement des données]
+    D --> E[ngDoCheck: Vérification des changements]
+    E --> F{Vue prête?}
+    F -->|Oui| G[ngAfterViewInit: Initialisation du carousel]
+    F -->|Non| E
+    G --> H[ngOnDestroy: Nettoyage des souscriptions]
+
+    style B fill:#f9f,stroke:#333
+    style D fill:#bbf,stroke:#333
+    style G fill:#bfb,stroke:#333
+    style H fill:#fbb,stroke:#333
+```
+
+---
+
 ## Flux de données entre composants
+
+<div class="scale-50 -mt-48">
 
 ```mermaid
 sequenceDiagram
@@ -67,6 +90,8 @@ sequenceDiagram
     P->>C: Destruction
     Note over C: ngOnDestroy()
 ```
+
+</div>
 
 ---
 
