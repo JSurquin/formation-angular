@@ -164,3 +164,44 @@ export class CounterComponent {
   }
 }
 ``` 
+
+---
+
+## Exercice : Création du projet Mini-Blog
+
+1. Créez un nouveau projet Angular :
+```bash
+ng new mini-blog --standalone --routing --style=scss
+cd mini-blog
+```
+
+2. Configurez la structure initiale :
+```bash
+mkdir src/app/features
+mkdir src/app/shared
+mkdir src/app/core
+```
+
+3. Créez le composant principal :
+```typescript
+// app.component.ts
+@Component({
+  selector: 'app-root',
+  template: `
+    <header>
+      <h1>{{ title }}</h1>
+    </header>
+    <main>
+      <router-outlet />
+    </main>
+  `
+})
+export class AppComponent {
+  title = 'Mini Blog';
+}
+```
+
+4. Testez l'application :
+```bash
+ng serve
+``` 

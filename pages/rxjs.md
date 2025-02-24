@@ -316,9 +316,68 @@ export class SearchComponent {
 }
 ```
 
-Cet exercice vous permettra de pratiquer :
-- La gestion des états de chargement
-- La gestion des erreurs
-- Les opérateurs RxJS
-- L'intégration avec les Signals
-- La création d'une interface utilisateur réactive 
+---
+
+## Exercice : Recherche de Posts
+
+1. Créez le composant de recherche :
+```typescript
+// features/posts/post-search.component.ts
+@Component({
+  selector: 'app-post-search',
+  standalone: true,
+  template: `
+    <div class="search">
+      <input 
+        type="text" 
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        placeholder="Rechercher..."
+      >
+      
+      @if (loading()) {
+        <spinner />
+      } @else {
+        <div class="results">
+          @for (post of results(); track post.id) {
+            <app-post-card 
+              [post]="post"
+              (click)="selectPost(post)"
+            />
+          }
+        </div>
+      }
+    </div>
+  `
+})
+export class PostSearchComponent {
+  private postService = inject(PostService)
+  
+  searchTerm = signal('')
+  loading = signal(false)
+  
+  // Convertir le signal en Observable
+  private searchTerm$ = toObservable(this.searchTerm)
+  
+  results = toSignal(
+    this.searchTerm$.pipe(
+      // Attendre que l'utilisateur arrête de taper
+      debounceTime(300),
+      // Ignorer si le terme est le même
+      distinctUntilChanged(),
+      tap(() => this.loading.set(true)),
+      // Annuler la requête précédente
+      switchMap(term => 
+        term.length > 2
+          ? this.postService.searchPosts(term)
+          : of([])
+      ),
+      tap(() => this.loading.set(false))
+    ),
+    { initialValue: [] }
+  )
+
+  selectPost(post: Post) {
+    // Navigation vers le post
+  }
+} 

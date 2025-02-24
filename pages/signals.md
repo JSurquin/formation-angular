@@ -512,4 +512,181 @@ class CounterComponent {
     this.count.update(n => n + 1) // Mise à jour granulaire
   }
 }
-``` 
+```
+
+---
+
+## Exercice : État Global du Blog
+
+1. Créez le service d'état :
+```typescript
+// core/state/blog.state.ts
+interface BlogState {
+  posts: Post[]
+  selectedPost: Post | null
+  filters: {
+    search: string
+    category: string
+  }
+  loading: boolean
+  error: string | null
+}
+
+@Injectable({ providedIn: 'root' })
+export class BlogStateService {
+  // État privé
+  private state = signal<BlogState>({
+    posts: [],
+    selectedPost: null,
+    filters: {
+      search: '',
+      category: 'all'
+    },
+    loading: false,
+    error: null
+  })
+
+  // Sélecteurs publics en lecture seule
+  readonly posts = computed(() => this.state().posts)
+  readonly selectedPost = computed(() => this.state().selectedPost)
+  readonly loading = computed(() => this.state().loading)
+  readonly error = computed(() => this.state().error)
+
+  // Sélecteur filtré
+  readonly filteredPosts = computed(() => {
+    const { posts, filters } = this.state()
+    return posts.filter(post => {
+      const matchesSearch = post.title
+        .toLowerCase()
+        .includes(filters.search.toLowerCase())
+      const matchesCategory = filters.category === 'all' 
+        || post.category === filters.category
+      return matchesSearch && matchesCategory
+    })
+  })
+
+  // Actions
+  setSearch(search: string) {
+    this.state.update(state => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        search
+      }
+    }))
+  }
+
+  setCategory(category: string) {
+    this.state.update(state => ({
+      ...state,
+      filters: {
+        ...state.filters,
+        category
+      }
+    }))
+  }
+
+  selectPost(post: Post) {
+    this.state.update(state => ({
+      ...state,
+      selectedPost: post
+    }))
+  }
+
+  async loadPosts() {
+    this.state.update(state => ({
+      ...state,
+      loading: true,
+      error: null
+    }))
+
+    try {
+      const posts = await firstValueFrom(this.postService.getPosts())
+      this.state.update(state => ({
+        ...state,
+        posts,
+        loading: false
+      }))
+    } catch (error) {
+      this.state.update(state => ({
+        ...state,
+        error: 'Erreur lors du chargement des posts',
+        loading: false
+      }))
+    }
+  }
+}
+```
+
+2. Utilisez l'état dans un composant :
+```typescript
+@Component({
+  selector: 'app-post-list',
+  template: `
+    <div class="filters">
+      <input 
+        type="text" 
+        [ngModel]="searchTerm()" 
+        (ngModelChange)="onSearch($event)"
+        placeholder="Rechercher..."
+      >
+      <select 
+        [ngModel]="category()" 
+        (ngModelChange)="onCategoryChange($event)"
+      >
+        <option value="all">Toutes catégories</option>
+        <option value="tech">Tech</option>
+        <option value="lifestyle">Lifestyle</option>
+      </select>
+    </div>
+
+    @if (loading()) {
+      <spinner />
+    } @else if (error()) {
+      <error-message [message]="error()" />
+    } @else {
+      <div class="posts">
+        @for (post of filteredPosts(); track post.id) {
+          <app-post-card 
+            [post]="post"
+            [selected]="isSelected(post)"
+            (click)="onSelectPost(post)"
+          />
+        }
+      </div>
+    }
+  `
+})
+export class PostListComponent {
+  private blogState = inject(BlogStateService)
+
+  // Sélecteurs
+  posts = this.blogState.posts
+  filteredPosts = this.blogState.filteredPosts
+  loading = this.blogState.loading
+  error = this.blogState.error
+  
+  // État local
+  searchTerm = signal('')
+  category = signal('all')
+
+  // Computed
+  isSelected = computed(() => (post: Post) => 
+    this.blogState.selectedPost()?.id === post.id
+  )
+
+  // Actions
+  onSearch(term: string) {
+    this.searchTerm.set(term)
+    this.blogState.setSearch(term)
+  }
+
+  onCategoryChange(category: string) {
+    this.category.set(category)
+    this.blogState.setCategory(category)
+  }
+
+  onSelectPost(post: Post) {
+    this.blogState.selectPost(post)
+  }
+} 

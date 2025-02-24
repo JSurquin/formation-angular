@@ -194,3 +194,56 @@ Cet exercice vous permettra de maîtriser :
 - Les directives structurelles modernes
 - L'utilisation des pipes
 - Les références de template 
+
+---
+
+## Exercice : Template du Post
+
+1. Créez le composant PostCard :
+```typescript
+// features/posts/post-card.component.ts
+@Component({
+  selector: 'app-post-card',
+  standalone: true,
+  template: `
+    <article class="post-card">
+      <h2>{{ post.title }}</h2>
+      <p class="meta">
+        Par {{ post.author }} 
+        le {{ post.date | date:'shortDate' }}
+      </p>
+      <p [innerHTML]="post.excerpt"></p>
+      <div class="actions">
+        <button (click)="onRead()">Lire</button>
+        @if (isAuthor) {
+          <button (click)="onEdit()">Éditer</button>
+        }
+      </div>
+    </article>
+  `,
+  styles: [`
+    .post-card {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px
+    }
+    .meta {
+      color: #666;
+      font-size: 0.9rem
+    }
+  `]
+})
+export class PostCardComponent {
+  @Input() post: Post
+  @Input() isAuthor = false
+  @Output() read = new EventEmitter<void>()
+  @Output() edit = new EventEmitter<void>()
+
+  onRead() {
+    this.read.emit()
+  }
+
+  onEdit() {
+    this.edit.emit()
+  }
+} 

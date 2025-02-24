@@ -333,3 +333,61 @@ Cet exercice vous permettra de pratiquer :
 - L'utilisation des types TypeScript
 - L'implémentation des opérations CRUD
 - L'injection de dépendances 
+
+---
+
+## Exercice : Service API du Blog
+
+1. Créez le service API :
+```typescript
+// core/services/api.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private http = inject(HttpClient)
+  private baseUrl = 'https://api.blog.com'
+
+  private loading = signal(false)
+  private error = signal<string | null>(null)
+
+  readonly isLoading = this.loading.asReadonly()
+  readonly currentError = this.error.asReadonly()
+
+  constructor() {
+    // Intercepter les erreurs globales
+    effect(() => {
+      if (this.error()) {
+        console.error('API Error:', this.error())
+        // Notifier l'utilisateur
+      }
+    })
+  }
+
+  get<T>(endpoint: string) {
+    this.loading.set(true)
+    this.error.set(null)
+
+    return this.http.get<T>(`${this.baseUrl}${endpoint}`).pipe(
+      finalize(() => this.loading.set(false)),
+      catchError(err => {
+        this.error.set(err.message)
+        return EMPTY
+      })
+    )
+  }
+
+  post<T>(endpoint: string, data: any) {
+    this.loading.set(true)
+    this.error.set(null)
+
+    return this.http.post<T>(`${this.baseUrl}${endpoint}`, data).pipe(
+      finalize(() => this.loading.set(false)),
+      catchError(err => {
+        this.error.set(err.message)
+        return EMPTY
+      })
+    )
+  }
+}
+``` 

@@ -235,6 +235,55 @@ export class FeatureComponent {
 
 ---
 
+# Exercice : Service de Blog
+
+1. Créez l'interface Post :
+```typescript
+// features/posts/post.model.ts
+export interface Post {
+  id: number
+  title: string
+  content: string
+  excerpt: string
+  author: string
+  date: Date
+}
+```
+
+2. Créez le service PostService :
+```typescript
+// features/posts/post.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class PostService {
+  private posts = signal<Post[]>([])
+  readonly allPosts = this.posts.asReadonly()
+  
+  constructor(private http: HttpClient) {}
+
+  loadPosts() {
+    return this.http.get<Post[]>('/api/posts').pipe(
+      tap(posts => this.posts.set(posts))
+    )
+  }
+
+  getPost(id: number) {
+    return this.http.get<Post>(`/api/posts/${id}`)
+  }
+
+  createPost(post: Omit<Post, 'id'>) {
+    return this.http.post<Post>('/api/posts', post).pipe(
+      tap(newPost => {
+        this.posts.update(posts => [...posts, newPost])
+      })
+    )
+  }
+}
+```
+
+---
+
 # Exercice : Service de panier d'achat
 
 Créez un service de panier d'achat avec Signals :

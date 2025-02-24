@@ -384,3 +384,91 @@ Cet exercice vous permettra de pratiquer :
 - La validation croisée
 - La gestion des FormArray
 - Les états de chargement avec Signals 
+
+---
+
+## Exercice : Formulaire de Post
+
+1. Créez le composant de formulaire :
+```typescript
+// features/posts/post-form.component.ts
+@Component({
+  selector: 'app-post-form',
+  standalone: true,
+  template: `
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="title">Titre</label>
+        <input id="title" type="text" formControlName="title">
+        @if (titleErrors()) {
+          <span class="error">{{ titleErrors() }}</span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="content">Contenu</label>
+        <textarea id="content" formControlName="content" rows="10"></textarea>
+        @if (contentErrors()) {
+          <span class="error">{{ contentErrors() }}</span>
+        }
+      </div>
+
+      <button type="submit" [disabled]="form.invalid || saving()">
+        {{ saving() ? 'Enregistrement...' : 'Publier' }}
+      </button>
+    </form>
+  `
+})
+export class PostFormComponent {
+  private postService = inject(PostService)
+  private router = inject(Router)
+
+  form = new FormGroup({
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
+    ]),
+    content: new FormControl('', [
+      Validators.required,
+      Validators.minLength(50)
+    ])
+  })
+
+  saving = signal(false)
+
+  titleErrors = computed(() => {
+    const control = this.form.get('title')
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Le titre est requis'
+      if (control.errors['minlength']) return 'Le titre doit faire au moins 3 caractères'
+    }
+    return null
+  })
+
+  contentErrors = computed(() => {
+    const control = this.form.get('content')
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Le contenu est requis'
+      if (control.errors['minlength']) return 'Le contenu doit faire au moins 50 caractères'
+    }
+    return null
+  })
+
+  async onSubmit() {
+    if (this.form.valid) {
+      this.saving.set(true)
+      try {
+        await firstValueFrom(this.postService.createPost({
+          ...this.form.value,
+          author: 'Utilisateur actuel',
+          date: new Date(),
+          excerpt: this.form.value.content?.slice(0, 100) + '...'
+        }))
+        this.router.navigate(['/posts'])
+      } finally {
+        this.saving.set(false)
+      }
+    }
+  }
+}
+``` 

@@ -323,3 +323,64 @@ Cet exercice vous permettra de pratiquer :
 - La résolution de données
 - Le lazy loading
 - Les transitions de vue 
+
+---
+
+## Exercice : Routes du Blog
+
+1. Configurez les routes :
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'posts',
+    children: [
+      {
+        path: '',
+        component: PostListComponent,
+        resolve: {
+          posts: () => inject(PostService).loadPosts()
+        }
+      },
+      {
+        path: 'new',
+        component: PostFormComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: ':id',
+        component: PostDetailComponent,
+        resolve: {
+          post: (route: ActivatedRoute) => {
+            const id = route.paramMap.pipe(
+              map(params => Number(params.get('id')))
+            )
+            return inject(PostService).getPost(id)
+          }
+        }
+      }
+    ]
+  }
+]
+```
+
+2. Créez le guard d'authentification :
+```typescript
+// core/guards/auth.guard.ts
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService)
+  const router = inject(Router)
+  
+  if (authService.isAuthenticated()) {
+    return true
+  }
+  
+  return router.createUrlTree(['/login'], {
+    queryParams: { returnUrl: router.url }
+  })
+}
+``` 

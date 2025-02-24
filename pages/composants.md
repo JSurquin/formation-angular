@@ -283,4 +283,44 @@ export class UserListComponent {
     this.userSelect.emit(user);
   }
 }
+```
+
+---
+
+## Exercice : Composants du Blog
+
+1. Créez le composant PostList :
+```typescript
+// features/posts/post-list.component.ts
+@Component({
+  selector: 'app-post-list',
+  standalone: true,
+  template: `
+    <div class="posts">
+      @for (post of posts; track post.id) {
+        <article class="post-card">
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.excerpt }}</p>
+        </article>
+      }
+    </div>
+  `,
+  styles: [`
+    .posts {
+      display: grid;
+      gap: 1rem;
+    }
+    .post-card {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  `]
+})
+export class PostListComponent {
+  posts = [
+    { id: 1, title: 'Premier article', excerpt: 'Un extrait du premier article...' },
+    { id: 2, title: 'Deuxième article', excerpt: 'Un extrait du deuxième article...' }
+  ];
+}
 ``` 
