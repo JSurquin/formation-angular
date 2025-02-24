@@ -43,8 +43,8 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="typescript-essentials">💡 TypeScript Essentiels</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
 <Link to="angular-basics">🎯 Les Bases d'Angular</Link>
-<Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="composants-angular">🔧 Composants Angular</Link>
+<Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
 <Link to="dependency-injection">💉 Injection de dépendances</Link>
 </div>
@@ -89,11 +89,11 @@ src: ./pages/angular_basics.md
 ---
 
 ---
-src: ./pages/template_syntax.md
+src: ./pages/composants.md
 ---
 
 ---
-src: ./pages/composants.md
+src: ./pages/template_syntax.md
 ---
 
 ---
