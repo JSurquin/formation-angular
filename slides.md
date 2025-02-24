@@ -41,11 +41,11 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <div class="flex flex-col gap-2">
 <Link to="introduction-angular">🚀 Introduction à Angular</Link>
 <Link to="typescript-essentials">💡 TypeScript Essentiels</Link>
-<Link to="angular-basics">🎯 Les Bases d'Angular</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
-<Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
+<Link to="angular-basics">🎯 Les Bases d'Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="composants-angular">🔧 Composants Angular</Link>
+<Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
 <Link to="dependency-injection">💉 Injection de dépendances</Link>
 </div>
 
@@ -56,13 +56,13 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <small>
 
 <div class="flex flex-col gap-2">
-<Link to="directives-pipes">📱 Directives et Pipes</Link>
 <Link to="services-dependency-injection">📊 Services</Link>
 <Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 <Link to="forms-validation">📝 Formulaires et Validation</Link>
 <Link to="rxjs-observables">🔄 RxJS et Observables</Link>
 <Link to="http-client">🌐 HTTP Client et API REST</Link>
 <Link to="signals">⚡ Signals (Nouveauté Angular 18)</Link>
+<Link to="directives-pipes">📱 Directives et Pipes</Link>
 <Link to="performance">🚀 Performance et Optimisation</Link>
 <Link to="testing">🧪 Tests unitaires et E2E</Link>
 <Link to="deployment">📦 Déploiement</Link>
