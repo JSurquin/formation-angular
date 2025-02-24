@@ -1,8 +1,11 @@
 ---
+layout: new-section
 routeAlias: 'introduction-angular'
 ---
 
 # Introduction à Angular
+
+---
 
 ## Qu'est-ce qu'Angular ?
 

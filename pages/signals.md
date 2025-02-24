@@ -1,10 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'signals'
 ---
 
-# Signals dans Angular 18/19
+# Signals
 
-## Qu'est-ce qu'un Signal ?
+---
+
+## Introduction aux Signals
 
 Un Signal est comme une "boîte réactive" qui :
 - Contient une valeur
@@ -150,26 +153,6 @@ export class CartComponent {
 - Créer des signals dans des boucles
 - Appeler des signals dans des setters
 - Modifier plusieurs signals de manière non atomique
-
-## Introduction aux Signals
-
-```typescript
-// Création de signals basiques
-const count = signal(0);
-const name = signal('John');
-const items = signal<string[]>([]);
-
-// Lecture des valeurs
-console.log(count()); // 0
-console.log(name()); // 'John'
-
-// Mise à jour des valeurs
-count.set(1);
-name.set('Jane');
-items.update(current => [...current, 'Nouveau']);
-```
-
----
 
 ## Computed Signals
 

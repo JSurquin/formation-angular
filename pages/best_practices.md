@@ -1,10 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'best-practices'
 ---
 
-# Bonnes Pratiques Angular 18/19
+# Bonnes Pratiques
 
-## Architecture des composants
+---
+
+## Architecture et organisation
 
 ```typescript
 // ❌ À éviter

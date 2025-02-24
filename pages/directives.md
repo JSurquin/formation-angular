@@ -1,10 +1,13 @@
 ---
-routeAlias: 'directives-pipes'
+layout: new-section
+routeAlias: 'directives'
 ---
 
-# Directives et Pipes dans Angular 18/19
+# Directives
 
-## Directives structurelles modernes
+---
+
+## Types de directives
 
 ```typescript
 // Nouvelle syntaxe de control flow (Angular 18+)

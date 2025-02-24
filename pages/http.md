@@ -1,6 +1,13 @@
 ---
-routeAlias: 'http-client'
+layout: new-section
+routeAlias: 'http'
 ---
+
+# HTTP et Communication
+
+---
+
+## Le HttpClient
 
 # HTTP Client dans Angular 18/19
 

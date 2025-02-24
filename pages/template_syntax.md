@@ -1,8 +1,9 @@
 ---
+layout: new-section
 routeAlias: 'template-syntax'
 ---
 
-# Syntaxe des Templates Angular
+# Syntaxe des Templates
 
 ## Interpolation et expressions
 

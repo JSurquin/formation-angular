@@ -1,8 +1,11 @@
 ---
-routeAlias: 'routing-navigation'
+layout: new-section
+routeAlias: 'routing'
 ---
 
-# Routing et Navigation dans Angular 18/19
+# Routing et Navigation
+
+---
 
 ## Configuration des routes modernes
 

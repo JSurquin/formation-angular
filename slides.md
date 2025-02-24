@@ -81,15 +81,11 @@ src: ./pages/typescript_essentials.md
 ---
 
 ---
-src: ./pages/angular_basics.md
----
-
----
 src: ./pages/configuration.md
 ---
 
 ---
-src: ./pages/component_lifecycle.md
+src: ./pages/angular_basics.md
 ---
 
 ---
@@ -101,11 +97,11 @@ src: ./pages/composants.md
 ---
 
 ---
-src: ./pages/dependency_injection.md
+src: ./pages/component_lifecycle.md
 ---
 
 ---
-src: ./pages/directives.md
+src: ./pages/dependency_injection.md
 ---
 
 ---
@@ -130,6 +126,10 @@ src: ./pages/http.md
 
 ---
 src: ./pages/signals.md
+---
+
+---
+src: ./pages/directives.md
 ---
 
 ---

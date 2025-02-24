@@ -1,8 +1,11 @@
 ---
+layout: new-section
 routeAlias: 'typescript-essentials'
 ---
 
-# TypeScript pour Angular
+# TypeScript Essentiels
+
+---
 
 ## Types de base
 

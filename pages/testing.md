@@ -1,8 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'testing'
 ---
 
-# Tests dans Angular 18/19
+# Tests dans Angular
+
+---
+
+## Introduction aux tests
 
 ## Tests unitaires avec Jasmine et Karma
 

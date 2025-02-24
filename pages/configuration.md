@@ -1,8 +1,11 @@
 ---
+layout: new-section
 routeAlias: 'configuration-environnement'
 ---
 
-# Configuration de l'environnement (2024/2025)
+# Configuration de l'environnement
+
+---
 
 ## Prérequis
 

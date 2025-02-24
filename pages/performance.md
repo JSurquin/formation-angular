@@ -1,10 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'performance'
 ---
 
-# Performance et Optimisation dans Angular 18/19
+# Performance et Optimisation
 
-## Signals vs Zone.js
+---
+
+## Stratégies d'optimisation
 
 ```typescript
 // Avant (avec Zone.js)

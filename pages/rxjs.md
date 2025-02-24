@@ -1,8 +1,13 @@
 ---
-routeAlias: 'rxjs-observables'
+layout: new-section
+routeAlias: 'rxjs'
 ---
 
-# RxJS et Observables dans Angular 18/19
+# RxJS et Observables
+
+---
+
+## Introduction à RxJS
 
 ## Intégration avec Signals
 

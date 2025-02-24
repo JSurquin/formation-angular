@@ -1,8 +1,9 @@
 ---
+layout: new-section
 routeAlias: 'component-lifecycle'
 ---
 
-# Cycle de vie des composants Angular
+# Cycle de Vie des Composants
 
 ## Vue d'ensemble des hooks de cycle de vie
 

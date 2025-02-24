@@ -1,8 +1,11 @@
 ---
+layout: new-section
 routeAlias: 'angular-basics'
 ---
 
-# Les bases d'Angular
+# Les Bases d'Angular
+
+---
 
 ## Architecture fondamentale
 

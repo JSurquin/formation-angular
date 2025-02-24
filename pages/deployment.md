@@ -1,6 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'deployment'
 ---
+
+# Déploiement
+
+---
+
+## Préparation au déploiement
 
 # Déploiement d'applications Angular 18/19
 

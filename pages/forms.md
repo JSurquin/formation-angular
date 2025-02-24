@@ -1,6 +1,13 @@
 ---
-routeAlias: 'forms-validation'
+layout: new-section
+routeAlias: 'forms'
 ---
+
+# Formulaires Angular
+
+---
+
+## Types de formulaires
 
 # Formulaires dans Angular 18/19
 

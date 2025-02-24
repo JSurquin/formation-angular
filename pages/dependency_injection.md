@@ -1,10 +1,13 @@
 ---
+layout: new-section
 routeAlias: 'dependency-injection'
 ---
 
-# Injection de Dépendances dans Angular
+# Injection de Dépendances
 
-## Concepts de base
+---
+
+## Principes fondamentaux
 
 - **Qu'est-ce que l'injection de dépendances ?**
   - Pattern de conception logicielle

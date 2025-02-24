@@ -1,6 +1,13 @@
 ---
-routeAlias: 'services-dependency-injection'
+layout: new-section
+routeAlias: 'services'
 ---
+
+# Services Angular
+
+---
+
+## Introduction aux services
 
 # Services et Injection de Dépendances (2024/2025)
 
