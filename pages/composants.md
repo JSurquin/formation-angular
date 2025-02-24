@@ -1,8 +1,11 @@
 ---
+layout: new-section
 routeAlias: 'composants-angular'
 ---
 
 # Les Composants dans Angular
+
+---
 
 ## Qu'est-ce qu'un composant ?
 
