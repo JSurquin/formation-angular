@@ -378,7 +378,9 @@ export class RegistrationComponent {
 }
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - Les formulaires imbriqués
 - La validation personnalisée
 - La validation croisée

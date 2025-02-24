@@ -306,7 +306,7 @@ export class PasswordStrengthDirective implements Validator {
 })
 ```
 
-Cet exercice vous permettra de comprendre comment créer des directives de validation personnalisées et les intégrer avec les formulaires Angular. 
+Cet exercice vous à permis de comprendre comment créer des directives de validation personnalisées et les intégrer avec les formulaires Angular. 
 
 # Directives et Control Flow
 

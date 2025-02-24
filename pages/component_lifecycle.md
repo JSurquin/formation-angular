@@ -203,8 +203,3 @@ export class OptimizedComponent implements DoCheck {
 }
 ```
 
-Cet exercice vous permettra de comprendre :
-- Le cycle de vie complet des composants
-- L'ordre d'exécution des hooks
-- L'optimisation des performances
-- La gestion des ressources 

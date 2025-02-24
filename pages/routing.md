@@ -317,7 +317,9 @@ export default [{
 }];
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - La navigation imbriquée
 - Les guards conditionnels
 - La résolution de données

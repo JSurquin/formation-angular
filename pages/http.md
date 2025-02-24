@@ -327,7 +327,9 @@ export class ApiService<T extends { id: string }> implements CrudOperations<T> {
 }
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - La création d'un service générique
 - La gestion des erreurs HTTP
 - L'utilisation des types TypeScript

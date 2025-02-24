@@ -188,7 +188,9 @@ export class ReferencesComponent {
 }
 ```
 
-Cet exercice vous permettra de maîtriser :
+---
+
+Cet exercice vous à permis de maîtriser :
 - La syntaxe d'interpolation
 - Les différents types de binding
 - Les directives structurelles modernes

@@ -376,7 +376,9 @@ export class ProductListComponent {
 }
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - L'utilisation du virtual scrolling
 - L'optimisation des images
 - La gestion efficace des filtres avec Signals

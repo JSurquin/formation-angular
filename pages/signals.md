@@ -469,7 +469,9 @@ export class TaskManagerComponent {
 }
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - La gestion d'état avec Signals
 - Les computed values
 - La mise à jour immutable des données

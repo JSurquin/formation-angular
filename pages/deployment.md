@@ -334,13 +334,6 @@ export class MonitoringService {
 }
 ```
 
-Cet exercice vous permettra de mettre en place un déploiement professionnel avec :
-- Tests automatisés
-- Build optimisé
-- Containerisation
-- Monitoring en production
-- Métriques de performance 
-
 ---
 layout: new-section
 routeAlias: 'deploiement-vercel'

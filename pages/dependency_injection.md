@@ -142,8 +142,3 @@ export class CacheService {
 }
 ```
 
-Cet exercice vous permettra de comprendre :
-- Les différents niveaux d'injection
-- Les types de providers
-- La configuration avancée
-- Les décorateurs d'injection spéciaux 

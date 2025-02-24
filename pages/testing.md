@@ -383,7 +383,9 @@ describe('CartComponent', () => {
 });
 ```
 
-Cet exercice vous permettra de pratiquer :
+---
+
+Cet exercice vous à permis de pratiquer :
 - Les tests unitaires de services
 - Les tests de composants
 - L'utilisation des Signals dans les tests
