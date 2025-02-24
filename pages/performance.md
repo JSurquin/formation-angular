@@ -282,6 +282,8 @@ Créez une liste de produits optimisée avec :
 - Mise en cache des données
 - Filtrage optimisé
 
+---
+
 ```typescript
 interface Product {
   id: number;

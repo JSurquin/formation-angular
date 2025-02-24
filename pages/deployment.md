@@ -7,10 +7,6 @@ routeAlias: 'deployment'
 
 ---
 
-## Préparation au déploiement
-
-# Déploiement d'applications Angular 18/19
-
 ## Build de production
 
 ```bash
@@ -289,6 +285,10 @@ docker run -p 4000:4000 my-angular-app
 # 3. Déploiement avec monitoring
 ```
 
+---
+
+## Monitoring
+
 ```typescript
 // monitoring.service.ts
 @Injectable({
@@ -342,7 +342,6 @@ Cet exercice vous permettra de mettre en place un déploiement professionnel ave
 - Métriques de performance 
 
 ---
-
 layout: new-section
 routeAlias: 'deploiement-vercel'
 ---

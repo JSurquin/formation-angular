@@ -623,6 +623,8 @@ export class BlogStateService {
 }
 ```
 
+---
+
 2. Utilisez l'état dans un composant :
 ```typescript
 @Component({
