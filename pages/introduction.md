@@ -19,6 +19,8 @@ Imaginez Angular comme un kit complet pour construire une maison moderne :
 
 ### Exemple concret de ces termes :
 
+<small>
+
 - **Fondations** :
   - Framework core
   - TypeScript
@@ -34,6 +36,8 @@ Imaginez Angular comme un kit complet pour construire une maison moderne :
 - **Matériaux** :
   - Composants : boutons, formulaires, tables, etc.
   - Services : API, authentification, notifications, etc.
+
+</small>
 
 ---
 
