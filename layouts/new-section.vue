@@ -2,7 +2,7 @@
   <div class="bg-section slidev-layout new-section">
     <CornerCurves class="absolute left-0 top-0 transform rotate-90" />
     <div
-      class="flex flex-col justify-center text-center h-full underline underline-offset-16"
+      class="flex flex-col justify-center text-center h-full underline dark:decoration-purple-400 underline-offset-16"
     >
       <slot></slot>
     </div>
