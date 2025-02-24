@@ -377,3 +377,45 @@ Cet exercice vous permettra de pratiquer :
 - La gestion efficace des filtres avec Signals
 - Le lazy loading des composants
 - La mise en cache des données
+
+---
+
+## Hydration (Nouveauté Angular 18/19)
+
+```typescript
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideClientHydration() // Active l'hydration
+  ]
+};
+```
+
+---
+
+## Comment fonctionne l'Hydration ?
+
+- Réutilise le HTML du SSR
+- Restaure l'état de l'application
+- Évite le re-rendu complet
+- Améliore le First Contentful Paint (FCP)
+
+---
+
+## Defer Loading (Nouveauté Angular 18/19)
+
+```typescript
+@Component({
+  template: `
+    @defer {
+      <heavy-component />
+    } @loading {
+      <spinner />
+    } @error {
+      <error-message />
+    } @placeholder {
+      <div>Chargement...</div>
+    }
+  `
+})
+```

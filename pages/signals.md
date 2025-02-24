@@ -4,6 +4,153 @@ routeAlias: 'signals'
 
 # Signals dans Angular 18/19
 
+## Qu'est-ce qu'un Signal ?
+
+Un Signal est comme une "boîte réactive" qui :
+- Contient une valeur
+- Notifie automatiquement quand cette valeur change
+- Permet un suivi précis des dépendances
+
+```mermaid
+graph LR
+    A[Signal] --> B[Valeur]
+    A --> C[Observateurs]
+    B --> D[Mise à jour]
+    D --> C
+    C --> E[Re-rendu UI]
+```
+
+---
+
+## Comparaison avec les variables classiques
+
+Imaginons un thermomètre :
+
+**Sans Signal :**
+```typescript
+// La température change mais personne n'est notifié
+class Thermometer {
+  temperature = 20;
+  
+  update() {
+    this.temperature++; // L'affichage ne sait pas qu'il doit se mettre à jour
+  }
+}
+```
+
+**Avec Signal :**
+```typescript
+class Thermometer {
+  temperature = signal(20);
+  
+  update() {
+    this.temperature.update(t => t + 1); // Notification automatique !
+  }
+}
+```
+
+---
+
+## Les différents types de Signals
+
+### 1. Signal Writeable
+```typescript
+// Comme une variable qu'on peut lire et modifier
+const counter = signal(0);
+
+// Lecture
+console.log(counter()); // 0
+
+// Écriture
+counter.set(5);        // Remplacement direct
+counter.update(n => n + 1); // Mise à jour basée sur valeur précédente
+```
+
+### 2. Signal Computed
+```typescript
+// Comme une formule Excel qui se recalcule automatiquement
+const price = signal(100);
+const taxRate = signal(0.2);
+
+const total = computed(() => {
+  const basePrice = price();
+  const tax = basePrice * taxRate();
+  return basePrice + tax;
+});
+```
+
+---
+
+## Visualisation du flux de données
+
+```mermaid
+graph TD
+    A[Signal Prix: 100€] --> C[Computed Total]
+    B[Signal TVA: 20%] --> C
+    C --> D[Affichage: 120€]
+    E[User Input] --> A
+    F[Config Update] --> B
+```
+
+---
+
+## Exemple concret : Panier d'achat
+
+```typescript
+@Component({
+  template: `
+    <div class="cart-summary">
+      <h2>Votre panier</h2>
+      
+      <!-- Affichage réactif des totaux -->
+      <div class="totals">
+        <p>Sous-total: {{ subtotal() }}€</p>
+        <p>TVA ({{ vatRate() * 100 }}%): {{ vatAmount() }}€</p>
+        <p class="grand-total">Total: {{ total() }}€</p>
+      </div>
+      
+      <!-- La mise à jour d'un produit recalcule automatiquement tous les totaux -->
+      @for (item of cartItems(); track item.id) {
+        <cart-item 
+          [item]="item"
+          (quantityChange)="updateQuantity(item.id, $event)"
+        />
+      }
+    </div>
+  `
+})
+export class CartComponent {
+  // Signals de base
+  cartItems = signal<CartItem[]>([]);
+  vatRate = signal(0.20);
+
+  // Computed signals - Se recalculent automatiquement
+  subtotal = computed(() => {
+    return this.cartItems().reduce(
+      (sum, item) => sum + (item.price * item.quantity), 
+      0
+    );
+  });
+
+  vatAmount = computed(() => this.subtotal() * this.vatRate());
+  total = computed(() => this.subtotal() + this.vatAmount());
+}
+```
+
+---
+
+## Bonnes pratiques avec les Signals
+
+✅ **À faire**
+- Utiliser computed() pour les valeurs dérivées
+- Préférer .update() à .set() pour les modifications basées sur l'état précédent
+- Garder les signals privés quand possible
+
+❌ **À éviter**
+- Créer des signals dans des boucles
+- Appeler des signals dans des setters
+- Modifier plusieurs signals de manière non atomique
+
 ## Introduction aux Signals
 
 ```typescript
@@ -27,23 +174,9 @@ items.update(current => [...current, 'Nouveau']);
 ## Computed Signals
 
 ```typescript
-@Component({
-  template: `
-    <div>
-      <p>Prix: {{ price() }}€</p>
-      <p>TVA: {{ vat() }}€</p>
-      <p>Total: {{ total() }}€</p>
-    </div>
-  `
-})
-export class PriceComponent {
-  price = signal(100);
-  vatRate = signal(0.20);
-  
-  // Valeur calculée automatiquement
-  vat = computed(() => this.price() * this.vatRate());
-  total = computed(() => this.price() + this.vat());
-}
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+const isEven = computed(() => count() % 2 === 0);
 ```
 
 ---

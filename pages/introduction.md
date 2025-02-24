@@ -6,233 +6,192 @@ routeAlias: 'introduction-angular'
 
 ## Qu'est-ce qu'Angular ?
 
-- **Framework web complet**
-  - Développé et maintenu par Google
-  - Écrit en TypeScript
-  - Architecture robuste et scalable
+Imaginez Angular comme un kit complet pour construire une maison moderne :
+- Les **fondations** (le framework core)
+- Les **outils** (CLI, DevTools)
+- Les **plans** (architecture)
+- Les **matériaux** (composants)
 
-- **Écosystème riche**
-  - CLI puissant
-  - Outils de développement
-  - Grande communauté
-  - Documentation complète
+---
+
+### Exemple concret de ces termes :
+
+- **Fondations** :
+  - Framework core
+  - TypeScript
+  - RxJS
+  - CLI
+  - DevTools
+
+- **Plans** :
+  - Architecture orientée composants
+  - Routage / Routing
+  - State management avec RxJS / NgRx etc
+
+- **Matériaux** :
+  - Composants : boutons, formulaires, tables, etc.
+  - Services : API, authentification, notifications, etc.
+
+---
+
+## Architecture d'une application Angular
+
+Structure typique d'un projet :
+
+```mermaid
+graph TD
+    A[Application] --> B[Composants]
+    A --> C[Services]
+    A --> D[Modules]
+    B --> E[Templates]
+    B --> F[Logique]
+    C --> G[API]
+    C --> H[État]
+    D --> I[Routing]
+    D --> J[Features]
+```
+
+---
+
+## Les piliers d'Angular
+
+<br>
+
+### 1. Composants
+Comme les LEGO® de votre application :
+- Réutilisables
+- Autonomes
+- Combinables
+
+### 2. Services
+Comme les employés d'une entreprise :
+- Spécialisés
+- Partagés
+- Indépendants
+
+---
+
+### 3. Dependency Injection
+Comme un système de livraison automatique :
+- Efficace
+- Flexible
+- Testable
+
+Un exemple concret :
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  constructor(private http: HttpClient) {}
+}
+```
+
+Ce qui veut dire que le service `UserService` est injectable dans n'importe quel composant
+
+Et que c'est un service singleton
+
+C'est à dire que toutes les instances de `UserService` sont la même instance.
 
 ---
 
 ## Évolution d'Angular
 
-### Angular.js (1.x) vs Angular Moderne (2+)
-- Réécriture complète
-- Adoption de TypeScript
-- Architecture par composants
-- Performance améliorée
+### De AngularJS à Angular Moderne
+- **AngularJS (1.x)**
+  - Basé sur le DOM et les scopes
+  - Directives comme composants
+  - JavaScript vanilla
 
-### Principales évolutions jusqu'à Angular 18/19
-- Standalone Components (v14+)
-- Signals (v16+)
-- Control Flow (v17+)
-- Hydration (v16+)
-- Defer Loading (v17+)
-
----
-
-## Objectifs des évolutions
-
-- **Performance**
-  - Détection des changements plus précise
-  - Meilleure gestion de la mémoire
-  - Rendu plus rapide
-
-- **Developer Experience**
-  - Syntaxe plus intuitive
-  - Moins de boilerplate
-  - Meilleur support TypeScript
+- **Angular 2+ : La révolution**
+  - Réécriture complète en TypeScript
+  - Architecture orientée composants
+  - Performance améliorée
+  - Injection de dépendances repensée
 
 ---
 
-## Bénéfices pour les développeurs
+# Historique d'évolution de Angular en timeline
 
-- **Maintenabilité**
-  - Code plus prévisible
-  - Débogage facilité
-  - Tests plus simples
-
-- **Productivité**
-  - Moins de configuration
-  - API plus cohérentes
-  - Meilleurs messages d'erreur
-
----
-
-# Nouveautés Angular 18/19
-
-## Signals
-
-```typescript
-// Création d'un signal
-const count = signal(0);
-
-// Lecture de la valeur
-console.log(count()); // 0
-
-// Mise à jour de la valeur
-count.set(1);
-count.update(value => value + 1);
+```mermaid
+timeline
+    1.x : AngularJS - DOM & Scopes
+    2.0 : Réécriture complète - TypeScript
+    4.0 : Stable & Mature - CLI amélioré
+    12.0 : Standalone API - Moins de boilerplate
+    14.0 : Typed Forms - Typage strict
+    16.0 : Signals - État réactif
+    17.0 : Control Flow - Syntaxe moderne
+    18.0 : Hydration & Defer - Performance
 ```
 
 ---
 
-## Defer Loading
+## Évolutions majeures
 
-```typescript
-@Component({
-  template: `
-    @defer {
-      <heavy-component />
-    } @loading {
-      <spinner />
-    }
-  `
-})
-export class AppComponent {}
+### Angular 12-14 : Simplification
+- Introduction des Standalone Components
+- Suppression progressive des NgModules
+- Amélioration du CLI
+- Formulaires typés
+
+### Angular 15-16 : Réactivité
+- Signals pour la gestion d'état
+- Meilleure détection des changements
+- SSR amélioré
+- Hydration intelligente
+
+### Angular 17-18 : Modernisation
+- Nouveau Control Flow (@if, @for)
+- Defer Loading intégré
+- Build system avec Vite & ESBuild
+- Developer experience améliorée
+
+---
+
+## Comparaison avec d'autres frameworks
+
+| Caractéristique | Angular | React | Vue |
+|----------------|---------|-------|-----|
+| Architecture   | Full-framework | Bibliothèque | Progressive |
+| Courbe d'apprentissage | Plus raide | Modérée | Douce |
+| Tooling | Complet | Flexible | Intermédiaire |
+| TypeScript | Natif | Optionnel | Optionnel |
+
+---
+
+## Outils essentiels
+
+```mermaid
+graph LR
+    A[VS Code] --> B[Angular Language Service]
+    A --> C[ESLint pour le linting du code]
+    A --> D[Prettier pour le formatage du code]
+    A --> E[Debug Chrome via la console]
 ```
 
 ---
 
-# Architecture Angular
-
-## Structure d'une application
-
-```
-mon-app/
-├── src/
-│   ├── app/
-│   │   ├── components/
-│   │   ├── services/
-│   │   ├── models/
-│   │   └── app.component.ts
-│   ├── assets/
-│   └── main.ts
-└── package.json
-```
+### Extensions indispensables
+- Angular Language Service pour la complétion de code
+- Angular Snippets pour les snippets de code
+- ESLint pour le linting du code
+- Prettier pour le formatage du code
 
 ---
 
-# Composants de base
+## Prérequis techniques
 
-## Exemple de composant
+Pour bien démarrer avec Angular, vous devez connaître :
 
-```typescript
-@Component({
-  selector: 'app-hello',
-  standalone: true,
-  template: `
-    <h1>Hello {{ name }}</h1>
-    <button (click)="updateName()">
-      Update Name
-    </button>
-  `
-})
-export class HelloComponent {
-  name = signal('Angular 18');
-  
-  updateName() {
-    this.name.update(n => n + '!');
-  }
-}
-```
+✅ **Fondamentaux**
+- HTML/CSS
+- JavaScript moderne
+- TypeScript basique
+- Programmation orientée objet
 
----
-
-# Concepts clés
-
-- **Composants Standalone**
-  - Plus besoin de NgModule
-  - Configuration simplifiée
-  - Meilleure portabilité
-
-- **Hydration**
-  - Rendu côté serveur amélioré
-  - Meilleure performance initiale
-  - SEO optimisé
-
-- **Control Flow**
-  - Nouvelle syntaxe pour les conditions
-  - Boucles optimisées
-  - Meilleure lisibilité
-
----
-
-# Exemple de Control Flow
-
-```typescript
-@Component({
-  template: `
-    @if (user()) {
-      <h1>Welcome {{ user().name }}</h1>
-    } @else {
-      <login-form />
-    }
-
-    @for (item of items(); track item.id) {
-      <item-card [data]="item" />
-    }
-  `
-})
-export class AppComponent {
-  user = signal<User | null>(null);
-  items = signal<Item[]>([]);
-}
-```
-
----
-
-# Performance et Optimisation
-
-- **Signals vs Zone.js**
-  - Détection des changements plus précise
-  - Meilleures performances
-  - Moins de re-rendus inutiles
-
-- **Vite & ESBuild**
-  - Compilation plus rapide
-  - Développement plus fluide
-  - Build optimisé
-
----
-
-# Exercice : Premier composant Angular
-
-1. Créez un nouveau projet Angular :
-```bash
-npm create @angular@latest my-app
-cd my-app
-```
-
-2. Créez votre premier composant :
-```typescript
-@Component({
-  selector: 'app-counter',
-  standalone: true,
-  template: `
-    <div>
-      <h2>Counter: {{ count() }}</h2>
-      <button (click)="increment()">+</button>
-      <button (click)="decrement()">-</button>
-    </div>
-  `
-})
-export class CounterComponent {
-  count = signal(0);
-  
-  increment() {
-    this.count.update(n => n + 1);
-  }
-  
-  decrement() {
-    this.count.update(n => n - 1);
-  }
-}
-```
-
-Cet exercice vous permettra de comprendre les bases des composants Angular et l'utilisation des signals.
+❌ **Pas nécessaire**
+- Backend development
+- Mobile development
+- WebAssembly

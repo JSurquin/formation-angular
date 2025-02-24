@@ -21,13 +21,15 @@ npm install -g @angular/cli@latest
 
 ```bash
 # Création d'un nouveau projet
-ng new my-app --standalone --ssr
+ng new my-app --standalone
 
 # Options recommandées
 ✔ Would you like to add routing? Yes
 ✔ Which stylesheet format would you like to use? SCSS
-✔ Would you like to enable Server-Side Rendering (SSR)? Yes
+✔ Would you like to enable Server-Side Rendering (SSR)? No
 ```
+
+> **standalone : pour utiliser les composants sans NgModules par défaut donc pas besoin de préciser**
 
 ---
 
@@ -46,63 +48,6 @@ my-app/
 │   └── main.ts
 ├── package.json
 └── angular.json
-```
-
----
-
-## Configuration de l'environnement de développement
-
-### VS Code Extensions recommandées
-
-```json
-{
-  "recommendations": [
-    "Angular.ng-template",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "johnpapa.Angular2"
-  ]
-}
-```
-
----
-
-## Configuration ESLint moderne
-
-```javascript
-// .eslintrc.json
-{
-  "root": true,
-  "ignorePatterns": ["projects/**/*"],
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@angular-eslint/recommended"
-      ],
-      "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "app",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "app",
-            "style": "kebab-case"
-          }
-        ]
-      }
-    }
-  ]
-}
 ```
 
 ---
@@ -152,25 +97,6 @@ export const environment = {
 
 ---
 
-## Configuration du SSR (Server-Side Rendering)
-
-```typescript
-// app.config.server.ts
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
-import { appConfig } from './app.config';
-
-const serverConfig: ApplicationConfig = {
-  providers: [
-    provideServerRendering()
-  ]
-};
-
-export const config = mergeApplicationConfig(appConfig, serverConfig);
-```
-
----
-
 ## Scripts NPM utiles
 
 ```json
@@ -195,7 +121,7 @@ export const config = mergeApplicationConfig(appConfig, serverConfig);
 1. Créez un nouveau projet Angular :
 
 ```bash
-ng new exercice-app --standalone --ssr
+ng new exercice-app
 cd exercice-app
 ```
 
@@ -205,6 +131,8 @@ cd exercice-app
 ng add @angular-eslint/schematics
 npm install prettier prettier-eslint --save-dev
 ```
+
+---
 
 3. Configurez les environnements :
 
@@ -229,3 +157,32 @@ ng test
 ```
 
 Cette configuration vous donnera une base solide pour développer des applications Angular modernes.
+
+---
+
+# Configuration avec Vite (Angular 18/19)
+
+## Nouvelle configuration de build
+
+```typescript
+// vite.config.ts
+import { defineConfig } from '@angular-devkit/build-angular/vite';
+
+export default defineConfig({
+  build: {
+    target: 'es2022'
+  },
+  server: {
+    port: 4200
+  }
+});
+```
+
+---
+
+## Avantages de Vite & ESBuild
+
+- Build plus rapide
+- Hot Module Replacement amélioré
+- Meilleure gestion des dépendances
+- Consommation mémoire réduite

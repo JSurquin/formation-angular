@@ -2,193 +2,190 @@
 routeAlias: 'composants-angular'
 ---
 
-# Composants Angular (2024/2025)
+# Les Composants dans Angular
 
-## Composants Standalone
+## Qu'est-ce qu'un composant ?
+
+Un composant est comme une brique LEGO® de votre application :
+- Une partie de l'interface utilisateur (UI)
+- Autonome et réutilisable
+- Avec sa propre logique et son propre template
+
+---
+
+## Structure d'un composant
+
+```mermaid
+graph TD
+    A[Composant Angular] --> B[Template HTML]
+    A --> C[Logique TypeScript]
+    A --> D[Styles CSS]
+    C --> E[Propriétés]
+    C --> F[Méthodes]
+    C --> G[Cycle de vie]
+```
+
+---
+
+## Composants Standalone (Angular 18/19)
 
 ```typescript
-// user-card.component.ts
 @Component({
   selector: 'app-user-card',
-  standalone: true,
+  standalone: true, // Plus besoin de NgModule !
   imports: [CommonModule],
+  template: `...`
+})
+export class UserCardComponent {}
+```
+
+---
+
+## Le décorateur @Component - Partie 1
+
+```typescript
+@Component({
+  // Nom de la balise HTML pour utiliser ce composant
+  selector: 'app-user-profile',
+  
+  // Template HTML du composant
   template: `
-    <div class="card">
-      <h2>{{ user().name }}</h2>
-      <p>{{ user().email }}</p>
-      <button (click)="handleClick()">
-        Contact
-      </button>
+    <div class="user-profile">
+      <h2>{{ userName }}</h2>
     </div>
-  `,
+  `
+})
+```
+
+---
+
+## Le décorateur @Component - Partie 2
+
+```typescript
+@Component({
+  // Styles spécifiques au composant
   styles: [`
-    .card {
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .user-profile {
+      padding: 20px;
+      border: 1px solid #ccc;
     }
   `]
 })
-export class UserCardComponent {
-  user = signal<User>({
-    name: 'John Doe',
-    email: 'john@example.com'
-  });
-
-  handleClick() {
-    // Logique de gestion du clic
-  }
-}
 ```
 
 ---
 
-## Control Flow (Nouveau en Angular 18)
+## Communication Parent → Enfant
+
+### Entrées (@Input)
 
 ```typescript
 @Component({
-  selector: 'app-user-list',
+  selector: 'app-user-card',
   template: `
-    @if (users().length) {
-      @for (user of users(); track user.id) {
-        <app-user-card [user]="user" />
-      } 
-    } @else {
-      <p>Aucun utilisateur trouvé</p>
-    }
+    <div class="card">
+      <h3>{{ userName }}</h3>
+      <p>{{ userRole }}</p>
+    </div>
   `
 })
-export class UserListComponent {
-  users = signal<User[]>([]);
+export class UserCardComponent {
+  @Input() userName: string;
+  @Input() userRole: string;
 }
 ```
 
 ---
 
-## Inputs et Outputs
+## Utilisation des @Input
+
+```html
+<app-user-card
+  userName="John Doe"
+  userRole="Admin"
+/>
+```
+
+---
+
+## Communication Enfant → Parent
+
+### Sorties (@Output)
 
 ```typescript
 @Component({
   selector: 'app-counter',
   template: `
     <div>
-      <h3>{{ title }}</h3>
-      <p>Count: {{ count() }}</p>
+      <h2>{{ count() }}</h2>
       <button (click)="increment()">+</button>
-      <button (click)="decrement()">-</button>
     </div>
   `
 })
 export class CounterComponent {
-  @Input() title: string = 'Counter';
-  @Output() countChange = new EventEmitter<number>();
-  
   count = signal(0);
-  
+  @Output() countChange = new EventEmitter<number>();
+}
+```
+
+---
+
+## Gestion des événements @Output
+
+```typescript
+export class CounterComponent {
   increment() {
     this.count.update(n => n + 1);
     this.countChange.emit(this.count());
   }
-  
-  decrement() {
-    this.count.update(n => n - 1);
-    this.countChange.emit(this.count());
-  }
 }
+```
+
+Utilisation :
+```html
+<app-counter
+  (countChange)="handleCountChange($event)"
+/>
 ```
 
 ---
 
-## Cycle de vie des composants
+## Styles des composants - Partie 1
 
 ```typescript
 @Component({
-  selector: 'app-lifecycle',
-  template: `<div>{{ data() }}</div>`
-})
-export class LifecycleComponent implements OnInit, OnDestroy {
-  data = signal<string>('');
-  private subscription: Subscription;
-  
-  constructor(private dataService: DataService) {}
-  
-  ngOnInit() {
-    this.subscription = this.dataService.getData()
-      .subscribe(data => {
-        this.data.set(data);
-      });
-  }
-  
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-}
-```
-
----
-
-## Injection de dépendances
-
-```typescript
-@Injectable({
-  providedIn: 'root'
-})
-export class UserService {
-  private apiUrl = 'https://api.example.com/users';
-  
-  constructor(private http: HttpClient) {}
-  
-  getUsers() {
-    return this.http.get<User[]>(this.apiUrl);
-  }
-}
-
-@Component({
-  selector: 'app-users',
+  selector: 'app-styled-button',
   template: `
-    @if (users()) {
-      @for (user of users(); track user.id) {
-        <app-user-card [user]="user" />
-      }
-    }
+    <button class="custom-btn">
+      <ng-content></ng-content>
+    </button>
   `
 })
-export class UsersComponent {
-  users = signal<User[]>([]);
-  
-  constructor(private userService: UserService) {
-    this.userService.getUsers()
-      .subscribe(users => this.users.set(users));
-  }
-}
 ```
 
 ---
 
-## View Encapsulation
+## Styles des composants - Partie 2
 
 ```typescript
 @Component({
-  selector: 'app-styled',
-  template: `
-    <div class="container">
-      <h1>Styled Component</h1>
-    </div>
-  `,
   styles: [`
-    .container {
-      background: #f0f0f0;
-      padding: 20px;
+    .custom-btn {
+      padding: 10px 20px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
     }
   `],
   encapsulation: ViewEncapsulation.ShadowDom
 })
-export class StyledComponent {}
 ```
 
 ---
 
-## Content Projection
+## Projection de contenu - Structure
 
 ```typescript
 @Component({
@@ -198,135 +195,89 @@ export class StyledComponent {}
       <div class="header">
         <ng-content select="[header]"></ng-content>
       </div>
-      <div class="body">
+      <div class="content">
         <ng-content></ng-content>
-      </div>
-      <div class="footer">
-        <ng-content select="[footer]"></ng-content>
       </div>
     </div>
   `
 })
-export class CardComponent {}
-
-// Utilisation
-@Component({
-  template: `
-    <app-card>
-      <h2 header>Titre de la carte</h2>
-      <p>Contenu principal</p>
-      <button footer>Action</button>
-    </app-card>
-  `
-})
 ```
 
 ---
 
-# Exercice : Création d'un composant réutilisable
+## Projection de contenu - Utilisation
 
-Créez un composant de bouton réutilisable avec différentes variantes :
+```html
+<app-card>
+  <h2 header>Mon titre</h2>
+  <p>Contenu principal</p>
+  <button footer>Action</button>
+</app-card>
+```
+
+---
+
+## Bonnes pratiques - À faire ✅
+
+- Un composant = une responsabilité unique
+- Garder les composants petits et focalisés
+- Utiliser des interfaces pour typer les inputs
+- Documenter les inputs/outputs importants
+
+---
+
+## Bonnes pratiques - À éviter ❌
+
+- Trop de logique dans les templates
+- Composants trop complexes
+- Duplication de code entre composants
+- Couplage fort entre composants
+
+---
+
+## Exercice - Interface
 
 ```typescript
-// components/button.component.ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+```
+
+---
+
+## Exercice - Composant
+
+```typescript
 @Component({
-  selector: 'app-button',
-  standalone: true,
+  selector: 'app-user-list',
   template: `
-    <button
-      [class]="buttonClass()"
-      [disabled]="loading()"
-      (click)="handleClick()"
-    >
-      @if (loading()) {
-        <span class="spinner"></span>
+    <div class="user-list">
+      <h2>Utilisateurs</h2>
+      @for (user of users(); track user.id) {
+        <app-user-card
+          [user]="user"
+          (userClick)="onUserSelect($event)"
+        />
       }
-      <ng-content></ng-content>
-    </button>
-  `,
-  styles: [`
-    button {
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .primary {
-      background: #007bff;
-      color: white;
-    }
-    
-    .secondary {
-      background: #6c757d;
-      color: white;
-    }
-    
-    .spinner {
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  `]
+    </div>
+  `
 })
-export class ButtonComponent {
-  @Input() variant: 'primary' | 'secondary' = 'primary';
-  @Input() loading = signal(false);
-  @Output() click = new EventEmitter<void>();
-  
-  buttonClass = computed(() => this.variant);
-  
-  handleClick() {
-    if (!this.loading()) {
-      this.click.emit();
-    }
-  }
-}
-```
-
-Utilisez ce composant dans votre application pour comprendre les concepts de base des composants Angular. 
-
-## Évolution des Composants
-
-### Approche Traditionnelle (pré-Angular 14)
-```typescript
-@NgModule({
-  declarations: [UserComponent],
-  imports: [CommonModule],
-  exports: [UserComponent]
-})
-class UserModule {}
-
-@Component({
-  selector: 'app-user'
-})
-class UserComponent {
-  name = 'John'
-}
 ```
 
 ---
 
-### Approche Moderne (Angular 18/19)
+## Exercice - Logique
+
 ```typescript
-@Component({
-  selector: 'app-user',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <h1>{{ name }}</h1>
-  `
-})
-class UserComponent {
-  name = 'John'
+export class UserListComponent {
+  users = signal<User[]>([]);
+  @Output() userSelect = new EventEmitter<User>();
+
+  onUserSelect(user: User) {
+    this.userSelect.emit(user);
+  }
 }
 ``` 

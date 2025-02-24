@@ -14,6 +14,78 @@ routeAlias: 'component-lifecycle'
 
 ---
 
+## Flux du cycle de vie
+
+```mermaid
+graph LR
+    A[Création du Composant] --> B[constructor]
+    B --> C[ngOnChanges]
+    C --> D[ngOnInit]
+    D --> E[ngDoCheck]
+    E --> F{Vue initialisée?}
+    F -->|Non| G[ngAfterContentInit]
+    G --> H[ngAfterContentChecked]
+    H --> I[ngAfterViewInit]
+    I --> J[ngAfterViewChecked]
+    F -->|Oui| K[ngAfterContentChecked]
+    K --> L[ngAfterViewChecked]
+    L --> M{Changements?}
+    M -->|Oui| C
+    M -->|Non| N{Destruction?}
+    N -->|Oui| O[ngOnDestroy]
+    N -->|Non| E
+```
+
+---
+
+## Flux de données entre composants
+
+```mermaid
+sequenceDiagram
+    participant P as Parent
+    participant C as Composant
+    participant V as Vue
+    
+    P->>C: Création
+    Note over C: constructor()
+    P->>C: @Input() changes
+    Note over C: ngOnChanges()
+    Note over C: ngOnInit()
+    C->>V: Initialise Vue
+    Note over V: ngAfterViewInit()
+    
+    loop Cycle de vie
+        P->>C: Nouvelles données
+        Note over C: ngDoCheck()
+        C->>V: Met à jour Vue
+        Note over V: ngAfterViewChecked()
+    end
+    
+    P->>C: Destruction
+    Note over C: ngOnDestroy()
+```
+
+---
+
+## Explication des phases
+
+### Phase d'initialisation
+1. **constructor** : Création de l'instance
+2. **ngOnChanges** : Quand une @Input() change
+3. **ngOnInit** : Une fois le composant initialisé
+4. **ngDoCheck** : Vérification manuelle
+
+### Phase de rendu
+5. **ngAfterContentInit** : Après projection du contenu
+6. **ngAfterContentChecked** : Après vérification du contenu
+7. **ngAfterViewInit** : Après initialisation de la vue
+8. **ngAfterViewChecked** : Après vérification de la vue
+
+### Phase de destruction
+9. **ngOnDestroy** : Nettoyage avant destruction
+
+---
+
 ## Exemple d'implémentation
 
 ```typescript
