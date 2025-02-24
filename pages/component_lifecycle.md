@@ -5,6 +5,8 @@ routeAlias: 'component-lifecycle'
 
 # Cycle de Vie des Composants
 
+---
+
 ## Vue d'ensemble des hooks de cycle de vie
 
 - **ngOnChanges**: Appelé quand une propriété liée aux données change
