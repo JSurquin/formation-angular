@@ -359,3 +359,41 @@ Cet exercice vous permettra de pratiquer :
 - La mise à jour immutable des données
 - L'intégration avec les templates
 - La gestion des événements utilisateur 
+
+# Gestion de l'État avec Signals
+
+## Avant les Signals
+```typescript
+@Component({
+  template: `
+    <h1>{{ count }}</h1>
+    <button (click)="increment()">+1</button>
+  `
+})
+class CounterComponent {
+  count = 0
+  
+  increment() {
+    this.count++ // Déclenche détection globale
+  }
+}
+```
+
+---
+
+## Avec les Signals
+```typescript
+@Component({
+  template: `
+    <h1>{{ count() }}</h1>
+    <button (click)="increment()">+1</button>
+  `
+})
+class CounterComponent {
+  count = signal(0)
+  
+  increment() {
+    this.count.update(n => n + 1) // Mise à jour granulaire
+  }
+}
+``` 

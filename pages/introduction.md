@@ -2,20 +2,65 @@
 routeAlias: 'introduction-angular'
 ---
 
-# Introduction à Angular 18/19
+# Introduction à Angular
 
-- **Qu'est-ce qu'Angular ?**
-  - Framework complet pour le développement web
+## Qu'est-ce qu'Angular ?
+
+- **Framework web complet**
   - Développé et maintenu par Google
   - Écrit en TypeScript
-  - Version 18/19 avec de nombreuses améliorations
-
-- **Avantages d'Angular**
   - Architecture robuste et scalable
-  - Système de composants puissant
-  - Injection de dépendances intégrée
-  - Outils de développement avancés
-  - Grande communauté et écosystème riche
+
+- **Écosystème riche**
+  - CLI puissant
+  - Outils de développement
+  - Grande communauté
+  - Documentation complète
+
+---
+
+## Évolution d'Angular
+
+### Angular.js (1.x) vs Angular Moderne (2+)
+- Réécriture complète
+- Adoption de TypeScript
+- Architecture par composants
+- Performance améliorée
+
+### Principales évolutions jusqu'à Angular 18/19
+- Standalone Components (v14+)
+- Signals (v16+)
+- Control Flow (v17+)
+- Hydration (v16+)
+- Defer Loading (v17+)
+
+---
+
+## Objectifs des évolutions
+
+- **Performance**
+  - Détection des changements plus précise
+  - Meilleure gestion de la mémoire
+  - Rendu plus rapide
+
+- **Developer Experience**
+  - Syntaxe plus intuitive
+  - Moins de boilerplate
+  - Meilleur support TypeScript
+
+---
+
+## Bénéfices pour les développeurs
+
+- **Maintenabilité**
+  - Code plus prévisible
+  - Débogage facilité
+  - Tests plus simples
+
+- **Productivité**
+  - Moins de configuration
+  - API plus cohérentes
+  - Meilleurs messages d'erreur
 
 ---
 

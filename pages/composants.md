@@ -294,3 +294,39 @@ export class ButtonComponent {
 ```
 
 Utilisez ce composant dans votre application pour comprendre les concepts de base des composants Angular. 
+
+## Évolution des Composants
+
+### Approche Traditionnelle (pré-Angular 14)
+```typescript
+@NgModule({
+  declarations: [UserComponent],
+  imports: [CommonModule],
+  exports: [UserComponent]
+})
+class UserModule {}
+
+@Component({
+  selector: 'app-user'
+})
+class UserComponent {
+  name = 'John'
+}
+```
+
+---
+
+### Approche Moderne (Angular 18/19)
+```typescript
+@Component({
+  selector: 'app-user',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <h1>{{ name }}</h1>
+  `
+})
+class UserComponent {
+  name = 'John'
+}
+``` 

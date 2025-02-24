@@ -304,3 +304,38 @@ export class PasswordStrengthDirective implements Validator {
 ```
 
 Cet exercice vous permettra de comprendre comment créer des directives de validation personnalisées et les intégrer avec les formulaires Angular. 
+
+# Directives et Control Flow
+
+## Syntaxe Traditionnelle
+```typescript
+@Component({
+  template: `
+    <div *ngIf="isLoading; else content">
+      Loading...
+    </div>
+    <ng-template #content>
+      <div *ngFor="let item of items">
+        {{ item }}
+      </div>
+    </ng-template>
+  `
+})
+```
+
+---
+
+## Nouveau Control Flow (Angular 18/19)
+```typescript
+@Component({
+  template: `
+    @if (isLoading()) {
+      Loading...
+    } @else {
+      @for (item of items(); track item.id) {
+        {{ item }}
+      }
+    }
+  `
+})
+``` 
