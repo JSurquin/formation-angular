@@ -134,39 +134,6 @@ Interpolation: `{{ expression }}`
 
 ---
 
-## Exercice pratique : Premier composant
-
-1. Créez un nouveau projet Angular
-2. Créez un composant de compteur
-3. Implémentez les différents types de binding
-
-```typescript
-@Component({
-  selector: 'app-counter',
-  standalone: true,
-  template: `
-    <div>
-      <h2>Counter: {{ count }}</h2>
-      <button (click)="increment()">+</button>
-      <button (click)="decrement()">-</button>
-    </div>
-  `
-})
-export class CounterComponent {
-  count = 0;
-
-  increment() {
-    this.count++;
-  }
-
-  decrement() {
-    this.count--;
-  }
-}
-``` 
-
----
-
 ## Exercice : Création du projet Mini-Blog
 
 1. Créez un nouveau projet Angular :
