@@ -340,3 +340,113 @@ Cet exercice vous permettra de mettre en place un déploiement professionnel ave
 - Containerisation
 - Monitoring en production
 - Métriques de performance 
+
+---
+
+layout: new-section
+routeAlias: 'deploiement-vercel'
+---
+
+# Déploiement avec Vercel
+
+---
+
+## Configuration Vercel
+
+1. Installez Vercel CLI :
+```bash
+npm i -g vercel
+```
+
+2. Connectez-vous à votre compte :
+```bash
+vercel login
+```
+
+---
+
+## Déploiement automatique
+
+1. Créez un fichier `vercel.json` à la racine :
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
+```
+
+2. Configurez le build :
+```json
+{
+  "scripts": {
+    "build": "ng build --configuration production"
+  }
+}
+```
+
+---
+
+## Intégration Continue
+
+1. Connectez votre repo GitHub à Vercel
+
+2. Activez les déploiements automatiques :
+- Sur chaque push sur main
+- Preview sur les Pull Requests
+- Rollback automatique en cas d'erreur
+
+3. Variables d'environnement :
+```bash
+vercel env add PRODUCTION_API_URL
+```
+
+---
+
+## Optimisations Vercel
+
+- Edge Functions pour l'API
+- Image Optimization
+- Analytics intégrées
+- Monitoring temps réel
+- Certificats SSL automatiques
+
+```typescript
+// next.config.js
+module.exports = {
+  images: {
+    domains: ['assets.example.com'],
+  },
+}
+```
+
+---
+
+## Commandes utiles
+
+```bash
+# Déploiement manuel
+vercel
+
+# Déploiement en production
+vercel --prod
+
+# Voir les logs
+vercel logs
+
+# Lister les déploiements
+vercel list
+
+# Supprimer un déploiement
+vercel remove <deployment-id>
+```

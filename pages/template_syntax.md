@@ -196,8 +196,13 @@ Cet exercice vous permettra de maîtriser :
 - Les références de template 
 
 ---
+layout: exercices
+routeAlias: 'exercice-template-post'
+---
 
 ## Exercice : Template du Post
+
+---
 
 1. Créez le composant PostCard :
 ```typescript

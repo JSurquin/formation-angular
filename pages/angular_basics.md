@@ -133,8 +133,13 @@ Interpolation: `{{ expression }}`
   - Nécessite d'importer FormsModule ou le NgModel dans le composant standalone
 
 ---
+layout: exercices
+routeAlias: 'exercice-mini-blog'
+---
 
-## Exercice : Création du projet Mini-Blog
+# Exercice : Création du projet Mini-Blog
+
+---
 
 1. Créez un nouveau projet Angular :
 ```bash
@@ -148,6 +153,8 @@ mkdir src/app/features
 mkdir src/app/shared
 mkdir src/app/core
 ```
+
+---
 
 3. Créez le composant principal :
 ```typescript

@@ -515,8 +515,13 @@ class CounterComponent {
 ```
 
 ---
+layout: exercices
+routeAlias: 'exercice-blog-state'
+---
 
 ## Exercice : État Global du Blog
+
+---
 
 1. Créez le service d'état :
 ```typescript

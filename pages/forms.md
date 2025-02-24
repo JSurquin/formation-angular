@@ -386,10 +386,16 @@ Cet exercice vous permettra de pratiquer :
 - Les états de chargement avec Signals 
 
 ---
+layout: exercices
+routeAlias: 'exercice-formulaire-post'
+---
 
-## Exercice : Formulaire de Post
+# Exercice : Formulaire de Post
 
-1. Créez le composant de formulaire :
+---
+
+## 1. Structure du Template
+
 ```typescript
 // features/posts/post-form.component.ts
 @Component({
@@ -419,6 +425,13 @@ Cet exercice vous permettra de pratiquer :
     </form>
   `
 })
+```
+
+---
+
+## 2. Configuration du Formulaire
+
+```typescript
 export class PostFormComponent {
   private postService = inject(PostService)
   private router = inject(Router)
@@ -435,7 +448,13 @@ export class PostFormComponent {
   })
 
   saving = signal(false)
+```
 
+---
+
+## 3. Gestion des Erreurs
+
+```typescript
   titleErrors = computed(() => {
     const control = this.form.get('title')
     if (control?.errors && control.touched) {
@@ -453,7 +472,13 @@ export class PostFormComponent {
     }
     return null
   })
+```
 
+---
+
+## 4. Soumission du Formulaire
+
+```typescript
   async onSubmit() {
     if (this.form.valid) {
       this.saving.set(true)
@@ -471,4 +496,4 @@ export class PostFormComponent {
     }
   }
 }
-``` 
+```

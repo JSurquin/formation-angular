@@ -325,8 +325,13 @@ Cet exercice vous permettra de pratiquer :
 - Les transitions de vue 
 
 ---
+layout: exercices
+routeAlias: 'exercice-routing-blog'
+---
 
 ## Exercice : Routes du Blog
+
+---
 
 1. Configurez les routes :
 ```typescript
@@ -367,6 +372,8 @@ export const routes: Routes = [
   }
 ]
 ```
+
+---
 
 2. Créez le guard d'authentification :
 ```typescript

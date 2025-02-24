@@ -317,8 +317,13 @@ export class SearchComponent {
 ```
 
 ---
+layout: exercices
+routeAlias: 'exercice-search-realtime'
+---
 
 ## Exercice : Recherche de Posts
+
+---
 
 1. Créez le composant de recherche :
 ```typescript

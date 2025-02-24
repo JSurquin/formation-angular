@@ -335,8 +335,13 @@ Cet exercice vous permettra de pratiquer :
 - L'injection de dépendances 
 
 ---
+layout: exercices
+routeAlias: 'exercice-api-rest'
+---
 
 ## Exercice : Service API du Blog
+
+---
 
 1. Créez le service API :
 ```typescript

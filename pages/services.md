@@ -234,8 +234,13 @@ export class FeatureComponent {
 ```
 
 ---
+layout: exercices
+routeAlias: 'exercice-service-blog'
+---
 
 # Exercice : Service de Blog
+
+---
 
 1. Créez l'interface Post :
 ```typescript

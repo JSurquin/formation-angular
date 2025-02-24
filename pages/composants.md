@@ -286,8 +286,13 @@ export class UserListComponent {
 ```
 
 ---
+layout: exercices
+routeAlias: 'exercice-post-list'
+---
 
 ## Exercice : Composants du Blog
+
+---
 
 1. Créez le composant PostList :
 ```typescript
