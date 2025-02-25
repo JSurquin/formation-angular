@@ -7,6 +7,42 @@ routeAlias: 'directives-pipes'
 
 ---
 
+Qu'est ce qu'une directive ?
+
+Une directive est un élément qui modifie le comportement ou la structure d'un élément HTML.
+
+A vrai dire, depuis le début de la formation, vous en avez utilisé plusieurs :
+
+- `*ngIf` maintenant @if
+- `*ngFor` maintenant @for
+- `*ngSwitch` maintenant @switch
+- `*ngStyle` maintenant [ngStyle]
+- `*ngClass` maintenant [ngClass]
+
+Mais aussi des pipes sont des directives :
+
+- `date`
+- `uppercase`
+- `lowercase`
+- `currency`
+- `slice`
+- `json` !!
+
+---
+
+## Types de directives
+
+Il existe plusieurs types de directives :
+
+- Directives d'attributs personnalisées
+- Directives de structure
+- Pipes
+
+Mais vous en avez d'autres, des directives personnalisées, des pipes personnalisés, des directives avec injection de dépendances, etc.
+Ce que je sous entend par là, c'est aussi que vous pouvez en créer vous même.
+
+---
+
 ## Types de directives
 
 ```typescript
