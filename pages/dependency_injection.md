@@ -142,3 +142,109 @@ export class CacheService {
 }
 ```
 
+---
+
+## Injection moderne avec inject()
+
+```typescript
+// Avant (constructor injection)
+@Component({
+  template: `...`
+})
+class OldComponent {
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    @Inject(APP_CONFIG) private config: AppConfig
+  ) {}
+}
+
+// Après (fonction inject)
+@Component({
+  template: `...`
+})
+class ModernComponent {
+  private userService = inject(UserService)
+  private router = inject(Router)
+  private config = inject(APP_CONFIG)
+}
+```
+
+---
+
+## Avantages de inject()
+
+- Plus concis
+- Utilisable en dehors du constructor
+- Parfait pour les composants standalone
+- Meilleure inférence de type
+
+```typescript
+@Component({
+  standalone: true,
+  template: `
+    @if (user()) {
+      <h1>Bienvenue {{ user().name }}</h1>
+    }
+  `
+})
+class WelcomeComponent {
+  // Injection et Signal en une ligne
+  private auth = inject(AuthService)
+  user = this.auth.currentUser
+
+  // Injection dans une méthode
+  logout() {
+    inject(Router).navigate(['/login'])
+  }
+}
+```
+
+---
+
+## Injection conditionnelle avec inject()
+
+```typescript
+@Component({
+  template: `...`
+})
+class FeatureComponent {
+  // Injection optionnelle
+  private logger = inject(LoggerService, { optional: true })
+
+  // Injection avec fallback
+  private analytics = inject(AnalyticsService, {
+    optional: true,
+    self: true
+  }) ?? new NoopAnalyticsService()
+
+  // Injection au niveau parent
+  private parentCache = inject(CacheService, {
+    skipSelf: true,
+    host: true
+  })
+}
+```
+
+---
+
+## Injection dans les services
+
+```typescript
+@Injectable({ providedIn: 'root' })
+class ModernService {
+  // Injection directe sans constructor
+  private http = inject(HttpClient)
+  private config = inject(APP_CONFIG)
+  
+  // Computed basé sur injection
+  private apiUrl = computed(() => 
+    `${this.config.baseUrl}/api`
+  )
+
+  getData() {
+    return this.http.get(`${this.apiUrl()}/data`)
+  }
+}
+```
+
