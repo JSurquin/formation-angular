@@ -7,6 +7,247 @@ routeAlias: 'rxjs-observables'
 
 ---
 
+## Concepts de base
+
+Bon déjà c'est quoi un Observable ?
+
+Un Observable est un objet qui représente une séquence de valeurs, émises à des moments différents.
+
+Imaginons je fais un appel api , regardons du marble "testing" pour mieux comprendre :
+
+```typescript
+const apiCall$ = new Observable(observer => {
+  fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => observer.next(data))
+    .catch(error => observer.error(error))
+    .finally(() => observer.complete())
+})
+```
+
+<!-- retoucher -->
+
+donc ce flux : --1--2--3--4--5--
+
+ce qui veut dire :
+
+- 1 premiere étape : j'aurais donc une réponse de l'api
+- 2 deuxième étape : j'aurais donc une autre réponse de l'api
+- 3 troisième étape : j'aurais donc une autre réponse de l'api
+- 4 quatrième étape : j'aurais donc une autre réponse de l'api
+- 5 cinquième étape : j'aurais donc une autre réponse de l'api
+
+---
+
+## Observer
+
+Un observer est un objet qui écoute les événements d'un Observable.
+
+```typescript
+// Observable simple
+const numbers$ = of(1, 2, 3, 4, 5)
+
+// Observer
+numbers$.subscribe({
+  next: value => console.log(value),
+  error: err => console.error(err),
+  complete: () => console.log('Terminé')
+})
+```
+
+---
+
+## Types de Subjects
+
+```typescript
+// Subject basique
+const subject = new Subject<string>()
+subject.subscribe(value => console.log('A:', value))
+subject.subscribe(value => console.log('B:', value))
+subject.next('Hello') // A: Hello, B: Hello
+
+// BehaviorSubject - Garde la dernière valeur
+const behavior = new BehaviorSubject<number>(0)
+behavior.subscribe(value => console.log('Valeur actuelle:', value))
+console.log('Valeur stockée:', behavior.value)
+
+// ReplaySubject - Rejoue X valeurs
+const replay = new ReplaySubject<string>(2)
+replay.next('Un')
+replay.next('Deux')
+replay.next('Trois')
+replay.subscribe(value => console.log(value)) // Deux, Trois
+```
+
+---
+
+## Opérateurs essentiels - Filtrage
+
+```typescript
+const source$ = interval(1000)
+
+// filter - Garde uniquement les valeurs qui passent le prédicat
+source$.pipe(
+  filter(n => n % 2 === 0)
+) // 0, 2, 4, 6...
+
+// take - Prend X valeurs puis complète
+source$.pipe(
+  take(3)
+) // 0, 1, 2, complete
+
+// takeUntil - Émet jusqu'à ce qu'un autre Observable émette
+const stop$ = timer(5000)
+source$.pipe(
+  takeUntil(stop$)
+) // Émet pendant 5 secondes
+
+// distinctUntilChanged - Ignore les doublons consécutifs
+of(1, 1, 2, 2, 3, 3).pipe(
+  distinctUntilChanged()
+) // 1, 2, 3
+```
+
+---
+
+## Opérateurs essentiels - Transformation
+
+```typescript
+// map - Transforme chaque valeur
+source$.pipe(
+  map(n => n * 2)
+) // 0, 2, 4, 6...
+
+// switchMap - Annule l'Observable précédent
+searchTerm$.pipe(
+  switchMap(term => 
+    this.http.get(`/api/search?q=${term}`)
+  )
+)
+
+// mergeMap - Fusionne tous les Observables
+userIds$.pipe(
+  mergeMap(id => 
+    this.http.get(`/api/user/${id}`)
+  )
+)
+
+// concatMap - Attend que chaque Observable soit complété
+uploads$.pipe(
+  concatMap(file => 
+    this.uploadFile(file)
+  )
+)
+```
+
+---
+
+## Opérateurs essentiels - Combinaison
+
+```typescript
+// combineLatest - Combine les dernières valeurs
+combineLatest({
+  user: userProfile$,
+  preferences: userPrefs$,
+  theme: themeSettings$
+}).subscribe(({ user, preferences, theme }) => {
+  console.log('État complet:', { user, preferences, theme })
+})
+
+// merge - Fusionne plusieurs Observables
+merge(
+  clicks$,
+  keypresses$,
+  touches$
+).subscribe(event => {
+  console.log('Interaction utilisateur:', event)
+})
+
+// forkJoin - Attend que tous les Observables soient complétés
+forkJoin({
+  posts: this.http.get('/api/posts'),
+  comments: this.http.get('/api/comments'),
+  users: this.http.get('/api/users')
+}).subscribe(data => {
+  console.log('Toutes les données chargées:', data)
+})
+```
+
+---
+
+## Cas d'utilisation concrets
+
+### 1. Recherche en temps réel
+```typescript
+@Component({
+  template: `
+    <input [ngModel]="searchTerm()" 
+           (ngModelChange)="searchTerm$.next($event)">
+    <div *ngFor="let result of results()">
+      {{ result.name }}
+    </div>
+  `
+})
+class SearchComponent {
+  private searchTerm$ = new BehaviorSubject<string>('')
+  
+  results = toSignal(
+    this.searchTerm$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      filter(term => term.length >= 2),
+      switchMap(term => this.searchService.search(term)),
+      catchError(err => {
+        console.error('Erreur de recherche:', err)
+        return of([])
+      })
+    ),
+    { initialValue: [] }
+  )
+}
+```
+
+---
+
+### 2. Gestion des websockets avec reconnexion
+```typescript
+class WebSocketService {
+  private wsSubject = new BehaviorSubject<WebSocket | null>(null)
+  private messagesSubject = new Subject<any>()
+  private reconnectAttempts = 0
+  
+  connect() {
+    const ws = new WebSocket('ws://api.example.com')
+    
+    ws.addEventListener('message', event => {
+      this.messagesSubject.next(JSON.parse(event.data))
+    })
+    
+    ws.addEventListener('close', () => {
+      this.reconnect()
+    })
+    
+    this.wsSubject.next(ws)
+  }
+  
+  messages$ = this.messagesSubject.asObservable().pipe(
+    retry(3),
+    share()
+  )
+  
+  private reconnect() {
+    if (this.reconnectAttempts < 3) {
+      this.reconnectAttempts++
+      timer(1000 * this.reconnectAttempts).pipe(
+        take(1)
+      ).subscribe(() => this.connect())
+    }
+  }
+}
+```
+
+---
+
 ## Introduction à RxJS
 
 ## Intégration avec Signals
