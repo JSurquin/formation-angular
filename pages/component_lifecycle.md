@@ -7,110 +7,12 @@ routeAlias: 'component-lifecycle'
 
 ---
 
-## Vue d'ensemble des hooks de cycle de vie
+## Hooks essentiels
 
-- **ngOnChanges**: Appelé quand une propriété liée aux données change
 - **ngOnInit**: Après la première initialisation des propriétés
-- **ngDoCheck**: Pendant chaque détection de changement
-- **ngAfterViewInit**: Après l'initialisation de la vue
 - **ngOnDestroy**: Juste avant que le composant soit détruit
-
----
-
-## Flux du cycle de vie
-
-```mermaid
-graph LR
-    A[Création du Composant] --> B[constructor]
-    B --> C[ngOnChanges]
-    C --> D[ngOnInit]
-    D --> E[ngDoCheck]
-    E --> F{Vue initialisée?}
-    F -->|Non| G[ngAfterContentInit]
-    G --> H[ngAfterContentChecked]
-    H --> I[ngAfterViewInit]
-    I --> J[ngAfterViewChecked]
-    F -->|Oui| K[ngAfterContentChecked]
-    K --> L[ngAfterViewChecked]
-    L --> M{Changements?}
-    M -->|Oui| C
-    M -->|Non| N{Destruction?}
-    N -->|Oui| O[ngOnDestroy]
-    N -->|Non| E
-```
-
----
-
-## Exemple concret du cycle de vie
-
-```mermaid
-graph LR
-    A[Création du Composant] --> B[constructor: Injection des services]
-    B --> C[ngOnChanges: Réception des @Input]
-    C --> D[ngOnInit: Chargement des données]
-    D --> E[ngDoCheck: Vérification des changements]
-    E --> F{Vue prête?}
-    F -->|Oui| G[ngAfterViewInit: Initialisation du carousel]
-    F -->|Non| E
-    G --> H[ngOnDestroy: Nettoyage des souscriptions]
-
-    style B fill:#f9f,stroke:#333
-    style D fill:#bbf,stroke:#333
-    style G fill:#bfb,stroke:#333
-    style H fill:#fbb,stroke:#333
-```
-
----
-
-## Flux de données entre composants
-
-<div class="scale-50 -mt-48">
-
-```mermaid
-sequenceDiagram
-    participant P as Parent
-    participant C as Composant
-    participant V as Vue
-    
-    P->>C: Création
-    Note over C: constructor()
-    P->>C: @Input() changes
-    Note over C: ngOnChanges()
-    Note over C: ngOnInit()
-    C->>V: Initialise Vue
-    Note over V: ngAfterViewInit()
-    
-    loop Cycle de vie
-        P->>C: Nouvelles données
-        Note over C: ngDoCheck()
-        C->>V: Met à jour Vue
-        Note over V: ngAfterViewChecked()
-    end
-    
-    P->>C: Destruction
-    Note over C: ngOnDestroy()
-```
-
-</div>
-
----
-
-## Explication des phases
-
-### Phase d'initialisation
-1. **constructor** : Création de l'instance
-2. **ngOnChanges** : Quand une @Input() change
-3. **ngOnInit** : Une fois le composant initialisé
-4. **ngDoCheck** : Vérification manuelle
-
-### Phase de rendu
-5. **ngAfterContentInit** : Après projection du contenu
-6. **ngAfterContentChecked** : Après vérification du contenu
-7. **ngAfterViewInit** : Après initialisation de la vue
-8. **ngAfterViewChecked** : Après vérification de la vue
-
-### Phase de destruction
-9. **ngOnDestroy** : Nettoyage avant destruction
+- **ngOnChanges**: Quand une propriété liée aux données change
+- **ngAfterViewInit**: Après l'initialisation de la vue
 
 ---
 
@@ -177,54 +79,28 @@ export class ChildComponent implements OnChanges {
     </div>
   `
 })
-export class ViewChildComponent implements AfterViewInit, AfterContentInit {
+export class ViewChildComponent implements AfterViewInit {
   @ViewChild('contentDiv') contentDiv: ElementRef;
   
   ngAfterViewInit() {
     console.log('View initialized:', this.contentDiv.nativeElement);
-  }
-  
-  ngAfterContentInit() {
-    console.log('Content initialized');
   }
 }
 ```
 
 ---
 
-## Bonnes pratiques et optimisation
+## Bonnes pratiques
 
-```typescript
-@Component({
-  selector: 'app-optimized',
-  template: `
-    <div>{{ computedValue }}</div>
-  `
-})
-export class OptimizedComponent implements DoCheck {
-  private _data: any;
-  private _computedValue: string;
-  
-  @Input() 
-  set data(value: any) {
-    if (this._data !== value) {
-      this._data = value;
-      this.compute();
-    }
-  }
-  
-  get computedValue(): string {
-    return this._computedValue;
-  }
-  
-  ngDoCheck() {
-    // Utiliser avec précaution
-    console.log('Change detection running');
-  }
-  
-  private compute() {
-    this._computedValue = `Computed: ${this._data}`;
-  }
-}
-```
+1. **Initialisation**
+   - Utiliser `ngOnInit` pour l'initialisation des données
+   - Éviter les opérations lourdes dans le constructeur
+
+2. **Nettoyage**
+   - Toujours implémenter `ngOnDestroy` pour nettoyer les souscriptions
+   - Libérer les ressources (timers, listeners, etc.)
+
+3. **Performance**
+   - Éviter les calculs lourds dans `ngOnChanges`
+   - Utiliser `ChangeDetectionStrategy.OnPush` quand possible
 
