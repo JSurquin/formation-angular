@@ -4,9 +4,15 @@
     <div class="my-auto relative">
       <slot></slot>
     </div>
-    <SlideCurrentNo
-      class="dark:!text-white absolute bottom-4 left-6 -translate-x-1/2 !text-[10px] p-1 w-6 h-6 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
-    />
+    <div class="absolute top-4 right-2 flex items-center gap-2">
+      <SlideCurrentNo
+        class="dark:!text-white !text-[8px] p-1 w-5 h-5 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
+      />
+      <span class="text-[6px] text-gray-400">/</span>
+      <SlideTotal
+        class="dark:!text-white !text-[8px] p-1 w-5 h-5 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
+      />
+    </div>
     <div
       class="absolute bottom-0 p-4 w-full justify-end -ml-16 mt-auto flex items-center w-full z-50"
     >

@@ -7,7 +7,7 @@
       <slot></slot>
     </div>
     <SlideCurrentNo
-      class="dark:!text-white absolute bottom-4 left-6 -translate-x-1/2 !text-[10px] p-1 w-6 h-6 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
+      class="dark:!text-white absolute top-4 right-2 -translate-x-1/2 !text-[8px] p-1 w-6 h-6 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
     />
     <div
       class="absolute bottom-0 p-4 justify-end -ml-16 mt-auto flex items-center w-full z-50"

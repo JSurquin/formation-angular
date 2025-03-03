@@ -25,17 +25,19 @@ const apiCall$ = new Observable(observer => {
 })
 ```
 
+---
+
 <!-- retoucher -->
 
-donc ce flux : --1--2--3--4--5--
+### Donc ce flux : --1--2--3--4--5--
 
 ce qui veut dire :
 
-- 1 premiere étape : j'aurais donc une réponse de l'api
-- 2 deuxième étape : j'aurais donc une autre réponse de l'api
-- 3 troisième étape : j'aurais donc une autre réponse de l'api
-- 4 quatrième étape : j'aurais donc une autre réponse de l'api
-- 5 cinquième étape : j'aurais donc une autre réponse de l'api
+> - 1 premiere étape : j'aurais donc une réponse de l'api
+> - 2 deuxième étape : j'aurais donc une autre réponse de l'api
+> - 3 troisième étape : j'aurais donc une autre réponse de l'api
+> - 4 quatrième étape : j'aurais donc une autre réponse de l'api
+> - 5 cinquième étape : j'aurais donc une autre réponse de l'api
 
 ---
 
