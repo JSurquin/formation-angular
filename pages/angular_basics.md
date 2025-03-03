@@ -22,6 +22,13 @@ routeAlias: 'angular-basics'
   - Pipes
 
 ---
+layout: new-section
+routeAlias: 'architecture-fondamentale'
+---
+
+<img class="w-1/3 mx-auto" src="/architecture.png" alt="Architecture d'Angular" />
+
+---
 
 ## Comprendre le bootstrapping
 

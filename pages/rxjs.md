@@ -549,3 +549,117 @@ export class PostSearchComponent {
     // Navigation vers le post
   }
 } 
+```
+
+---
+
+## Opérateurs courants
+
+```typescript {1-3|4-6|7-9|10-12|13-15}
+// Création d'un Observable
+const numbers$ = new Observable<number>(subscriber => {
+  subscriber.next(1);
+  subscriber.next(2);
+  subscriber.next(3);
+  subscriber.complete();
+});
+
+// Souscription
+numbers$.subscribe({
+  next: value => console.log(value),
+  error: err => console.error(err),
+  complete: () => console.log('Terminé')
+});
+```
+
+---
+
+## Opérateurs courants
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
+// map, filter, tap
+const numbers$ = of(1, 2, 3, 4, 5);
+
+numbers$.pipe(
+  map(x => x * 2),
+  filter(x => x > 4),
+  tap(x => console.log('Valeur:', x))
+).subscribe();
+```
+
+---
+
+## Combinaison d'Observables
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
+// combineLatest, merge, forkJoin
+const user$ = this.userService.getUser();
+const posts$ = this.postService.getPosts();
+
+combineLatest({
+  user: user$,
+  posts: posts$
+}).subscribe(({ user, posts }) => {
+  console.log('User:', user);
+  console.log('Posts:', posts);
+});
+```
+
+---
+
+## Gestion des erreurs
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
+this.http.get('/api/data').pipe(
+  catchError(error => {
+    console.error('Erreur:', error);
+    return of({ error: true }); // Valeur par défaut
+  }),
+  retry(3), // Réessaie 3 fois
+  timeout(5000) // Timeout après 5s
+).subscribe();
+```
+
+---
+
+## Subjects et BehaviorSubjects
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
+@Injectable({
+  providedIn: 'root'
+})
+export class ThemeService {
+  private themeSubject = new BehaviorSubject<'light' | 'dark'>('light');
+  theme$ = this.themeSubject.asObservable();
+
+  setTheme(theme: 'light' | 'dark') {
+    this.themeSubject.next(theme);
+  }
+}
+```
+
+---
+
+## RxJS avec Signals
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24}
+@Component({
+  template: `
+    @if (users(); as users) {
+      @for (user of users; track user.id) {
+        <div>{{ user.name }}</div>
+      }
+    }
+  `
+})
+export class UserListComponent {
+  private userService = inject(UserService);
+  
+  users = toSignal(
+    this.userService.getUsers().pipe(
+      catchError(() => of([])),
+      shareReplay(1)
+    ),
+    { initialValue: [] }
+  );
+}

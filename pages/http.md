@@ -13,7 +13,7 @@ routeAlias: 'http-client'
 
 ## Configuration moderne du HttpClient
 
-```typescript
+```typescript {1-3|4-6|7-9}
 // app.config.ts
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Service HTTP avec Signals
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-20}
 @Injectable({
   providedIn: 'root'
 })
@@ -65,7 +65,7 @@ export class ApiService {
 
 ## Intercepteurs modernes
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
 // auth.interceptor.ts
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authToken = localStorage.getItem('token');
@@ -94,7 +94,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 ## Gestion des erreurs HTTP
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
 @Injectable({
   providedIn: 'root'
 })
@@ -132,7 +132,7 @@ export class ErrorHandlingService {
 
 ## Requêtes parallèles
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
 @Component({
   template: `
     @if (data(); as result) {
@@ -167,7 +167,7 @@ export class UserDataComponent {
 
 ## Upload de fichiers
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24}
 @Injectable({
   providedIn: 'root'
 })
@@ -230,7 +230,7 @@ export class UploadComponent {
 
 ## Cache HTTP avec Signals
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24}
 @Injectable({
   providedIn: 'root'
 })
@@ -274,7 +274,7 @@ routeAlias: 'exercice-api-rest'
 ---
 
 1. Créez le service API :
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24|25-27}
 // core/services/api.service.ts
 @Injectable({
   providedIn: 'root'

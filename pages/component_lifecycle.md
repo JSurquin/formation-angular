@@ -18,7 +18,7 @@ routeAlias: 'component-lifecycle'
 
 ## Exemple d'implémentation
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15}
 @Component({
   selector: 'app-lifecycle',
   template: `
@@ -45,7 +45,7 @@ export class LifecycleComponent implements OnInit, OnDestroy {
 
 ## Détection des changements d'Input
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15}
 @Component({
   selector: 'app-child',
   template: `
@@ -70,7 +70,7 @@ export class ChildComponent implements OnChanges {
 
 ## AfterView et AfterContent
 
-```typescript
+```typescript {1-3|4-6|7-9|10-12|13-15}
 @Component({
   selector: 'app-view-child',
   template: `
