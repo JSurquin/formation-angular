@@ -22,6 +22,46 @@ routeAlias: 'angular-basics'
   - Pipes
 
 ---
+
+## Commandes CLI Angular essentielles
+
+```bash
+# Création d'un nouveau projet
+ng new mon-projet --standalone --routing --style=scss
+
+# Lancer le serveur de développement
+ng serve
+
+# Générer un composant
+ng generate component mon-composant
+# ou version courte
+ng g c mon-composant
+
+# Générer un service
+ng generate service mon-service
+# ou version courte
+ng g s mon-service
+
+# Générer une directive
+ng generate directive ma-directive
+# ou version courte
+ng g d ma-directive
+
+# Générer un pipe
+ng generate pipe mon-pipe
+# ou version courte
+ng g p mon-pipe
+
+# Générer une interface
+ng generate interface mon-interface
+# ou version courte
+ng g i mon-interface
+
+# Builder l'application pour la production
+ng build --prod
+```
+
+---
 layout: new-section
 routeAlias: 'architecture-fondamentale'
 ---

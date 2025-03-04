@@ -30,6 +30,31 @@ Mais aussi des pipes sont des directives :
 
 ---
 
+## Création de directives avec le CLI
+
+```bash
+# Générer une directive standalone
+ng generate directive shared/directives/highlight --standalone
+# ou version courte
+ng g d shared/directives/highlight --standalone
+
+# Générer une directive avec des tests
+ng g d shared/directives/highlight --spec
+
+# Générer une directive sans créer un dossier
+ng g d shared/directives/highlight --flat
+
+# Générer une directive avec un préfixe personnalisé
+ng g d shared/directives/highlight --prefix app
+
+# Générer un pipe standalone
+ng generate pipe shared/pipes/timeAgo --standalone
+# ou version courte
+ng g p shared/pipes/timeAgo --standalone
+```
+
+---
+
 ## Types de directives
 
 Il existe plusieurs types de directives :

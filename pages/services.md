@@ -20,6 +20,29 @@ Vous pouvez utiliser rxjs et les Observables comme Subject, BehaviorSubject, Rep
 
 ---
 
+## Création d'un service avec le CLI
+
+```bash
+# Générer un service global (root)
+ng generate service services/user
+# ou version courte
+ng g s services/user
+
+# Générer un service dans un feature module
+ng g s features/auth/services/auth
+
+# Générer un service avec des tests
+ng g s services/user --spec
+
+# Générer un service sans créer un dossier
+ng g s services/user --flat
+
+# Générer un service avec une interface
+ng g s services/user --spec --type interface
+```
+
+---
+
 ```typescript
 @Injectable({
   providedIn: 'root'

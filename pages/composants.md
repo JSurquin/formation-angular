@@ -16,6 +16,32 @@ Un composant est comme une brique LEGO® de votre application :
 
 ---
 
+## Création d'un composant avec le CLI
+
+```bash
+# Générer un composant standalone
+ng generate component features/user/user-profile --standalone
+# ou version courte
+ng g c features/user/user-profile --standalone
+
+# Générer un composant avec des tests
+ng g c features/user/user-profile --standalone --spec
+
+# Générer un composant sans fichier de style
+ng g c features/user/user-profile --standalone --inline-style
+
+# Générer un composant avec template inline
+ng g c features/user/user-profile --standalone --inline-template
+
+# Générer un composant dans un sous-dossier
+ng g c features/user/components/user-profile --standalone
+
+# Générer un composant sans créer un dossier
+ng g c features/user/user-profile --standalone --flat
+```
+
+---
+
 ## Structure d'un composant
 
 ```mermaid

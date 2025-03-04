@@ -3,7 +3,37 @@ layout: new-section
 routeAlias: 'routing-navigation'
 ---
 
-# Routing et Navigation
+# Routing et Navigation dans Angular
+
+---
+
+## Commandes CLI pour le Routing
+
+```bash
+# Générer un nouveau module avec routing
+ng generate module features/admin --routing
+
+# Générer un guard de route
+ng generate guard core/guards/auth --implements CanActivate
+
+# Générer un resolver
+ng generate resolver features/product/product-data
+
+# Générer une route lazy-loadée
+ng generate module features/dashboard --route dashboard --module app.routes.ts
+
+# Générer un composant avec route
+ng generate component features/profile --route profile --type page
+
+# Générer un service de navigation
+ng generate service core/services/navigation
+
+# Générer un guard avec plusieurs interfaces
+ng generate guard core/guards/admin --implements CanActivate,CanDeactivate
+
+# Générer un module feature complet
+ng generate module features/shop --routing --route shop --module app.routes.ts
+```
 
 ---
 

@@ -21,6 +21,36 @@ routeAlias: 'dependency-injection'
 
 ---
 
+## Commandes CLI pour l'Injection de Dépendances
+
+```bash
+# Générer un service injectable global
+ng generate service core/services/config --providedIn root
+
+# Générer un service avec un scope spécifique
+ng generate service features/admin/services/admin --flat
+
+# Générer une interface pour un token
+ng generate interface core/interfaces/config-token
+
+# Générer un guard (protection de route)
+ng generate guard core/guards/auth
+
+# Générer un resolver
+ng generate resolver features/product/product-data
+
+# Générer un intercepteur HTTP
+ng generate interceptor core/interceptors/auth
+
+# Générer un service avec des tests
+ng generate service shared/services/cache --spec
+
+# Générer un service avec une interface
+ng generate service core/services/api --type interface
+```
+
+---
+
 ## Création d'un service injectable
 
 ```typescript

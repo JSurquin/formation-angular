@@ -7,6 +7,33 @@ routeAlias: 'forms-validation'
 
 ---
 
+## Commandes CLI pour les Formulaires
+
+```bash
+# Générer un composant de formulaire réactif
+ng generate component features/contact-form --type form
+
+# Générer un validator personnalisé
+ng generate validator shared/validators/password-strength
+
+# Générer un formulaire avec validation
+ng generate component features/registration --type form --spec
+
+# Générer un formulaire avec états asynchrones
+ng generate component features/signup --type form --signals
+
+# Générer un service de validation
+ng generate service shared/services/form-validation
+
+# Générer un composant de formulaire dynamique
+ng generate component shared/components/dynamic-form --type form
+
+# Générer un formulaire avec gestion d'état
+ng generate component features/checkout --type form --state
+```
+
+---
+
 ## Formulaires réactifs modernes avec Signals
 
 ```typescript

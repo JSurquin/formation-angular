@@ -3,6 +3,40 @@ layout: new-section
 routeAlias: 'http-client'
 ---
 
+# HTTP dans Angular
+
+---
+
+## Commandes CLI pour HTTP
+
+```bash
+# Générer un service HTTP
+ng generate service core/services/api
+
+# Générer un intercepteur HTTP
+ng generate interceptor core/interceptors/auth
+
+# Générer un service avec mock
+ng generate service core/services/api --mock
+
+# Générer un intercepteur avec transformation
+ng generate interceptor core/interceptors/transform --transform
+
+# Générer un service HTTP avec cache
+ng generate service core/services/cached-api --cache
+
+# Générer un intercepteur de gestion d'erreurs
+ng generate interceptor core/interceptors/error-handler
+
+# Générer un service avec retry policy
+ng generate service core/services/resilient-api --retry
+
+# Générer un service avec pagination
+ng generate service features/products/product-api --paginated
+```
+
+---
+
 # HTTP et Communication
 
 ---

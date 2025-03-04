@@ -7,6 +7,33 @@ routeAlias: 'testing'
 
 ---
 
+## Commandes CLI pour les tests
+
+```bash
+# Lancer tous les tests
+ng test
+
+# Lancer les tests avec couverture de code
+ng test --code-coverage
+
+# Lancer les tests en mode watch
+ng test --watch
+
+# Lancer les tests d'un fichier spécifique
+ng test --include src/app/features/user/user.component.spec.ts
+
+# Générer un composant avec des tests
+ng g c features/user --spec
+
+# Générer un service avec des tests
+ng g s services/auth --spec
+
+# Lancer les tests e2e avec Cypress
+ng e2e
+```
+
+---
+
 ## Introduction aux tests
 
 ## Tests unitaires avec Jasmine et Karma

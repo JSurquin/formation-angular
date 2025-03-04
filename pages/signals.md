@@ -7,6 +7,36 @@ routeAlias: 'signals'
 
 ---
 
+## Commandes CLI pour les Signals
+
+```bash
+# Générer un composant avec support des signals
+ng generate component features/counter --signals
+
+# Générer un service avec signals
+ng generate service shared/services/state --signals
+
+# Générer un store avec signals
+ng generate store features/todo/todo-store --signals
+
+# Générer un composant avec état signal
+ng generate component features/user-profile --signals --state
+
+# Générer un service d'état global
+ng generate service core/services/app-state --signals --global
+
+# Générer un composant avec computed signals
+ng generate component features/dashboard --signals --computed
+
+# Générer un service de cache avec signals
+ng generate service shared/services/cache --signals --storage
+
+# Générer un store avec effets
+ng generate store features/auth/auth-store --signals --effects
+```
+
+---
+
 ## Introduction aux Signals
 
 Un Signal est comme une "boîte réactive" qui :

@@ -3,7 +3,53 @@ layout: new-section
 routeAlias: 'deployment'
 ---
 
-# Déploiement
+# Déploiement d'Applications Angular
+
+---
+
+## Commandes CLI de Build et Déploiement
+
+```bash
+# Build de production
+ng build --configuration production
+
+# Build avec stats
+ng build --stats-json
+
+# Analyser la taille du bundle
+ng build --configuration production --source-map
+
+# Servir une version de production localement
+ng serve --configuration production
+
+# Build avec optimisation SSR
+ng build --configuration production --ssr
+
+# Générer des PWA assets
+ng add @angular/pwa
+ng build --configuration production
+
+# Build avec optimisation de performance
+ng build --configuration production --optimization
+
+# Build avec différents environnements
+ng build --configuration staging
+ng build --configuration demo
+ng build --configuration production
+
+# Build avec rapport de bundle
+ng build --configuration production --stats-json
+npm run bundle-report
+
+# Build avec compression
+ng build --configuration production --optimization --output-hashing all
+
+# Build pour différentes locales
+ng build --configuration production --localize
+
+# Build avec service worker
+ng build --configuration production --service-worker
+```
 
 ---
 
