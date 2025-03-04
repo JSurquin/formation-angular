@@ -94,6 +94,9 @@ export class NavComponent {
 
 ## Guards modernes
 
+Un guard est un service qui permet de contrôler l'accès à une route.
+Parfait pour les routes sensibles ou les routes qui nécessitent une authentification.
+
 ```typescript
 // auth.guard.ts
 export const authGuard: CanActivateFn = (
