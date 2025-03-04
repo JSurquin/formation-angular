@@ -27,7 +27,7 @@ routeAlias: 'angular-basics'
 
 ```bash
 # Création d'un nouveau projet
-ng new mon-projet --standalone --routing --style=scss
+ng new mon-projet   --routing --style=scss
 
 # Lancer le serveur de développement
 ng serve
@@ -365,7 +365,7 @@ routeAlias: 'exercice-mini-blog'
 
 1. Créez un nouveau projet Angular :
 ```bash
-ng new mini-blog --standalone --routing --style=scss
+ng new mini-blog   --routing --style=scss
 cd mini-blog
 ```
 

@@ -20,24 +20,24 @@ Un composant est comme une brique LEGO® de votre application :
 
 ```bash
 # Générer un composant standalone
-ng generate component features/user/user-profile --standalone
+ng generate component features/user/user-profile  
 # ou version courte
-ng g c features/user/user-profile --standalone
+ng g c features/user/user-profile  
 
 # Générer un composant avec des tests
-ng g c features/user/user-profile --standalone --spec
+ng g c features/user/user-profile   --spec
 
 # Générer un composant sans fichier de style
-ng g c features/user/user-profile --standalone --inline-style
+ng g c features/user/user-profile   --inline-style
 
 # Générer un composant avec template inline
-ng g c features/user/user-profile --standalone --inline-template
+ng g c features/user/user-profile   --inline-template
 
 # Générer un composant dans un sous-dossier
-ng g c features/user/components/user-profile --standalone
+ng g c features/user/components/user-profile  
 
 # Générer un composant sans créer un dossier
-ng g c features/user/user-profile --standalone --flat
+ng g c features/user/user-profile   --flat
 ```
 
 ---

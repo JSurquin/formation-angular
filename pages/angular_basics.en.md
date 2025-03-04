@@ -150,7 +150,7 @@ routeAlias: 'mini-blog-exercise'
 
 1. Create a new Angular project:
 ```bash
-ng new mini-blog --standalone --routing --style=scss
+ng new mini-blog --routing --style=scss
 cd mini-blog
 ```
 

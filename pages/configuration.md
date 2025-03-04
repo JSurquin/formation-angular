@@ -24,7 +24,7 @@ npm install -g @angular/cli@latest
 
 ```bash
 # Création d'un nouveau projet
-ng new my-app --standalone
+ng new my-app  
 
 # Options recommandées
 ✔ Would you like to add routing? Yes

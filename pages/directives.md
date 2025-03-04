@@ -34,9 +34,9 @@ Mais aussi des pipes sont des directives :
 
 ```bash
 # Générer une directive standalone
-ng generate directive shared/directives/highlight --standalone
+ng generate directive shared/directives/highlight  
 # ou version courte
-ng g d shared/directives/highlight --standalone
+ng g d shared/directives/highlight  
 
 # Générer une directive avec des tests
 ng g d shared/directives/highlight --spec
@@ -48,9 +48,9 @@ ng g d shared/directives/highlight --flat
 ng g d shared/directives/highlight --prefix app
 
 # Générer un pipe standalone
-ng generate pipe shared/pipes/timeAgo --standalone
+ng generate pipe shared/pipes/timeAgo  
 # ou version courte
-ng g p shared/pipes/timeAgo --standalone
+ng g p shared/pipes/timeAgo  
 ```
 
 ---
