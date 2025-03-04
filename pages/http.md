@@ -7,10 +7,6 @@ routeAlias: 'http-client'
 
 ---
 
-## Le HttpClient
-
-# HTTP Client dans Angular 18/19
-
 ## Configuration moderne du HttpClient
 
 ```typescript {1-3|4-6|7-9}
@@ -18,9 +14,9 @@ routeAlias: 'http-client'
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withInterceptors([authInterceptor]),
+      withInterceptors([authInterceptor]), // Intercepteurs pour les requêtes (jwt/token)
       withFetch(), // Nouvelle API Fetch
-      withJsonpSupport()
+      withJsonpSupport() // Support JSONP
     )
   ]
 };

@@ -27,7 +27,7 @@ export const routes: Routes = [
   }
 ];
 
-// Configuration de l'application
+// Configuration de l'application dans le main.ts ou app.config.ts
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes, 

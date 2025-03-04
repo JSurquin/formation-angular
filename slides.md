@@ -5,6 +5,9 @@ layout: intro
 highlighter: shiki
 editor: true
 title: Formation Angular 18/19
+#lineNumbers: true
+record: "dev"
+lang: "en"
 #transition: slide-left
 download: "https://angular.andromed.fr/slides.pdf"
 themeConfig:
@@ -46,7 +49,7 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="composants-angular">🔧 Composants Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
-<Link to="dependency-injection">💉 Injection de dépendances</Link>
+<Link to="services-dependency-injection">📊 Services</Link>
 </div>
 
 </small>
@@ -56,7 +59,7 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <small>
 
 <div class="flex flex-col gap-2">
-<Link to="services-dependency-injection">📊 Services</Link>
+<Link to="dependency-injection">💉 Injection de dépendances</Link>
 <Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 <Link to="forms-validation">📝 Formulaires et Validation</Link>
 <Link to="rxjs-observables">🔄 RxJS et Observables</Link>
@@ -101,11 +104,11 @@ src: ./pages/component_lifecycle.md
 ---
 
 ---
-src: ./pages/dependency_injection.md
+src: ./pages/services.md
 ---
 
 ---
-src: ./pages/services.md
+src: ./pages/dependency_injection.md
 ---
 
 ---

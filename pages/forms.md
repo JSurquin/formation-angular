@@ -7,10 +7,6 @@ routeAlias: 'forms-validation'
 
 ---
 
-## Types de formulaires
-
-# Formulaires dans Angular 18/19
-
 ## Formulaires réactifs modernes avec Signals
 
 ```typescript

@@ -55,52 +55,7 @@ my-app/
 
 ---
 
-## Configuration TypeScript
-
-```json
-// tsconfig.json
-{
-  "compileOnSave": false,
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
-    "lib": ["ES2022", "dom"]
-  }
-}
-```
-
----
-
-## Configuration des environnements
-
-```typescript
-// src/environments/environment.ts
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api'
-};
-
-// src/environments/environment.prod.ts
-export const environment = {
-  production: true,
-  apiUrl: 'https://api.monapp.com'
-};
-```
-
----
-
-## Scripts NPM utiles
+## Analyse des scripts NPM utiles
 
 ```json
 // package.json
@@ -143,13 +98,15 @@ npm install prettier prettier-eslint --save-dev
 // src/app/environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'http://localhost:3000', // URL de l'API
   features: {
-    darkMode: true,
-    analytics: false
+    darkMode: true, // Mode sombre
+    analytics: false // Analyse
   }
 };
 ```
+
+---
 
 4. Testez votre configuration :
 
@@ -160,32 +117,3 @@ ng test
 ```
 
 Cette configuration vous donnera une base solide pour développer des applications Angular modernes.
-
----
-
-# Configuration avec Vite (Angular 18/19)
-
-## Nouvelle configuration de build
-
-```typescript
-// vite.config.ts
-import { defineConfig } from '@angular-devkit/build-angular/vite';
-
-export default defineConfig({
-  build: {
-    target: 'es2022'
-  },
-  server: {
-    port: 4200
-  }
-});
-```
-
----
-
-## Avantages de Vite & ESBuild
-
-- Build plus rapide
-- Hot Module Replacement amélioré
-- Meilleure gestion des dépendances
-- Consommation mémoire réduite

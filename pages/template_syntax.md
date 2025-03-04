@@ -191,15 +191,6 @@ export class ReferencesComponent {
 ```
 
 ---
-
-Cet exercice vous à permis de maîtriser :
-- La syntaxe d'interpolation
-- Les différents types de binding
-- Les directives structurelles modernes
-- L'utilisation des pipes
-- Les références de template 
-
----
 layout: exercices
 routeAlias: 'exercice-template-post'
 ---
@@ -209,8 +200,6 @@ routeAlias: 'exercice-template-post'
 ---
 
 ### 1. Créez le composant PostCard :
-
----
 
 ```typescript
 // features/posts/post-card.component.ts

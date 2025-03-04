@@ -112,11 +112,84 @@ Interpolation: `{{ expression }}`
 
 ---
 
+## Exemple d'interpolation
+
+```typescript {1-3|4-6|7-9|10-12|13-15}
+@Component({
+  template: `
+    <!-- Interpolation simple -->
+    <h1>Bienvenue {{ userName }}</h1>
+    
+    <!-- Expressions mathématiques -->
+    <p>Total: {{ price * quantity + tax }}</p>
+    
+    <!-- Expressions conditionnelles -->
+    <span>Status: {{ isActive ? 'Actif' : 'Inactif' }}</span>
+    
+    <!-- Méthodes -->
+    <div>Message: {{ getMessage() }}</div>
+  `
+})
+export class InterpolationComponent {
+  userName = 'John';
+  price = 100;
+  quantity = 2;
+  tax = 20;
+  isActive = true;
+  
+  getMessage() {
+    return 'Hello ' + this.userName;
+  }
+}
+```
+
+---
+
 - **Property binding (Liaison de propriété)**
   - Syntaxe: `[property]="value"`
   - Permet de lier une propriété d'un élément HTML à une valeur du composant
   - Exemple: `[disabled]="isLoading"` désactive un bouton selon l'état
   - Très utilisé pour les attributs HTML: `[src]`, `[href]`, `[class]`, etc.
+
+---
+
+## Exemple de Property Binding
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
+@Component({
+  template: `
+    <!-- Binding d'attributs HTML -->
+    <img [src]="imageUrl" [alt]="imageAlt">
+    
+    <!-- Binding de propriétés -->
+    <button [disabled]="isButtonDisabled">
+      {{ buttonText }}
+    </button>
+    
+    <!-- Binding de classes -->
+    <div [class.active]="isActive"
+         [class.error]="hasError">
+      Contenu stylé
+    </div>
+    
+    <!-- Binding de styles -->
+    <p [style.color]="textColor"
+       [style.font-size.px]="fontSize">
+      Texte stylé
+    </p>
+  `
+})
+export class PropertyBindingComponent {
+  imageUrl = 'assets/image.jpg';
+  imageAlt = 'Une belle image';
+  isButtonDisabled = false;
+  buttonText = 'Cliquez-moi';
+  isActive = true;
+  hasError = false;
+  textColor = 'blue';
+  fontSize = 16;
+}
+```
 
 ---
 
@@ -131,6 +204,65 @@ Interpolation: `{{ expression }}`
 
 ---
 
+## Exemple d'Event Binding
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
+@Component({
+  template: `
+    <!-- Click events -->
+    <button (click)="handleClick($event)">
+      Compteur: {{ clickCount }}
+    </button>
+    
+    <!-- Keyboard events -->
+    <input (keyup.enter)="handleEnter($event)"
+           (keydown)="handleKeyDown($event)">
+           
+    <!-- Mouse events -->
+    <div (mouseenter)="handleMouseEnter()"
+         (mouseleave)="handleMouseLeave()">
+      Zone interactive
+    </div>
+    
+    <!-- Form events -->
+    <form (submit)="handleSubmit($event)">
+      <button type="submit">Envoyer</button>
+    </form>
+  `
+})
+export class EventBindingComponent {
+  clickCount = 0;
+  
+  handleClick(event: MouseEvent) {
+    this.clickCount++;
+    console.log('Position du clic:', event.clientX, event.clientY);
+  }
+  
+  handleEnter(event: KeyboardEvent) {
+    console.log('Touche entrée pressée:', event.target['value']);
+  }
+  
+  handleKeyDown(event: KeyboardEvent) {
+    console.log('Touche pressée:', event.key);
+  }
+  
+  handleMouseEnter() {
+    console.log('Souris entrée dans la zone');
+  }
+  
+  handleMouseLeave() {
+    console.log('Souris sortie de la zone');
+  }
+  
+  handleSubmit(event: Event) {
+    event.preventDefault();
+    console.log('Formulaire soumis');
+  }
+}
+```
+
+---
+
 - **Two-way binding (Liaison bidirectionnelle)**
   - Syntaxe banana in a box: `[(ngModel)]="property"`
   - Combine property binding et event binding
@@ -138,6 +270,49 @@ Interpolation: `{{ expression }}`
   - Parfait pour les formulaires
   - Exemple: `[(ngModel)]="user.name"` synchronise un champ input avec une propriété
   - Nécessite d'importer FormsModule ou le NgModel dans le composant standalone
+
+---
+
+## Exemple de Two-way Binding
+
+```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
+@Component({
+  standalone: true,
+  imports: [FormsModule],
+  template: `
+    <!-- Input text basique -->
+    <input [(ngModel)]="userName">
+    <p>Bonjour {{ userName }}!</p>
+    
+    <!-- Textarea -->
+    <textarea [(ngModel)]="description"
+              rows="4">
+    </textarea>
+    <p>Description: {{ description }}</p>
+    
+    <!-- Select -->
+    <select [(ngModel)]="selectedColor">
+      <option value="red">Rouge</option>
+      <option value="blue">Bleu</option>
+      <option value="green">Vert</option>
+    </select>
+    <p>Couleur sélectionnée: {{ selectedColor }}</p>
+    
+    <!-- Checkbox -->
+    <label>
+      <input type="checkbox" [(ngModel)]="isSubscribed">
+      S'abonner à la newsletter
+    </label>
+    <p>Statut abonnement: {{ isSubscribed }}</p>
+  `
+})
+export class TwoWayBindingComponent {
+  userName = '';
+  description = '';
+  selectedColor = 'red';
+  isSubscribed = false;
+}
+```
 
 ---
 layout: exercices
