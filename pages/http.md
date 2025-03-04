@@ -296,63 +296,111 @@ export class CacheService {
 
 ---
 layout: exercices
-routeAlias: 'exercice-api-rest'
+routeAlias: 'exercice-http-blog'
 ---
 
-## Exercice : Service API du Blog
+## Exercice : Implémentation HTTP pour le Mini-Blog
+
+### Objectif
+Mettre en place les appels HTTP pour notre mini-blog en utilisant les concepts vus précédemment.
 
 ---
 
-1. Créez le service API :
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24|25-27}
-// core/services/api.service.ts
-@Injectable({
-  providedIn: 'root'
-})
-export class ApiService {
-  private http = inject(HttpClient)
-  private baseUrl = 'https://api.blog.com'
+### 1. Configuration du service API
 
-  private loading = signal(false)
-  private error = signal<string | null>(null)
+```typescript
+@Injectable({ providedIn: 'root' })
+export class BlogApiService {
+  constructor(private http: HttpClient) {}
 
-  readonly isLoading = this.loading.asReadonly()
-  readonly currentError = this.error.asReadonly()
-
-  constructor() {
-    // Intercepter les erreurs globales
-    effect(() => {
-      if (this.error()) {
-        console.error('API Error:', this.error())
-        // Notifier l'utilisateur
-      }
-    })
+  // Récupération paginée des articles
+  getPosts(page = 1, limit = 10): Observable<PaginatedResponse<Post>> {
+    return this.http.get<PaginatedResponse<Post>>('/api/posts', {
+      params: { page: page.toString(), limit: limit.toString() }
+    });
   }
 
-  get<T>(endpoint: string) {
-    this.loading.set(true)
-    this.error.set(null)
+  // Création d'un article avec upload d'image
+  createPost(post: CreatePostDto, image?: File): Observable<Post> {
+    const formData = new FormData();
+    formData.append('title', post.title);
+    formData.append('content', post.content);
+    if (image) {
+      formData.append('image', image);
+    }
 
-    return this.http.get<T>(`${this.baseUrl}${endpoint}`).pipe(
-      finalize(() => this.loading.set(false)),
-      catchError(err => {
-        this.error.set(err.message)
-        return EMPTY
-      })
-    )
-  }
-
-  post<T>(endpoint: string, data: any) {
-    this.loading.set(true)
-    this.error.set(null)
-
-    return this.http.post<T>(`${this.baseUrl}${endpoint}`, data).pipe(
-      finalize(() => this.loading.set(false)),
-      catchError(err => {
-        this.error.set(err.message)
-        return EMPTY
-      })
-    )
+    return this.http.post<Post>('/api/posts', formData);
   }
 }
+```
+
+---
+
+### 2. Gestion des erreurs
+
+```typescript
+@Injectable()
+export class BlogErrorInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Une erreur est survenue';
+        
+        if (error.error instanceof ErrorEvent) {
+          // Erreur côté client
+          errorMessage = error.error.message;
+        } else {
+          // Erreur côté serveur
+          switch (error.status) {
+            case 404:
+              errorMessage = 'Article non trouvé';
+              break;
+            case 403:
+              errorMessage = 'Accès non autorisé';
+              break;
+            // ... autres cas
+          }
+        }
+        
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+}
+```
+
+---
+
+### 3. Cache des articles
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class PostCacheService {
+  private cache = new Map<string, Post>();
+  private cacheTime = 5 * 60 * 1000; // 5 minutes
+
+  getPost(id: number): Observable<Post> {
+    const cached = this.cache.get(id.toString());
+    if (cached) {
+      return of(cached);
+    }
+
+    return this.http.get<Post>(`/api/posts/${id}`).pipe(
+      tap(post => {
+        this.cache.set(id.toString(), post);
+        setTimeout(() => {
+          this.cache.delete(id.toString());
+        }, this.cacheTime);
+      })
+    );
+  }
+}
+```
+
+Cette section d'exercice permet de mettre en pratique :
+- Les appels HTTP avec gestion de paramètres
+- L'upload de fichiers
+- La gestion d'erreurs personnalisée
+- La mise en cache des données
+- L'utilisation des intercepteurs
 ``` 

@@ -355,3 +355,88 @@ export class PostListComponent {
   ];
 }
 ``` 
+
+## Exercice : Création des composants du Mini-Blog
+
+### Structure des composants
+
+```typescript
+// Liste des articles
+@Component({
+  selector: 'app-post-list',
+  standalone: true,
+  template: `
+    <div class="posts-grid">
+      @for (post of posts; track post.id) {
+        <app-post-card [post]="post" />
+      }
+    </div>
+  `
+})
+export class PostListComponent {
+  posts = signal<Post[]>([]);
+}
+
+// Détail d'un article
+@Component({
+  selector: 'app-post-detail',
+  standalone: true,
+  template: `
+    <article class="post-detail">
+      <h1>{{ post()?.title }}</h1>
+      <div class="content">{{ post()?.content }}</div>
+      <app-comment-list [postId]="post()?.id" />
+    </article>
+  `
+})
+export class PostDetailComponent {
+  post = signal<Post | null>(null);
+}
+```
+
+### Composant de formulaire
+
+```typescript
+@Component({
+  selector: 'app-post-form',
+  standalone: true,
+  template: `
+    <form class="post-form" (ngSubmit)="onSubmit()">
+      <input [(ngModel)]="title" placeholder="Titre" />
+      <textarea [(ngModel)]="content" placeholder="Contenu"></textarea>
+      <button type="submit">Publier</button>
+    </form>
+  `
+})
+export class PostFormComponent {
+  @Output() submitted = new EventEmitter<Post>();
+}
+```
+
+### Dashboard Admin
+
+```typescript
+@Component({
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  template: `
+    <div class="admin-dashboard">
+      <h2>Tableau de bord</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Articles</h3>
+          <p>{{ postCount() }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Commentaires</h3>
+          <p>{{ commentCount() }}</p>
+        </div>
+      </div>
+    </div>
+  `
+})
+export class AdminDashboardComponent {
+  postCount = signal(0);
+  commentCount = signal(0);
+}
+``` 

@@ -352,4 +352,150 @@ export const authGuard: CanActivateFn = () => {
     queryParams: { returnUrl: router.url }
   })
 }
-``` 
+```
+
+---
+
+## Exercice : Routing et Sécurité du Mini-Blog
+
+### Configuration des routes
+
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+    title: 'Accueil'
+  },
+  {
+    path: 'posts',
+    children: [
+      {
+        path: '',
+        component: PostListComponent,
+        title: 'Articles'
+      },
+      {
+        path: ':id',
+        component: PostDetailComponent,
+        title: 'Article',
+        resolve: {
+          post: (route: ActivatedRoute) => {
+            const id = route.paramMap.pipe(map(params => params.get('id')));
+            return inject(PostService).getPost(id);
+          }
+        }
+      }
+    ]
+  },
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: AdminDashboardComponent,
+        title: 'Dashboard'
+      },
+      {
+        path: 'posts/new',
+        component: PostFormComponent,
+        title: 'Nouvel article',
+        canDeactivate: [unsavedChangesGuard]
+      },
+      {
+        path: 'posts/edit/:id',
+        component: PostFormComponent,
+        title: 'Modifier l\'article',
+        canDeactivate: [unsavedChangesGuard]
+      }
+    ]
+  }
+];
+```
+
+### Guard d'authentification
+
+```typescript
+// guards/auth.guard.ts
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+  
+  return router.createUrlTree(['/login'], {
+    queryParams: { returnUrl: state.url }
+  });
+};
+```
+
+### Guard de changements non sauvegardés
+
+```typescript
+// guards/unsaved-changes.guard.ts
+export interface HasUnsavedChanges {
+  hasUnsavedChanges(): boolean;
+}
+
+export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = 
+  (component, currentRoute, currentState, nextState) => {
+    if (component.hasUnsavedChanges()) {
+      return confirm(
+        'Vous avez des modifications non sauvegardées. Voulez-vous vraiment quitter ?'
+      );
+    }
+    return true;
+  };
+```
+
+### Intercepteur HTTP pour l'authentification
+
+```typescript
+// interceptors/auth.interceptor.ts
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token = this.authService.getToken();
+
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+}
+
+// Configuration
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    )
+  ]
+}); 

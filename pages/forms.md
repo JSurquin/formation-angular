@@ -522,3 +522,152 @@ export class PostFormComponent {
   }
 }
 ```
+
+---
+
+## Exercice : Formulaires du Mini-Blog
+
+### Formulaire de connexion (Template-driven)
+
+```typescript
+@Component({
+  selector: 'app-login-form',
+  template: `
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="loginData.email"
+          required
+          email
+          #email="ngModel"
+        >
+        @if (email.invalid && email.touched) {
+          <span class="error">Email invalide</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="loginData.password"
+          required
+          minlength="6"
+          #password="ngModel"
+        >
+        @if (password.invalid && password.touched) {
+          <span class="error">
+            Le mot de passe doit contenir au moins 6 caractères
+          </span>
+        }
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">
+        Se connecter
+      </button>
+    </form>
+  `
+})
+export class LoginFormComponent {
+  loginData = {
+    email: '',
+    password: ''
+  };
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      // Traitement du formulaire
+      console.log(this.loginData);
+    }
+  }
+}
+```
+
+### Formulaire d'article (Reactive Form)
+
+```typescript
+@Component({
+  selector: 'app-post-form',
+  template: `
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">Titre</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+        >
+        @if (titleErrors()) {
+          <span class="error">{{ titleErrors() }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="content">Contenu</label>
+        <textarea
+          id="content"
+          formControlName="content"
+          rows="10"
+        ></textarea>
+        @if (contentErrors()) {
+          <span class="error">{{ contentErrors() }}</span>
+        }
+      </div>
+
+      <button type="submit" [disabled]="!postForm.valid || submitting()">
+        {{ submitting() ? 'Publication...' : 'Publier' }}
+      </button>
+    </form>
+  `
+})
+export class PostFormComponent {
+  submitting = signal(false);
+  
+  postForm = new FormGroup({
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5)
+    ]),
+    content: new FormControl('', [
+      Validators.required,
+      Validators.minLength(50)
+    ])
+  });
+
+  titleErrors = computed(() => {
+    const control = this.postForm.get('title');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Le titre est requis';
+      if (control.errors['minlength']) return 'Le titre doit contenir au moins 5 caractères';
+    }
+    return null;
+  });
+
+  contentErrors = computed(() => {
+    const control = this.postForm.get('content');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Le contenu est requis';
+      if (control.errors['minlength']) return 'Le contenu doit contenir au moins 50 caractères';
+    }
+    return null;
+  });
+
+  async onSubmit() {
+    if (this.postForm.valid) {
+      this.submitting.set(true);
+      try {
+        // Traitement du formulaire
+        console.log(this.postForm.value);
+      } finally {
+        this.submitting.set(false);
+      }
+    }
+  }
+}
+```

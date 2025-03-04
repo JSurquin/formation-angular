@@ -605,3 +605,174 @@ export class PostListComponent {
     this.blogState.selectPost(post)
   }
 } 
+```
+
+---
+
+## Exercice : Gestion d'État du Mini-Blog avec Signals
+
+### État des Posts
+
+```typescript
+// stores/post.store.ts
+interface PostState {
+  posts: Post[];
+  selectedPost: Post | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+@Injectable({ providedIn: 'root' })
+export class PostStore {
+  // État privé
+  private state = signal<PostState>({
+    posts: [],
+    selectedPost: null,
+    loading: false,
+    error: null
+  });
+
+  // Sélecteurs publics
+  readonly posts = computed(() => this.state().posts);
+  readonly selectedPost = computed(() => this.state().selectedPost);
+  readonly loading = computed(() => this.state().loading);
+  readonly error = computed(() => this.state().error);
+
+  // Sélecteurs dérivés
+  readonly sortedPosts = computed(() => 
+    [...this.posts()].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+  );
+
+  readonly postCount = computed(() => this.posts().length);
+
+  constructor(private postService: PostService) {
+    // Effet pour sauvegarder l'état dans le localStorage
+    effect(() => {
+      localStorage.setItem('posts', JSON.stringify(this.posts()));
+    });
+  }
+
+  // Actions
+  async loadPosts() {
+    this.state.update(s => ({ ...s, loading: true, error: null }));
+    try {
+      const posts = await this.postService.getPosts();
+      this.state.update(s => ({ ...s, posts, loading: false }));
+    } catch (error) {
+      this.state.update(s => ({ 
+        ...s, 
+        error: error as Error,
+        loading: false 
+      }));
+    }
+  }
+
+  selectPost(id: number) {
+    const post = this.posts().find(p => p.id === id);
+    this.state.update(s => ({ ...s, selectedPost: post }));
+  }
+
+  async createPost(post: Omit<Post, 'id'>) {
+    this.state.update(s => ({ ...s, loading: true, error: null }));
+    try {
+      const newPost = await this.postService.createPost(post);
+      this.state.update(s => ({
+        ...s,
+        posts: [...s.posts, newPost],
+        loading: false
+      }));
+    } catch (error) {
+      this.state.update(s => ({
+        ...s,
+        error: error as Error,
+        loading: false
+      }));
+    }
+  }
+}
+```
+
+### État de l'Authentification
+
+```typescript
+// stores/auth.store.ts
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+@Injectable({ providedIn: 'root' })
+export class AuthStore {
+  // État privé
+  private state = signal<AuthState>({
+    user: null,
+    token: null,
+    loading: false,
+    error: null
+  });
+
+  // Sélecteurs publics
+  readonly user = computed(() => this.state().user);
+  readonly isAuthenticated = computed(() => !!this.state().token);
+  readonly loading = computed(() => this.state().loading);
+  readonly error = computed(() => this.state().error);
+
+  // Sélecteurs dérivés
+  readonly isAdmin = computed(() => 
+    this.user()?.role === 'admin'
+  );
+
+  constructor(private authService: AuthService) {
+    // Restauration de la session
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.state.update(s => ({ ...s, token }));
+      this.loadUser();
+    }
+  }
+
+  // Actions
+  async login(credentials: { email: string; password: string }) {
+    this.state.update(s => ({ ...s, loading: true, error: null }));
+    try {
+      const { user, token } = await this.authService.login(credentials);
+      this.state.update(s => ({
+        ...s,
+        user,
+        token,
+        loading: false
+      }));
+      localStorage.setItem('token', token);
+    } catch (error) {
+      this.state.update(s => ({
+        ...s,
+        error: error as Error,
+        loading: false
+      }));
+    }
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.state.update(s => ({
+      ...s,
+      user: null,
+      token: null
+    }));
+  }
+
+  private async loadUser() {
+    if (!this.state().token) return;
+    
+    try {
+      const user = await this.authService.getProfile();
+      this.state.update(s => ({ ...s, user }));
+    } catch {
+      this.logout();
+    }
+  }
+} 

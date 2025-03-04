@@ -484,71 +484,213 @@ layout: exercices
 routeAlias: 'exercice-search-realtime'
 ---
 
-## Exercice : Recherche de Posts
+## Exercice : Recherche en temps réel pour le Mini-Blog
 
----
+### Composant de recherche
 
-1. Créez le composant de recherche :
 ```typescript
-// features/posts/post-search.component.ts
 @Component({
   selector: 'app-post-search',
-  standalone: true,
   template: `
-    <div class="search">
-      <input 
-        type="text" 
+    <div class="search-container">
+      <input
+        type="text"
         [ngModel]="searchTerm()"
-        (ngModelChange)="searchTerm.set($event)"
-        placeholder="Rechercher..."
+        (ngModelChange)="searchTerm$.next($event)"
+        placeholder="Rechercher des articles..."
+        class="search-input"
       >
-      
+
       @if (loading()) {
-        <spinner />
-      } @else {
-        <div class="results">
-          @for (post of results(); track post.id) {
-            <app-post-card 
-              [post]="post"
-              (click)="selectPost(post)"
-            />
-          }
+        <div class="loading-spinner">Chargement...</div>
+      }
+
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
         </div>
       }
+
+      <div class="search-results">
+        @for (post of searchResults(); track post.id) {
+          <div class="post-card">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+            <a [routerLink]="['/posts', post.id]">Lire la suite</a>
+          </div>
+        }
+      </div>
     </div>
   `
 })
 export class PostSearchComponent {
-  private postService = inject(PostService)
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private loading = signal(false);
+  private error = signal<string | null>(null);
+
+  // État de la recherche avec Signals
+  searchTerm = toSignal(this.searchTerm$);
   
-  searchTerm = signal('')
-  loading = signal(false)
-  
-  // Convertir le signal en Observable
-  private searchTerm$ = toObservable(this.searchTerm)
-  
-  results = toSignal(
+  // Résultats de recherche
+  searchResults = toSignal(
     this.searchTerm$.pipe(
       // Attendre que l'utilisateur arrête de taper
       debounceTime(300),
-      // Ignorer si le terme est le même
+      // Éviter les recherches identiques
       distinctUntilChanged(),
+      // Ignorer les termes trop courts
+      filter(term => term.length >= 2),
+      // Indiquer le chargement
       tap(() => this.loading.set(true)),
-      // Annuler la requête précédente
-      switchMap(term => 
-        term.length > 2
-          ? this.postService.searchPosts(term)
-          : of([])
-      ),
-      tap(() => this.loading.set(false))
+      // Annuler la recherche précédente si une nouvelle arrive
+      switchMap(term => this.postService.searchPosts(term).pipe(
+        // Gérer les erreurs pour chaque recherche
+        catchError(err => {
+          this.error.set('Erreur lors de la recherche');
+          return of([]);
+        }),
+        // Fin du chargement
+        finalize(() => this.loading.set(false))
+      ))
     ),
     { initialValue: [] }
-  )
+  );
 
-  selectPost(post: Post) {
-    // Navigation vers le post
+  constructor(private postService: PostService) {}
+}
+```
+
+### Service de recherche
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class PostService {
+  searchPosts(term: string): Observable<Post[]> {
+    return this.http.get<Post[]>('/api/posts/search', {
+      params: { q: term }
+    }).pipe(
+      // Transformer les résultats
+      map(posts => posts.map(post => ({
+        ...post,
+        excerpt: this.createExcerpt(post.content)
+      }))),
+      // Trier par pertinence
+      map(posts => this.sortByRelevance(posts, term))
+    );
   }
-} 
+
+  private createExcerpt(content: string): string {
+    return content.substring(0, 150) + '...';
+  }
+
+  private sortByRelevance(posts: Post[], term: string): Post[] {
+    return [...posts].sort((a, b) => {
+      const aScore = this.calculateRelevance(a, term);
+      const bScore = this.calculateRelevance(b, term);
+      return bScore - aScore;
+    });
+  }
+
+  private calculateRelevance(post: Post, term: string): number {
+    const titleMatch = post.title.toLowerCase().includes(term.toLowerCase());
+    const contentMatch = post.content.toLowerCase().includes(term.toLowerCase());
+    return (titleMatch ? 2 : 0) + (contentMatch ? 1 : 0);
+  }
+}
+```
+
+### Filtres combinés
+
+```typescript
+@Component({
+  selector: 'app-post-filters',
+  template: `
+    <div class="filters">
+      <select [ngModel]="category()" (ngModelChange)="category$.next($event)">
+        <option value="">Toutes les catégories</option>
+        @for (cat of categories(); track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+
+      <select [ngModel]="sortBy()" (ngModelChange)="sortBy$.next($event)">
+        <option value="date">Plus récents</option>
+        <option value="title">Alphabétique</option>
+        <option value="popularity">Popularité</option>
+      </select>
+
+      <select [ngModel]="author()" (ngModelChange)="author$.next($event)">
+        <option value="">Tous les auteurs</option>
+        @for (auth of authors(); track auth.id) {
+          <option [value]="auth.id">{{ auth.name }}</option>
+        }
+      </select>
+    </div>
+  `
+})
+export class PostFiltersComponent {
+  // Sources des filtres
+  private category$ = new BehaviorSubject<string>('');
+  private sortBy$ = new BehaviorSubject<string>('date');
+  private author$ = new BehaviorSubject<string>('');
+
+  // Conversion en Signals
+  category = toSignal(this.category$);
+  sortBy = toSignal(this.sortBy$);
+  author = toSignal(this.author$);
+
+  // Données des filtres
+  categories = computed(() => 
+    [...new Set(this.postStore.posts().map(p => p.category))]
+  );
+  
+  authors = computed(() => 
+    [...new Set(this.postStore.posts().map(p => p.author))]
+  );
+
+  // Combinaison des filtres
+  filteredPosts = toSignal(
+    combineLatest({
+      posts: this.postStore.posts$,
+      category: this.category$,
+      sortBy: this.sortBy$,
+      author: this.author$
+    }).pipe(
+      map(({ posts, category, sortBy, author }) => {
+        let filtered = posts;
+
+        // Filtre par catégorie
+        if (category) {
+          filtered = filtered.filter(p => p.category === category);
+        }
+
+        // Filtre par auteur
+        if (author) {
+          filtered = filtered.filter(p => p.author.id === author);
+        }
+
+        // Tri
+        filtered = [...filtered].sort((a, b) => {
+          switch (sortBy) {
+            case 'date':
+              return new Date(b.date).getTime() - new Date(a.date).getTime();
+            case 'title':
+              return a.title.localeCompare(b.title);
+            case 'popularity':
+              return b.views - a.views;
+            default:
+              return 0;
+          }
+        });
+
+        return filtered;
+      })
+    ),
+    { initialValue: [] }
+  );
+
+  constructor(private postStore: PostStore) {}
+}
 ```
 
 ---

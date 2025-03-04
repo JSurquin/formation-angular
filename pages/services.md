@@ -318,3 +318,118 @@ export class PostService {
   }
 }
 ```
+
+---
+
+## Exercice : Services du Mini-Blog
+
+### Service d'authentification
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private user = signal<User | null>(null);
+  private token = signal<string | null>(null);
+
+  constructor(private http: HttpClient) {
+    // Restauration de la session
+    const savedToken = localStorage.getItem('token');
+    if (savedToken) {
+      this.token.set(savedToken);
+      this.loadUser();
+    }
+  }
+
+  async login(credentials: { email: string; password: string }) {
+    const response = await this.http.post<AuthResponse>('/api/login', credentials).toPromise();
+    this.token.set(response.token);
+    this.user.set(response.user);
+    localStorage.setItem('token', response.token);
+  }
+
+  logout() {
+    this.token.set(null);
+    this.user.set(null);
+    localStorage.removeItem('token');
+  }
+
+  private async loadUser() {
+    if (this.token()) {
+      const user = await this.http.get<User>('/api/me').toPromise();
+      this.user.set(user);
+    }
+  }
+}
+```
+
+### Service des articles
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class PostService {
+  private posts = signal<Post[]>([]);
+  private loading = signal(false);
+  private error = signal<Error | null>(null);
+
+  // Computed values
+  readonly sortedPosts = computed(() => 
+    [...this.posts()].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
+  );
+
+  constructor(private http: HttpClient) {}
+
+  async fetchPosts() {
+    this.loading.set(true);
+    try {
+      const posts = await this.http.get<Post[]>('/api/posts').toPromise();
+      this.posts.set(posts);
+    } catch (err) {
+      this.error.set(err as Error);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async createPost(post: Omit<Post, 'id'>) {
+    const newPost = await this.http.post<Post>('/api/posts', post).toPromise();
+    this.posts.update(posts => [...posts, newPost]);
+    return newPost;
+  }
+
+  async deletePost(id: number) {
+    await this.http.delete(`/api/posts/${id}`).toPromise();
+    this.posts.update(posts => posts.filter(p => p.id !== id));
+  }
+}
+```
+
+### Service des commentaires
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class CommentService {
+  private comments = signal<Comment[]>([]);
+
+  constructor(private http: HttpClient) {}
+
+  async getCommentsByPost(postId: number) {
+    const comments = await this.http.get<Comment[]>(`/api/posts/${postId}/comments`).toPromise();
+    this.comments.set(comments);
+    return comments;
+  }
+
+  async addComment(postId: number, content: string) {
+    const comment = await this.http.post<Comment>(`/api/posts/${postId}/comments`, { content }).toPromise();
+    this.comments.update(comments => [...comments, comment]);
+    return comment;
+  }
+}
+```
