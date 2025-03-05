@@ -397,7 +397,11 @@ export class PostCacheService {
 }
 ```
 
-Cette section d'exercice permet de mettre en pratique :
+---
+
+## Conclusion
+
+Cette section d'exercice vous à permis de mettre en pratique :
 - Les appels HTTP avec gestion de paramètres
 - L'upload de fichiers
 - La gestion d'erreurs personnalisée

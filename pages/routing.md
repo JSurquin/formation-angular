@@ -416,6 +416,8 @@ export const routes: Routes = [
 ];
 ```
 
+---
+
 ### Guard d'authentification
 
 ```typescript
@@ -433,6 +435,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   });
 };
 ```
+
+---
 
 ### Guard de changements non sauvegardés
 
@@ -452,6 +456,8 @@ export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> =
     return true;
   };
 ```
+
+---
 
 ### Intercepteur HTTP pour l'authentification
 
@@ -489,8 +495,14 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 }
+```
 
-// Configuration
+---
+
+### Configuration de l'application
+
+```typescript
+// app.config.ts
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),

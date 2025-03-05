@@ -589,6 +589,8 @@ export class LoginFormComponent {
 }
 ```
 
+---
+
 ### Formulaire d'article (Reactive Form)
 
 ```typescript

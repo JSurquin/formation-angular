@@ -19,6 +19,10 @@ A vrai dire, depuis le début de la formation, vous en avez utilisé plusieurs :
 - `*ngStyle` maintenant [ngStyle]
 - `*ngClass` maintenant [ngClass]
 
+---
+
+## Pipes
+
 Mais aussi des pipes sont des directives :
 
 - `date`

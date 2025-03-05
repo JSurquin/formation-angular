@@ -486,6 +486,8 @@ routeAlias: 'exercice-search-realtime'
 
 ## Exercice : Recherche en temps réel pour le Mini-Blog
 
+---
+
 ### Composant de recherche
 
 ```typescript

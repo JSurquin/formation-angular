@@ -694,6 +694,8 @@ export class PostStore {
 }
 ```
 
+---
+
 ### État de l'Authentification
 
 ```typescript
