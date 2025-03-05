@@ -70,7 +70,7 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="testing">🧪 Tests unitaires et E2E</Link>
 <Link to="deployment">📦 Déploiement</Link>
 <Link to="best-practices">🔍 Bonnes pratiques</Link>
-<Link to="source-code">🧑‍💻 Code source du projet</Link>
+<Link href="https://github.com/JSurquin/angular-19-mini-blog" target="_blank">🧑‍💻 Code source du projet</Link>
 </div>
 
 </small>
