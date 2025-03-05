@@ -356,6 +356,8 @@ export class PostListComponent {
 }
 ``` 
 
+---
+
 ## Exercice : Création des composants du Mini-Blog
 
 ### Structure des composants
@@ -394,6 +396,8 @@ export class PostDetailComponent {
 }
 ```
 
+---
+
 ### Composant de formulaire
 
 ```typescript
@@ -412,6 +416,8 @@ export class PostFormComponent {
   @Output() submitted = new EventEmitter<Post>();
 }
 ```
+
+---
 
 ### Dashboard Admin
 
