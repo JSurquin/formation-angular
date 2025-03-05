@@ -439,6 +439,8 @@ vercel login
 }
 ```
 
+---
+
 2. Configurez le build :
 ```json
 {
