@@ -39,23 +39,15 @@ ng g c mon-composant
 
 # Générer un service
 ng generate service mon-service
-# ou version courte
-ng g s mon-service
 
 # Générer une directive
 ng generate directive ma-directive
-# ou version courte
-ng g d ma-directive
 
 # Générer un pipe
 ng generate pipe mon-pipe
-# ou version courte
-ng g p mon-pipe
 
 # Générer une interface
 ng generate interface mon-interface
-# ou version courte
-ng g i mon-interface
 
 # Builder l'application pour la production
 ng build --prod
