@@ -323,6 +323,8 @@ export class PostService {
 
 ## Exercice : Services du Mini-Blog
 
+---
+
 ### Service d'authentification
 
 ```typescript
@@ -363,6 +365,8 @@ export class AuthService {
   }
 }
 ```
+
+---
 
 ### Service des articles
 
@@ -408,6 +412,8 @@ export class PostService {
   }
 }
 ```
+
+---
 
 ### Service des commentaires
 
