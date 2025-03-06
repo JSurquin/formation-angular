@@ -46,11 +46,11 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="typescript-essentials">💡 TypeScript Essentiels</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
 <Link to="angular-basics">🎯 Les Bases d'Angular</Link>
-<Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 <Link to="composants-angular">🔧 Composants Angular</Link>
 <Link to="tailwind-setup">🎨 Tailwind v4 dans Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
+<Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 </div>
 
 </small>
@@ -93,10 +93,6 @@ src: ./pages/angular_basics.md
 ---
 
 ---
-src: ./pages/routing.md
----
-
----
 src: ./pages/composants.md
 ---
 
@@ -110,6 +106,10 @@ src: ./pages/template_syntax.md
 
 ---
 src: ./pages/component_lifecycle.md
+---
+
+---
+src: ./pages/routing.md
 ---
 
 ---
