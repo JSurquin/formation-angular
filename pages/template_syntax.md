@@ -404,3 +404,82 @@ Points clés :
 - Typage fort
 - Utilisation des pipes
 - Styling avec Tailwind
+
+# Control Flow Moderne (Angular 18/19)
+
+## Nouvelle Syntaxe @if
+
+```typescript
+@Component({
+  template: `
+    @if (user()) {
+      <h1>Bienvenue {{ user().name }}</h1>
+    } @else if (loading()) {
+      <spinner-component />
+    } @else {
+      <login-form />
+    }
+  `
+})
+export class WelcomeComponent {
+  user = signal<User | null>(null);
+  loading = signal(true);
+}
+```
+
+## Boucle @for Optimisée
+
+```typescript
+@Component({
+  template: `
+    @for (post of posts(); track post.id) {
+      <article class="post">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        @if (post.isPublished) {
+          <span class="badge">Publié</span>
+        }
+      </article>
+    }
+  `
+})
+export class BlogListComponent {
+  posts = signal<Post[]>([]);
+}
+```
+
+## Switch Case Moderne
+
+```typescript
+@Component({
+  template: `
+    @switch (post.status) {
+      @case ('draft') {
+        <draft-preview [post]="post" />
+      }
+      @case ('published') {
+        <published-post [post]="post" />
+      }
+      @case ('archived') {
+        <archived-post [post]="post" />
+      }
+      @default {
+        <p>Status inconnu</p>
+      }
+    }
+  `
+})
+```
+
+## Note d'Expert 💡
+
+Le nouveau control flow d'Angular 18/19 apporte plusieurs avantages :
+- Meilleure performance (plus besoin de NgModules)
+- Syntaxe plus claire et intuitive
+- Meilleure intégration avec TypeScript
+- Support natif du tracking pour les boucles
+
+Pour le mini-blog, utilisez ces nouvelles syntaxes pour :
+1. Gérer l'affichage conditionnel des boutons d'édition (@if)
+2. Afficher la liste des articles (@for avec tracking)
+3. Gérer les différents états de chargement (@switch)
