@@ -27,7 +27,7 @@ routeAlias: 'angular-basics'
 
 ```bash
 # Création d'un nouveau projet
-ng new mon-projet   --routing --style=scss
+ng new mon-projet
 
 # Lancer le serveur de développement
 ng serve
@@ -180,57 +180,3 @@ export class InterpolationComponent {
   }
 }
 ```
-
----
-layout: exercices
-routeAlias: 'exercice-mini-blog'
----
-
-# Exercice : Création du projet Mini-Blog
-
----
-
-1. Créez un nouveau projet Angular :
-```bash
-ng new mini-blog
-cd mini-blog
-```
-
-2. Configurez la structure initiale (ou gardez la structure par défaut si vous le souhaitez pour le moment) :
-
-```bash
-mkdir src/app/features
-mkdir src/app/shared
-mkdir src/app/core
-```
-
----
-
-3. Créez le composant principal :
-
-```bash
-ng generate component src/app/features/home
-```
-
-```typescript
-// app.component.ts
-@Component({
-  selector: 'app-root',
-  template: `
-    <header>
-      <h1>{{ title }}</h1>
-    </header>
-    <main>
-      <router-outlet />
-    </main>
-  `
-})
-export class AppComponent {
-  title = 'Mini Blog';
-}
-```
-
-4. Testez l'application :
-```bash
-ng serve
-``` 

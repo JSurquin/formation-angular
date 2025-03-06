@@ -270,6 +270,8 @@ routeAlias: 'exercice-blog-routing'
 
 ## Mini-Blog : Configuration du Routing
 
+---
+
 ### Configuration des routes
 
 ```typescript
@@ -314,6 +316,8 @@ export const routes: Routes = [
 ]
 ```
 
+---
+
 ### Guard d'authentification
 
 ```typescript
@@ -331,10 +335,12 @@ export const authGuard: CanActivateFn = (route, state) => {
 }
 ```
 
+---
+
 ### Navigation dans les composants
 
 ```typescript
-// post-card.component.ts
+// post-card.component.ts (composant enfant)
 @Component({
   template: `
     <article class="border rounded-lg p-4">
@@ -353,10 +359,12 @@ export class PostCardComponent {
 }
 ```
 
+---
+
 ### Menu de navigation
 
 ```typescript
-// header.component.ts
+// header.component.ts (composant parent)
 @Component({
   template: `
     <nav class="bg-gray-800 text-white p-4">
@@ -400,3 +408,123 @@ export class HeaderComponent {
     this.authService.logout()
   }
 } 
+```
+
+---
+layout: exercices
+routeAlias: 'exercice-blog-guards'
+---
+
+## Mini-Blog : Protection des Routes
+
+### Configuration des Guards
+
+```typescript
+// guards/auth.guard.ts
+export const authGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
+  
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+  
+  // Stocker l'URL tentée pour rediriger après login
+  return router.createUrlTree(['/login'], { 
+    queryParams: { returnUrl: state.url }
+  });
+};
+
+// guards/admin.guard.ts
+export const adminGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  if (authService.isAdmin()) {
+    return true;
+  }
+  
+  return router.createUrlTree(['/unauthorized']);
+};
+```
+
+### Application des Guards
+
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  { path: '', component: BlogListComponent },
+  { path: 'login', component: LoginComponent },
+  { 
+    path: 'admin', 
+    canActivate: [authGuard, adminGuard],
+    children: [
+      { path: 'posts/new', component: PostFormComponent },
+      { path: 'posts/:id/edit', component: PostFormComponent }
+    ]
+  },
+  { 
+    path: 'posts', 
+    children: [
+      { path: '', component: PostListComponent },
+      { 
+        path: 'new', 
+        component: PostFormComponent,
+        canActivate: [authGuard]
+      },
+      { 
+        path: ':id', 
+        component: PostDetailComponent 
+      },
+      { 
+        path: ':id/edit', 
+        component: PostFormComponent,
+        canActivate: [authGuard]
+      }
+    ]
+  }
+];
+```
+
+### Gestion de la Redirection
+
+```typescript
+// components/login.component.ts
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  template: `
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- ... form fields ... -->
+    </form>
+  `
+})
+export class LoginComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+
+  loginForm = inject(FormBuilder).group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      
+      if (this.authService.login(email!, password!)) {
+        // Récupérer l'URL de retour ou aller à la page d'accueil
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigateByUrl(returnUrl);
+      }
+    }
+  }
+}
+```
+
+Cette configuration :
+- Protège les routes sensibles avec `authGuard`
+- Ajoute une protection supplémentaire pour les admins
+- Gère la redirection après login
+- Conserve l'URL tentée pour y retourner après authentification 

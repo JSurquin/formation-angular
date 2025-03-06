@@ -256,241 +256,135 @@ export class AuthService {
 
 ---
 layout: exercices
-routeAlias: 'exercice-service-blog'
+routeAlias: 'exercice-blog-auth'
 ---
 
-# Exercice : Service de Blog
+## Mini-Blog : Service d'Authentification
 
----
-
-1. Créez l'interface Post :
-```typescript
-// features/posts/post.model.ts
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  excerpt: string;
-  author: string;
-  date: Date;
-}
-```
-
----
-
-2. Créez le service PostService :
-```typescript
-// features/posts/post.service.ts
-@Injectable({
-  providedIn: 'root'
-})
-export class PostService {
-  private posts = signal<Post[]>([]);
-  readonly allPosts = this.posts.asReadonly();
-  
-  constructor(private http: HttpClient) {}
-
-  loadPosts() {
-    return this.http.get<Post[]>('/api/posts').pipe(
-      tap(posts => this.posts.set(posts))
-    );
-  }
-
-  getPost(id: number) {
-    return this.http.get<Post>(`/api/posts/${id}`);
-  }
-
-  createPost(post: Omit<Post, 'id'>) {
-    return this.http.post<Post>('/api/posts', post).pipe(
-      tap(newPost => {
-        this.posts.update(posts => [...posts, newPost]);
-      })
-    );
-  }
-}
-```
-
----
-
-## Exercice : Services du Mini-Blog
-
----
-
-### Service d'authentification
+### Service de Base
 
 ```typescript
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthService {
-  private user = signal<User | null>(null);
-  private token = signal<string | null>(null);
-
-  constructor(private http: HttpClient) {
-    // Restauration de la session
-    const savedToken = localStorage.getItem('token');
-    if (savedToken) {
-      this.token.set(savedToken);
-      this.loadUser();
-    }
-  }
-
-  async login(credentials: { email: string; password: string }) {
-    const response = await this.http.post<AuthResponse>('/api/login', credentials).toPromise();
-    this.token.set(response.token);
-    this.user.set(response.user);
-    localStorage.setItem('token', response.token);
-  }
-
-  logout() {
-    this.token.set(null);
-    this.user.set(null);
-    localStorage.removeItem('token');
-  }
-
-  private async loadUser() {
-    if (this.token()) {
-      const user = await this.http.get<User>('/api/me').toPromise();
-      this.user.set(user);
-    }
-  }
-}
-```
-
-### Service des articles
-
-```typescript
+// services/auth.service.ts
 @Injectable({ providedIn: 'root' })
-export class PostService {
-  private posts = signal<Post[]>([])
-  private currentId = 3 // Pour simuler un auto-increment
+export class AuthService {
+  private readonly storageKey = 'blog_auth';
+  private isAuthenticatedSignal = signal(false);
+  private userSignal = signal<User | null>(null);
   
-  // Getters publics
-  readonly allPosts = this.posts.asReadonly()
+  // Getters publics en lecture seule
+  readonly isAuthenticated = this.isAuthenticatedSignal.asReadonly();
+  readonly currentUser = this.userSignal.asReadonly();
   
   constructor() {
-    // Données initiales
-    this.posts.set([
-      {
+    // Restaurer l'état d'authentification au démarrage
+    this.checkAuthState();
+  }
+  
+  private checkAuthState() {
+    const stored = localStorage.getItem(this.storageKey);
+    if (stored) {
+      const auth = JSON.parse(stored);
+      this.isAuthenticatedSignal.set(true);
+      this.userSignal.set(auth.user);
+    }
+  }
+  
+  login(email: string, password: string): boolean {
+    // Simulation d'authentification
+    if (email === 'admin@blog.com' && password === 'admin') {
+      const user: User = {
         id: 1,
-        title: 'Introduction à Angular 19',
-        content: 'Angular 19 apporte de nombreuses améliorations...',
-        author: 'John Doe',
-        createdAt: new Date()
-      },
-      {
-        id: 2,
-        title: 'Les Signals dans Angular',
-        content: 'Les Signals sont une nouvelle façon de gérer l\'état...',
-        author: 'Jane Smith',
-        createdAt: new Date()
-      }
-    ])
+        email,
+        role: 'admin',
+        name: 'Admin'
+      };
+      
+      // Sauvegarder dans le localStorage
+      localStorage.setItem(this.storageKey, JSON.stringify({ user }));
+      
+      // Mettre à jour les signals
+      this.isAuthenticatedSignal.set(true);
+      this.userSignal.set(user);
+      
+      return true;
+    }
+    
+    return false;
   }
   
-  getPost(id: number): Post | undefined {
-    return this.posts().find(post => post.id === id)
+  logout() {
+    localStorage.removeItem(this.storageKey);
+    this.isAuthenticatedSignal.set(false);
+    this.userSignal.set(null);
   }
   
-  addPost(post: Omit<Post, 'id' | 'createdAt'>) {
-    this.posts.update(posts => [
-      ...posts,
-      {
-        ...post,
-        id: this.currentId++,
-        createdAt: new Date()
-      }
-    ])
+  isAdmin(): boolean {
+    return this.userSignal()?.role === 'admin';
   }
+}
+
+// types/user.ts
+interface User {
+  id: number;
+  email: string;
+  role: 'user' | 'admin';
+  name: string;
+}
+```
+
+### Utilisation dans un Composant
+
+```typescript
+// components/header.component.ts
+@Component({
+  selector: 'app-header',
+  standalone: true,
+  template: `
+    <header class="bg-white shadow">
+      <nav class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <a routerLink="/" class="text-xl font-bold">Mini Blog</a>
+          
+          <div class="flex items-center gap-4">
+            @if (isAuthenticated()) {
+              <span>{{ currentUser()?.name }}</span>
+              <button 
+                (click)="logout()"
+                class="text-red-600 hover:text-red-800"
+              >
+                Déconnexion
+              </button>
+            } @else {
+              <a 
+                routerLink="/login"
+                class="text-blue-600 hover:text-blue-800"
+              >
+                Connexion
+              </a>
+            }
+          </div>
+        </div>
+      </nav>
+    </header>
+  `
+})
+export class HeaderComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
   
-  updatePost(id: number, updates: Partial<Post>) {
-    this.posts.update(posts =>
-      posts.map(post =>
-        post.id === id
-          ? { ...post, ...updates }
-          : post
-      )
-    )
-  }
+  readonly isAuthenticated = this.authService.isAuthenticated;
+  readonly currentUser = this.authService.currentUser;
   
-  deletePost(id: number) {
-    this.posts.update(posts =>
-      posts.filter(post => post.id !== id)
-    )
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }
 ```
 
-### Utilisation dans les composants
-
-```typescript
-// post-list.component.ts
-@Component({
-  template: `
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (post of posts(); track post.id) {
-        <app-post-card [post]="post" />
-      }
-    </div>
-  `
-})
-export class PostListComponent {
-  private postService = inject(PostService)
-  posts = this.postService.allPosts
-}
-
-// post-detail.component.ts
-@Component({
-  template: `
-    @if (post(); as post) {
-      <article class="prose lg:prose-xl mx-auto">
-        <h1>{{ post.title }}</h1>
-        <p class="text-gray-600">
-          Par {{ post.author }} le {{ post.createdAt | date }}
-        </p>
-        <div>{{ post.content }}</div>
-        
-        @if (isAuthor()) {
-          <div class="flex gap-4 mt-8">
-            <button (click)="editPost()"
-                    class="px-4 py-2 bg-blue-500 text-white rounded">
-              Modifier
-            </button>
-            <button (click)="deletePost()"
-                    class="px-4 py-2 bg-red-500 text-white rounded">
-              Supprimer
-            </button>
-          </div>
-        }
-      </article>
-    } @else {
-      <p>Article non trouvé</p>
-    }
-  `
-})
-export class PostDetailComponent {
-  private route = inject(ActivatedRoute)
-  private router = inject(Router)
-  private postService = inject(PostService)
-  
-  post = computed(() => {
-    const id = Number(this.route.snapshot.paramMap.get('id'))
-    return this.postService.getPost(id)
-  })
-  
-  isAuthor() {
-    // À implémenter avec la gestion des auteurs
-    return true
-  }
-  
-  editPost() {
-    // À implémenter
-  }
-  
-  deletePost() {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
-      this.postService.deletePost(this.post()!.id)
-      this.router.navigate(['/blog'])
-    }
-  }
-}
+Cette implémentation :
+- Utilise les Signals pour l'état d'authentification
+- Persiste l'état dans le localStorage
+- Gère les rôles utilisateur (admin/user)
+- Fournit des getters en lecture seule
+- S'intègre avec le système de routing et les guards

@@ -129,8 +129,10 @@ export class UserCardComponent {}
 ```
 
 ---
+layout: new-section
+---
 
-## Projection de Contenu
+# Projection de Contenu
 
 ---
 

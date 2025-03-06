@@ -49,8 +49,8 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="composants-angular">🔧 Composants Angular</Link>
 <Link to="tailwind-setup">🎨 Tailwind v4 dans Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
-<Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
 <Link to="routing-navigation">🗺️ Routing et Navigation</Link>
+<Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
 </div>
 
 </small>
@@ -105,11 +105,11 @@ src: ./pages/template_syntax.md
 ---
 
 ---
-src: ./pages/component_lifecycle.md
+src: ./pages/routing.md
 ---
 
 ---
-src: ./pages/routing.md
+src: ./pages/component_lifecycle.md
 ---
 
 ---
