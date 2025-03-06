@@ -16,7 +16,9 @@ Un composant est comme une brique LEGO® de votre application :
 
 ---
 
-## Création d'un composant avec le CLI```bash
+## Création d'un composant avec le CLI
+
+```bash
 # Générer un composant standalone
 ng generate component features/user/user-profile
 # ou version courte

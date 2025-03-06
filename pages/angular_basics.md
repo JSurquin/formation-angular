@@ -192,11 +192,12 @@ routeAlias: 'exercice-mini-blog'
 
 1. Créez un nouveau projet Angular :
 ```bash
-ng new mini-blog   --routing --style=scss
+ng new mini-blog
 cd mini-blog
 ```
 
-2. Configurez la structure initiale :
+2. Configurez la structure initiale (ou gardez la structure par défaut si vous le souhaitez pour le moment) :
+
 ```bash
 mkdir src/app/features
 mkdir src/app/shared
@@ -206,6 +207,11 @@ mkdir src/app/core
 ---
 
 3. Créez le composant principal :
+
+```bash
+ng generate component src/app/features/home
+```
+
 ```typescript
 // app.component.ts
 @Component({
