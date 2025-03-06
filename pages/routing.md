@@ -417,6 +417,8 @@ routeAlias: 'exercice-blog-guards'
 
 ## Mini-Blog : Protection des Routes
 
+---
+
 ### Configuration des Guards
 
 ```typescript
@@ -447,6 +449,8 @@ export const adminGuard: CanActivateFn = (route, state) => {
   return router.createUrlTree(['/unauthorized']);
 };
 ```
+
+--- 
 
 ### Application des Guards
 
@@ -486,6 +490,8 @@ export const routes: Routes = [
 ];
 ```
 
+---
+
 ### Gestion de la Redirection
 
 ```typescript
@@ -522,6 +528,8 @@ export class LoginComponent {
   }
 }
 ```
+
+---
 
 Cette configuration :
 - Protège les routes sensibles avec `authGuard`

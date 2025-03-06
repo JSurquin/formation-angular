@@ -787,6 +787,8 @@ routeAlias: 'exercice-blog-signals'
 
 ## Mini-Blog : Gestion d'état avec Signals
 
+---
+
 ### Store des articles
 
 ```typescript
@@ -854,6 +856,8 @@ export class PostStore {
 }
 ```
 
+---
+
 ### Utilisation dans les composants
 
 ```typescript
@@ -892,6 +896,8 @@ export class PostListComponent {
   sortedPosts = this.store.sortedByDate
 }
 ```
+
+---
 
 ### Composant de détail avec effet
 

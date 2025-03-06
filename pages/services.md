@@ -261,6 +261,8 @@ routeAlias: 'exercice-blog-auth'
 
 ## Mini-Blog : Service d'Authentification
 
+---
+
 ### Service de Base
 
 ```typescript
@@ -332,6 +334,8 @@ interface User {
 }
 ```
 
+---
+
 ### Utilisation dans un Composant
 
 ```typescript
@@ -381,6 +385,8 @@ export class HeaderComponent {
   }
 }
 ```
+
+---
 
 Cette implémentation :
 - Utilise les Signals pour l'état d'authentification

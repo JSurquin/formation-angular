@@ -385,6 +385,8 @@ routeAlias: 'exercice-blog-http'
 
 ## Mini-Blog : Simulation d'API REST
 
+---
+
 ### Service API
 
 ```typescript
@@ -467,6 +469,8 @@ export class ApiService {
 }
 ```
 
+---
+
 ### Intercepteur d'authentification
 
 ```typescript
@@ -493,6 +497,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   )
 }
 ```
+
+---
 
 ### Service d'authentification avec HTTP
 
@@ -530,6 +536,8 @@ export class AuthService {
   }
 }
 ```
+
+---
 
 ### Store avec appels HTTP
 
@@ -610,7 +618,10 @@ export class PostStore {
 }
 ```
 
+---
+
 Cette implémentation simule une API REST complète pour notre mini-blog, avec :
+
 - Gestion des requêtes HTTP
 - Simulation de latence réseau
 - Gestion des erreurs

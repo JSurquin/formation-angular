@@ -681,6 +681,8 @@ routeAlias: 'exercice-blog-forms'
 
 ## Mini-Blog : Formulaires Réactifs
 
+---
+
 ### Formulaire de connexion
 
 ```typescript
@@ -780,6 +782,8 @@ export class LoginComponent {
   }
 }
 ```
+
+---
 
 ### Formulaire de création d'article
 

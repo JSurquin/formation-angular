@@ -561,6 +561,8 @@ routeAlias: 'exercice-blog-composants'
 
 ## Mini-Blog : Création des Composants de Base
 
+---
+
 ### Objectif
 Créer la structure de base de notre mini-blog avec les composants essentiels.
 
@@ -575,6 +577,8 @@ ng generate component features/blog/post-card
 ng generate component shared/layout/header
 ng generate component shared/layout/footer
 ```
+
+---
 
 ### Structure des composants
 
@@ -598,6 +602,8 @@ export class PostListComponent {
 }
 ```
 
+---
+
 ### Interface Post
 
 ```typescript
@@ -611,6 +617,8 @@ export interface Post {
   imageUrl?: string
 }
 ```
+
+---
 
 ### Composant Card
 
@@ -634,5 +642,6 @@ export class PostCardComponent {
 }
 ```
 
-Cette première étape nous permet de mettre en place la structure de base de notre blog avec des données statiques. Dans les prochains modules, nous ajouterons la navigation, les services et la gestion d'état. 
+---
 
+Cette première étape nous permet de mettre en place la structure de base de notre blog avec des données statiques. Dans les prochains modules, nous ajouterons la navigation, les services et la gestion d'état.

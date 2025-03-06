@@ -224,6 +224,8 @@ graph TD
     style L fill:#bfb,stroke:#333
 ```
 
+---
+
 ### Flux des données
 - ⬇️ **@Input** : Les données descendent du parent vers l'enfant
   - `BlogList` → `Post` : passe l'objet post complet
@@ -233,6 +235,9 @@ graph TD
   - `Like` → `Post` : émet quand le bouton est cliqué
   - `Post` → `BlogList` : relaie l'événement avec l'ID du post
 
+---
+layout: new-section
+routeAlias: 'exercice-template-post-solution'
 ---
 
 ## Solution étape par étape
@@ -348,21 +353,41 @@ export class BlogListComponent {
 
 ---
 
-1. LikeComponent (enfant le plus bas) :
+## Flux de communication entre composants
 
-Reçoit @Input() likes
-Émet @Output() onLike vers PostComponent
+<br>
 
-2. PostComponent (composant intermédiaire) :
+<span class="text-red-500">
 
-Reçoit @Input() post
-Émet @Output() onLike vers BlogListComponent
-Reçoit l'événement de LikeComponent et le relaie
+### 1. LikeComponent (enfant le plus bas)
 
-3. BlogListComponent (parent) :
+</span>
 
-Contient le state (signal posts)
-Reçoit l'événement du PostComponent et met à jour le state
+- **Entrée** : Reçoit `@Input() likes` 
+- **Sortie** : Émet `@Output() onLike` vers PostComponent
+
+<br>
+
+<span class="text-orange-500">
+
+### 2. PostComponent (composant intermédiaire)
+
+</span>
+
+- **Entrée** : Reçoit `@Input() post`
+- **Sortie** : Émet `@Output() onLike` vers BlogListComponent
+- **Rôle** : Reçoit l'événement de LikeComponent et le relaie au parent
+
+<br>
+
+<span class="text-green-500">
+
+### 3. BlogListComponent (parent)
+
+</span>
+
+- **État** : Contient le state (signal `posts`)
+- **Gestion** : Reçoit l'événement du PostComponent et met à jour le state
 
 ---
 
