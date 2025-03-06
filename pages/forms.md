@@ -673,3 +673,264 @@ export class PostFormComponent {
   }
 }
 ```
+
+---
+layout: exercices
+routeAlias: 'exercice-blog-forms'
+---
+
+## Mini-Blog : Formulaires Réactifs
+
+### Formulaire de connexion
+
+```typescript
+// login.component.ts
+@Component({
+  template: `
+    <div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-6">Connexion</h2>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="email">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="w-full px-3 py-2 border rounded"
+            [class.border-red-500]="email.invalid && email.touched"
+          >
+          @if (email.invalid && email.touched) {
+            <p class="text-red-500 text-sm mt-1">
+              Email invalide
+            </p>
+          }
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-2" for="password">
+            Mot de passe
+          </label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            class="w-full px-3 py-2 border rounded"
+            [class.border-red-500]="password.invalid && password.touched"
+          >
+          @if (password.invalid && password.touched) {
+            <p class="text-red-500 text-sm mt-1">
+              Le mot de passe doit faire au moins 6 caractères
+            </p>
+          }
+        </div>
+        
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded
+                 hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          Se connecter
+        </button>
+        
+        @if (error()) {
+          <p class="text-red-500 mt-4">
+            {{ error() }}
+          </p>
+        }
+      </form>
+    </div>
+  `
+})
+export class LoginComponent {
+  private authService = inject(AuthService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  
+  loginForm = new FormGroup({
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6)
+    ])
+  })
+  
+  error = signal<string | null>(null)
+  
+  get email() { return this.loginForm.get('email')! }
+  get password() { return this.loginForm.get('password')! }
+  
+  onSubmit() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value
+      
+      if (this.authService.login(email!, password!)) {
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
+        this.router.navigateByUrl(returnUrl)
+      } else {
+        this.error.set('Email ou mot de passe incorrect')
+      }
+    }
+  }
+}
+```
+
+### Formulaire de création d'article
+
+```typescript
+// post-form.component.ts
+@Component({
+  template: `
+    <div class="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-6">
+        {{ isEditing ? 'Modifier l\'article' : 'Nouvel article' }}
+      </h2>
+      
+      <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="title">
+            Titre
+          </label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            class="w-full px-3 py-2 border rounded"
+            [class.border-red-500]="title.invalid && title.touched"
+          >
+          @if (title.invalid && title.touched) {
+            <p class="text-red-500 text-sm mt-1">
+              Le titre est requis et doit faire au moins 3 caractères
+            </p>
+          }
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="content">
+            Contenu
+          </label>
+          <textarea
+            id="content"
+            formControlName="content"
+            rows="6"
+            class="w-full px-3 py-2 border rounded"
+            [class.border-red-500]="content.invalid && content.touched"
+          ></textarea>
+          @if (content.invalid && content.touched) {
+            <p class="text-red-500 text-sm mt-1">
+              Le contenu est requis et doit faire au moins 10 caractères
+            </p>
+          }
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-2" for="image">
+            Image (optionnelle)
+          </label>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="w-full"
+          >
+        </div>
+        
+        <div class="flex gap-4">
+          <button
+            type="submit"
+            [disabled]="postForm.invalid"
+            class="bg-blue-500 text-white py-2 px-4 rounded
+                   hover:bg-blue-600 disabled:bg-gray-400"
+          >
+            {{ isEditing ? 'Mettre à jour' : 'Publier' }}
+          </button>
+          
+          <button
+            type="button"
+            (click)="cancel()"
+            class="bg-gray-500 text-white py-2 px-4 rounded
+                   hover:bg-gray-600"
+          >
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+  `
+})
+export class PostFormComponent implements OnInit {
+  private postService = inject(PostService)
+  private router = inject(Router)
+  private route = inject(ActivatedRoute)
+  
+  postForm = new FormGroup({
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3)
+    ]),
+    content: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10)
+    ])
+  })
+  
+  selectedImage: File | null = null
+  isEditing = false
+  
+  get title() { return this.postForm.get('title')! }
+  get content() { return this.postForm.get('content')! }
+  
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id')
+    if (id) {
+      this.isEditing = true
+      const post = this.postService.getPost(Number(id))
+      if (post) {
+        this.postForm.patchValue({
+          title: post.title,
+          content: post.content
+        })
+      }
+    }
+  }
+  
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0]
+    if (file) {
+      this.selectedImage = file
+    }
+  }
+  
+  onSubmit() {
+    if (this.postForm.valid) {
+      const { title, content } = this.postForm.value
+      
+      if (this.isEditing) {
+        const id = Number(this.route.snapshot.paramMap.get('id'))
+        this.postService.updatePost(id, {
+          title: title!,
+          content: content!
+        })
+      } else {
+        this.postService.addPost({
+          title: title!,
+          content: content!,
+          author: 'Utilisateur connecté' // À améliorer avec l'authentification
+        })
+      }
+      
+      this.router.navigate(['/blog'])
+    }
+  }
+  
+  cancel() {
+    this.router.navigate(['/blog'])
+  }
+}

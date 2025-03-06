@@ -778,3 +778,160 @@ export class AuthStore {
     }
   }
 } 
+```
+
+---
+layout: exercices
+routeAlias: 'exercice-blog-signals'
+---
+
+## Mini-Blog : Gestion d'état avec Signals
+
+### Store des articles
+
+```typescript
+// stores/post.store.ts
+@Injectable({ providedIn: 'root' })
+export class PostStore {
+  // État privé
+  private _posts = signal<Post[]>([])
+  private _selectedPost = signal<Post | null>(null)
+  private _loading = signal(false)
+  private _error = signal<string | null>(null)
+  
+  // Sélecteurs publics
+  readonly posts = this._posts.asReadonly()
+  readonly selectedPost = this._selectedPost.asReadonly()
+  readonly loading = this._loading.asReadonly()
+  readonly error = this._error.asReadonly()
+  
+  // Sélecteurs calculés
+  readonly postCount = computed(() => this._posts().length)
+  readonly hasError = computed(() => this._error() !== null)
+  readonly sortedByDate = computed(() => 
+    [...this._posts()].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+  )
+  
+  // Actions
+  setLoading(loading: boolean) {
+    this._loading.set(loading)
+  }
+  
+  setError(error: string | null) {
+    this._error.set(error)
+  }
+  
+  setPosts(posts: Post[]) {
+    this._posts.set(posts)
+  }
+  
+  addPost(post: Post) {
+    this._posts.update(posts => [...posts, post])
+  }
+  
+  updatePost(id: number, updates: Partial<Post>) {
+    this._posts.update(posts =>
+      posts.map(post =>
+        post.id === id
+          ? { ...post, ...updates }
+          : post
+      )
+    )
+  }
+  
+  deletePost(id: number) {
+    this._posts.update(posts =>
+      posts.filter(post => post.id !== id)
+    )
+  }
+  
+  selectPost(id: number) {
+    const post = this._posts().find(p => p.id === id)
+    this._selectedPost.set(post || null)
+  }
+}
+```
+
+### Utilisation dans les composants
+
+```typescript
+// post-list.component.ts
+@Component({
+  template: `
+    @if (loading()) {
+      <div class="flex justify-center p-8">
+        <span class="loading">Chargement...</span>
+      </div>
+    } @else if (error()) {
+      <div class="text-red-500 p-4">
+        {{ error() }}
+      </div>
+    } @else {
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold">
+          {{ postCount() }} articles publiés
+        </h3>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (post of sortedPosts(); track post.id) {
+          <app-post-card [post]="post" />
+        }
+      </div>
+    }
+  `
+})
+export class PostListComponent {
+  private store = inject(PostStore)
+  
+  loading = this.store.loading
+  error = this.store.error
+  postCount = this.store.postCount
+  sortedPosts = this.store.sortedByDate
+}
+```
+
+### Composant de détail avec effet
+
+```typescript
+// post-detail.component.ts
+@Component({
+  template: `
+    @if (loading()) {
+      <div class="flex justify-center p-8">
+        <span class="loading">Chargement...</span>
+      </div>
+    } @else if (post(); as post) {
+      <article class="prose lg:prose-xl mx-auto">
+        <h1>{{ post.title }}</h1>
+        <p class="text-gray-600">
+          Par {{ post.author }} le {{ post.createdAt | date }}
+        </p>
+        <div>{{ post.content }}</div>
+      </article>
+    } @else {
+      <p>Article non trouvé</p>
+    }
+  `
+})
+export class PostDetailComponent {
+  private store = inject(PostStore)
+  private route = inject(ActivatedRoute)
+  
+  loading = this.store.loading
+  post = this.store.selectedPost
+  
+  constructor() {
+    // Effet pour charger l'article quand l'ID change
+    effect(() => {
+      const id = Number(this.route.snapshot.paramMap.get('id'))
+      if (id) {
+        this.store.setLoading(true)
+        this.store.selectPost(id)
+        this.store.setLoading(false)
+      }
+    })
+  }
+} 

@@ -548,5 +548,87 @@ export class AdminDashboardComponent {
   postCount = signal(0);
   commentCount = signal(0);
 }
-``` 
+```
+
+---
+layout: exercices
+routeAlias: 'exercice-blog-composants'
+---
+
+## Mini-Blog : Création des Composants de Base
+
+### Objectif
+Créer la structure de base de notre mini-blog avec les composants essentiels.
+
+### Composants à créer
+
+```bash
+# Génération des composants
+ng generate component features/blog/post-list
+ng generate component features/blog/post-detail
+ng generate component features/blog/post-form
+ng generate component features/blog/post-card
+ng generate component shared/layout/header
+ng generate component shared/layout/footer
+```
+
+### Structure des composants
+
+```typescript
+// post-list.component.ts
+@Component({
+  selector: 'app-post-list',
+  template: `
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (post of posts; track post.id) {
+        <app-post-card [post]="post" />
+      }
+    </div>
+  `
+})
+export class PostListComponent {
+  posts: Post[] = [
+    { id: 1, title: 'Premier article', content: 'Contenu...', author: 'John' },
+    { id: 2, title: 'Deuxième article', content: 'Contenu...', author: 'Jane' }
+  ]
+}
+```
+
+### Interface Post
+
+```typescript
+// models/post.interface.ts
+export interface Post {
+  id: number
+  title: string
+  content: string
+  author: string
+  createdAt?: Date
+  imageUrl?: string
+}
+```
+
+### Composant Card
+
+```typescript
+// post-card.component.ts
+@Component({
+  selector: 'app-post-card',
+  template: `
+    <article class="border rounded-lg p-4 hover:shadow-lg transition">
+      <h2 class="text-xl font-bold">{{ post.title }}</h2>
+      <p class="text-gray-600">Par {{ post.author }}</p>
+      <p class="mt-2">{{ post.content | slice:0:100 }}...</p>
+      <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        Lire la suite
+      </button>
+    </article>
+  `
+})
+export class PostCardComponent {
+  @Input() post!: Post
+}
+```
+
+Cette première étape nous permet de mettre en place la structure de base de notre blog avec des données statiques. Dans les prochains modules, nous ajouterons la navigation, les services et la gestion d'état. 
 

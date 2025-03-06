@@ -46,11 +46,11 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="typescript-essentials">💡 TypeScript Essentiels</Link>
 <Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
 <Link to="angular-basics">🎯 Les Bases d'Angular</Link>
+<Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 <Link to="composants-angular">🔧 Composants Angular</Link>
 <Link to="tailwind-setup">🎨 Tailwind v4 dans Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
-<Link to="services-dependency-injection">📊 Services</Link>
 </div>
 
 </small>
@@ -60,12 +60,12 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <small>
 
 <div class="flex flex-col gap-2">
+<Link to="services-dependency-injection">📊 Services</Link>
 <Link to="dependency-injection">💉 Injection de dépendances</Link>
-<Link to="routing-navigation">🗺️ Routing et Navigation</Link>
 <Link to="forms-validation">📝 Formulaires et Validation</Link>
+<Link to="signals">⚡ Signals (Nouveauté Angular 18)</Link>
 <Link to="rxjs-observables">🔄 RxJS et Observables</Link>
 <Link to="http-client">🌐 HTTP Client et API REST</Link>
-<Link to="signals">⚡ Signals (Nouveauté Angular 18)</Link>
 <Link to="directives-pipes">📱 Directives et Pipes</Link>
 <Link to="performance">🚀 Performance et Optimisation</Link>
 <Link to="testing">🧪 Tests unitaires et E2E</Link>
@@ -93,6 +93,10 @@ src: ./pages/angular_basics.md
 ---
 
 ---
+src: ./pages/routing.md
+---
+
+---
 src: ./pages/composants.md
 ---
 
@@ -117,11 +121,11 @@ src: ./pages/dependency_injection.md
 ---
 
 ---
-src: ./pages/routing.md
+src: ./pages/forms.md
 ---
 
 ---
-src: ./pages/forms.md
+src: ./pages/signals.md
 ---
 
 ---
@@ -130,10 +134,6 @@ src: ./pages/rxjs.md
 
 ---
 src: ./pages/http.md
----
-
----
-src: ./pages/signals.md
 ---
 
 ---

@@ -356,3 +356,141 @@ export class AuthService {
   }
 }
 ```
+
+### Service des articles
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class PostService {
+  private posts = signal<Post[]>([])
+  private currentId = 3 // Pour simuler un auto-increment
+  
+  // Getters publics
+  readonly allPosts = this.posts.asReadonly()
+  
+  constructor() {
+    // Données initiales
+    this.posts.set([
+      {
+        id: 1,
+        title: 'Introduction à Angular 19',
+        content: 'Angular 19 apporte de nombreuses améliorations...',
+        author: 'John Doe',
+        createdAt: new Date()
+      },
+      {
+        id: 2,
+        title: 'Les Signals dans Angular',
+        content: 'Les Signals sont une nouvelle façon de gérer l\'état...',
+        author: 'Jane Smith',
+        createdAt: new Date()
+      }
+    ])
+  }
+  
+  getPost(id: number): Post | undefined {
+    return this.posts().find(post => post.id === id)
+  }
+  
+  addPost(post: Omit<Post, 'id' | 'createdAt'>) {
+    this.posts.update(posts => [
+      ...posts,
+      {
+        ...post,
+        id: this.currentId++,
+        createdAt: new Date()
+      }
+    ])
+  }
+  
+  updatePost(id: number, updates: Partial<Post>) {
+    this.posts.update(posts =>
+      posts.map(post =>
+        post.id === id
+          ? { ...post, ...updates }
+          : post
+      )
+    )
+  }
+  
+  deletePost(id: number) {
+    this.posts.update(posts =>
+      posts.filter(post => post.id !== id)
+    )
+  }
+}
+```
+
+### Utilisation dans les composants
+
+```typescript
+// post-list.component.ts
+@Component({
+  template: `
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (post of posts(); track post.id) {
+        <app-post-card [post]="post" />
+      }
+    </div>
+  `
+})
+export class PostListComponent {
+  private postService = inject(PostService)
+  posts = this.postService.allPosts
+}
+
+// post-detail.component.ts
+@Component({
+  template: `
+    @if (post(); as post) {
+      <article class="prose lg:prose-xl mx-auto">
+        <h1>{{ post.title }}</h1>
+        <p class="text-gray-600">
+          Par {{ post.author }} le {{ post.createdAt | date }}
+        </p>
+        <div>{{ post.content }}</div>
+        
+        @if (isAuthor()) {
+          <div class="flex gap-4 mt-8">
+            <button (click)="editPost()"
+                    class="px-4 py-2 bg-blue-500 text-white rounded">
+              Modifier
+            </button>
+            <button (click)="deletePost()"
+                    class="px-4 py-2 bg-red-500 text-white rounded">
+              Supprimer
+            </button>
+          </div>
+        }
+      </article>
+    } @else {
+      <p>Article non trouvé</p>
+    }
+  `
+})
+export class PostDetailComponent {
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+  private postService = inject(PostService)
+  
+  post = computed(() => {
+    const id = Number(this.route.snapshot.paramMap.get('id'))
+    return this.postService.getPost(id)
+  })
+  
+  isAuthor() {
+    // À implémenter avec la gestion des auteurs
+    return true
+  }
+  
+  editPost() {
+    // À implémenter
+  }
+  
+  deletePost() {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+      this.postService.deletePost(this.post()!.id)
+      this.router.navigate(['/blog'])
+    }
+  }
+}
