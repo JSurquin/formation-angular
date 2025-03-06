@@ -16,9 +16,7 @@ Un composant est comme une brique LEGO® de votre application :
 
 ---
 
-## Création d'un composant avec le CLI
-
-```bash
+## Création d'un composant avec le CLI```bash
 # Générer un composant standalone
 ng generate component features/user/user-profile
 # ou version courte
@@ -126,6 +124,167 @@ export class UserCardComponent {}
   `],
   encapsulation: ViewEncapsulation.ShadowDom
 })
+```
+
+---
+
+## Projection de Contenu
+
+---
+
+## Qu'est-ce que la projection ?
+
+La projection de contenu permet :
+- D'injecter du contenu dans un composant enfant
+- De créer des composants réutilisables et flexibles
+- De définir des "slots" pour le contenu
+- De gérer du contenu dynamique
+
+---
+
+## ng-content : Projection simple
+
+```typescript
+// card.component.ts
+@Component({
+  selector: 'app-card',
+  template: `
+    <div class="card">
+      <ng-content></ng-content>
+    </div>
+  `
+})
+export class CardComponent {}
+
+// Utilisation
+<app-card>
+  <h2>Mon titre</h2>
+  <p>Mon contenu</p>
+</app-card>
+```
+
+---
+
+## ng-content : Projection multiple
+
+```typescript
+@Component({
+  selector: 'app-layout',
+  template: `
+    <header>
+      <ng-content select="[header]"></ng-content>
+    </header>
+    <main>
+      <ng-content select="[content]"></ng-content>
+    </main>
+    <footer>
+      <ng-content select="[footer]"></ng-content>
+    </footer>
+  `
+})
+export class LayoutComponent {}
+
+// Utilisation
+<app-layout>
+  <nav header>Menu</nav>
+  <article content>Contenu principal</article>
+  <p footer>Pied de page</p>
+</app-layout>
+```
+
+---
+
+## ng-template : Contenu conditionnel
+
+```typescript
+@Component({
+  selector: 'app-conditional',
+  template: `
+    <div>
+      <ng-template #loading>
+        <p>Chargement en cours...</p>
+      </ng-template>
+
+      <ng-template #error>
+        <p>Une erreur est survenue</p>
+      </ng-template>
+
+      @if (data(); as result) {
+        <div>{{ result }}</div>
+      } @else if (isLoading()) {
+        <ng-container [ngTemplateOutlet]="loading"></ng-container>
+      } @else {
+        <ng-container [ngTemplateOutlet]="error"></ng-container>
+      }
+    </div>
+  `
+})
+export class ConditionalComponent {
+  data = signal<string | null>(null);
+  isLoading = signal(true);
+}
+```
+
+---
+
+## ng-template : Templates réutilisables
+
+```typescript
+@Component({
+  selector: 'app-list',
+  template: `
+    <ul>
+      @for (item of items(); track item.id) {
+        <ng-container
+          [ngTemplateOutlet]="itemTemplate"
+          [ngTemplateOutletContext]="{ $implicit: item }"
+        ></ng-container>
+      }
+    </ul>
+  `
+})
+export class ListComponent {
+  @Input() items = signal<any[]>([]);
+  @Input() itemTemplate!: TemplateRef<any>;
+}
+
+// Utilisation
+<app-list [items]="users">
+  <ng-template let-user>
+    <li class="user-item">
+      <img [src]="user.avatar" />
+      <span>{{ user.name }}</span>
+    </li>
+  </ng-template>
+</app-list>
+```
+
+---
+
+## ng-container : Groupement logique
+
+```typescript
+@Component({
+  template: `
+    <div class="container">
+      <ng-container *ngIf="isAdmin()">
+        <button>Éditer</button>
+        <button>Supprimer</button>
+        <button>Configurer</button>
+      </ng-container>
+
+      <ng-container [ngSwitch]="userRole()">
+        <div *ngSwitchCase="'admin'">Panel Admin</div>
+        <div *ngSwitchCase="'user'">Vue Utilisateur</div>
+        <div *ngSwitchDefault>Accès Limité</div>
+      </ng-container>
+    </div>
+  `
+})
+export class AdminPanelComponent {
+  isAdmin = signal(false);
+  userRole = signal<string>('user');
+}
 ```
 
 ---
@@ -390,3 +549,4 @@ export class AdminDashboardComponent {
   commentCount = signal(0);
 }
 ``` 
+

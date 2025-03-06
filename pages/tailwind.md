@@ -21,6 +21,8 @@ npx tailwindcss init
 
 ## Configuration de Tailwind
 
+> Plus obligatoire dans la v4, vous pouvez le supprimer ou continuer à l'utilise avec @config dans votre fichier css/scss.
+
 ```javascript
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
@@ -43,18 +45,29 @@ module.exports = {
 ## Configuration de PostCSS
 
 ```javascript
-// postcss.config.js
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
+// .postcssrc.json
+{
+    "plugins": {
+      "@tailwindcss/postcss": {}
+    }
   }
-}
 ```
 
 ---
 
 ## Intégration avec Angular
+
+> Dans la v4
+
+```css
+@import "tailwindcss";
+```
+
+```scss
+@use "tailwindcss";
+```
+
+> Avant dans la v3
 
 ```css
 /* src/styles.css */
@@ -65,35 +78,12 @@ module.exports = {
 
 ---
 
-## Configuration de l'application Angular
-
-```json
-// angular.json
-{
-  "projects": {
-    "your-app": {
-      "architect": {
-        "build": {
-          "options": {
-            "styles": [
-              "src/styles.css"
-            ],
-            "postcssConfig": "postcss.config.js"
-          }
-        }
-      }
-    }
-  }
-}
-```
-
----
-
 ## Utilisation dans les composants
 
 ```typescript
 @Component({
   selector: 'app-header',
+  // vous pouvez utiliser les classes tailwind dans le template
   template: `
     <header class="bg-gray-800 text-white p-4">
       <nav class="container mx-auto flex items-center justify-between">
@@ -127,26 +117,3 @@ export class HeaderComponent {}
 - Créer des classes utilitaires personnalisées
 - Optimiser la taille du bundle final
 - Suivre les conventions de nommage
-
----
-
-## Configuration pour la production
-
-```javascript
-// tailwind.config.js
-module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-  // Optimisations pour la production
-  purge: {
-    enabled: process.env.NODE_ENV === 'production',
-    content: [
-      './src/**/*.{html,ts}',
-    ]
-  }
-} 
