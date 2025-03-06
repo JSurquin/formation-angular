@@ -47,6 +47,7 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <Link to="configuration-environnement">💻 Configuration de l'environnement</Link>
 <Link to="angular-basics">🎯 Les Bases d'Angular</Link>
 <Link to="composants-angular">🔧 Composants Angular</Link>
+<Link to="tailwind-setup">🎨 Tailwind v4 dans Angular</Link>
 <Link to="template-syntax">📝 Syntaxe des templates</Link>
 <Link to="component-lifecycle">🔄 Cycle de vie des composants</Link>
 <Link to="services-dependency-injection">📊 Services</Link>
@@ -93,6 +94,10 @@ src: ./pages/angular_basics.md
 
 ---
 src: ./pages/composants.md
+---
+
+---
+src: ./pages/tailwind.md
 ---
 
 ---

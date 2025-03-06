@@ -7,17 +7,43 @@ routeAlias: 'dependency-injection'
 
 ---
 
-## Principes fondamentaux
+## Qu'est-ce que l'injection de dépendances ?
 
-- **Qu'est-ce que l'injection de dépendances ?**
-  - Pattern de conception logicielle
-  - Gestion des dépendances entre composants
-  - Facilite les tests et la maintenance
+- Un pattern de conception logicielle fondamental
+- Permet de gérer les dépendances entre composants
+- Rend le code plus modulaire et testable
 
-- **Avantages**
-  - Découplage du code
-  - Réutilisabilité
-  - Testabilité améliorée
+### Avantages clés
+- Découplage du code
+- Réutilisabilité accrue
+- Facilite les tests unitaires
+- Maintenance simplifiée
+
+---
+
+## Injection de base
+
+```typescript
+// Service injectable basique
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  constructor(private http: HttpClient) {}
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
+  }
+}
+
+// Utilisation dans un composant
+@Component({
+  selector: 'app-users'
+})
+export class UsersComponent {
+  constructor(private userService: UserService) {}
+}
+```
 
 ---
 
@@ -51,34 +77,10 @@ ng generate service core/services/api --type interface
 
 ---
 
-## Création d'un service injectable
-
-```typescript
-// user.service.ts
-@Injectable({
-  providedIn: 'root' // Service singleton au niveau application
-})
-export class UserService {
-  private users: User[] = [];
-
-  constructor(private http: HttpClient) {}
-
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>('/api/users');
-  }
-
-  addUser(user: User): Observable<User> {
-    return this.http.post<User>('/api/users', user);
-  }
-}
-```
-
----
-
 ## Hiérarchie d'injection
 
 ```typescript
-// Component-level provider
+// Niveau composant
 @Component({
   selector: 'app-feature',
   providers: [FeatureService] // Scope limité à ce composant
@@ -87,7 +89,7 @@ export class FeatureComponent {
   constructor(private featureService: FeatureService) {}
 }
 
-// Module-level provider
+// Niveau module
 @NgModule({
   providers: [
     GlobalService,
@@ -102,7 +104,7 @@ export class AppModule {}
 
 ---
 
-## Tokens d'injection et providers
+## Configuration des providers
 
 ```typescript
 // Token d'injection personnalisé
@@ -126,13 +128,6 @@ export const appConfig: ApplicationConfig = {
     {
       provide: ErrorHandler,
       useClass: CustomErrorHandler
-    },
-    {
-      provide: LoggerService,
-      useFactory: (config: AppConfig) => {
-        return new LoggerService(config.apiUrl);
-      },
-      deps: [APP_CONFIG]
     }
   ]
 };
@@ -140,7 +135,7 @@ export const appConfig: ApplicationConfig = {
 
 ---
 
-## Utilisation avancée
+## Services avec dépendances avancées
 
 ```typescript
 @Injectable({
@@ -165,19 +160,21 @@ export class CacheService {
     }
     this.cache.set(key, value);
   }
-
-  get(key: string): any {
-    return this.cache.get(key);
-  }
 }
 ```
 
 ---
+layout: new-section
+---
 
-## Injection moderne avec inject()
+# Injection Moderne avec inject()
+
+---
+
+## Introduction à inject()
 
 ```typescript
-// Avant (constructor injection)
+// Approche classique
 @Component({
   template: `...`
 })
@@ -189,7 +186,7 @@ class OldComponent {
   ) {}
 }
 
-// Après (fonction inject)
+// Approche moderne avec inject()
 @Component({
   template: `...`
 })
@@ -204,10 +201,11 @@ class ModernComponent {
 
 ## Avantages de inject()
 
-- Plus concis
+- Plus concis et lisible
 - Utilisable en dehors du constructor
 - Parfait pour les composants standalone
 - Meilleure inférence de type
+- Facilite l'utilisation avec les Signals
 
 ```typescript
 @Component({
@@ -219,11 +217,9 @@ class ModernComponent {
   `
 })
 class WelcomeComponent {
-  // Injection et Signal en une ligne
   private auth = inject(AuthService)
   user = this.auth.currentUser
 
-  // Injection dans une méthode
   logout() {
     inject(Router).navigate(['/login'])
   }
@@ -232,7 +228,7 @@ class WelcomeComponent {
 
 ---
 
-## Injection conditionnelle avec inject()
+## Options avancées avec inject()
 
 ```typescript
 @Component({
@@ -258,7 +254,7 @@ class FeatureComponent {
 
 ---
 
-## Injection dans les services
+## Injection dans les services modernes
 
 ```typescript
 @Injectable({ providedIn: 'root' })
@@ -274,6 +270,67 @@ class ModernService {
 
   getData() {
     return this.http.get(`${this.apiUrl()}/data`)
+  }
+}
+```
+
+---
+layout: exercices
+routeAlias: 'exercice-di-blog'
+---
+
+# Exercice : Injection de Dépendances dans le Blog
+
+---
+
+## Configuration de l'API
+
+```typescript
+// Configuration de l'API
+export interface ApiConfig {
+  baseUrl: string;
+  version: string;
+  timeout: number;
+}
+
+export const API_CONFIG = new InjectionToken<ApiConfig>('api.config');
+
+// Provider global
+export const appConfig: ApplicationConfig = {
+  providers: [
+    {
+      provide: API_CONFIG,
+      useValue: {
+        baseUrl: 'https://api.blog.com',
+        version: 'v1',
+        timeout: 5000
+      }
+    }
+  ]
+};
+```
+
+---
+
+## Service avec injection
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class BlogApiService {
+  private http = inject(HttpClient)
+  private config = inject(API_CONFIG)
+  private auth = inject(AuthService)
+  
+  private apiUrl = computed(() => 
+    `${this.config.baseUrl}/${this.config.version}`
+  )
+
+  getPosts() {
+    return this.http.get(`${this.apiUrl()}/posts`, {
+      headers: {
+        Authorization: `Bearer ${this.auth.getToken()}`
+      }
+    })
   }
 }
 ```

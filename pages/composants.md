@@ -20,24 +20,24 @@ Un composant est comme une brique LEGO® de votre application :
 
 ```bash
 # Générer un composant standalone
-ng generate component features/user/user-profile  
+ng generate component features/user/user-profile
 # ou version courte
-ng g c features/user/user-profile  
+ng g c features/user/user-profile
 
 # Générer un composant avec des tests
-ng g c features/user/user-profile   --spec
+ng g c features/user/user-profile --spec
 
 # Générer un composant sans fichier de style
-ng g c features/user/user-profile   --inline-style
+ng g c features/user/user-profile --inline-style
 
 # Générer un composant avec template inline
-ng g c features/user/user-profile   --inline-template
+ng g c features/user/user-profile --inline-template
 
 # Générer un composant dans un sous-dossier
-ng g c features/user/components/user-profile  
+ng g c features/user/components/user-profile
 
 # Générer un composant sans créer un dossier
-ng g c features/user/user-profile   --flat
+ng g c features/user/user-profile --flat
 ```
 
 ---
@@ -104,82 +104,7 @@ export class UserCardComponent {}
 
 ---
 
-## Communication Parent → Enfant
-
-### Entrées (@Input)
-
-```typescript
-@Component({
-  selector: 'app-user-card',
-  template: `
-    <div class="card">
-      <h3>{{ userName }}</h3>
-      <p>{{ userRole }}</p>
-    </div>
-  `
-})
-export class UserCardComponent {
-  @Input() userName: string;
-  @Input() userRole: string;
-}
-```
-
----
-
-## Utilisation des @Input
-
-```html
-<app-user-card
-  userName="John Doe"
-  userRole="Admin"
-/>
-```
-
----
-
-## Communication Enfant → Parent
-
-### Sorties (@Output)
-
-```typescript
-@Component({
-  selector: 'app-counter',
-  template: `
-    <div>
-      <h2>{{ count() }}</h2>
-      <button (click)="increment()">+</button>
-    </div>
-  `
-})
-export class CounterComponent {
-  count = signal(0);
-  @Output() countChange = new EventEmitter<number>();
-}
-```
-
----
-
-## Gestion des événements @Output
-
-```typescript
-export class CounterComponent {
-  increment() {
-    this.count.update(n => n + 1);
-    this.countChange.emit(this.count());
-  }
-}
-```
-
-Utilisation :
-```html
-<app-counter
-  (countChange)="handleCountChange($event)"
-/>
-```
-
----
-
-## Styles des composants - Partie 1
+## Styles des composants
 
 ```typescript
 @Component({
@@ -188,16 +113,7 @@ Utilisation :
     <button class="custom-btn">
       <ng-content></ng-content>
     </button>
-  `
-})
-```
-
----
-
-## Styles des composants - Partie 2
-
-```typescript
-@Component({
+  `,
   styles: [`
     .custom-btn {
       padding: 10px 20px;
@@ -263,52 +179,80 @@ Utilisation :
 - Couplage fort entre composants
 
 ---
+layout: new-section
+---
 
-## Exercice - Interface
-
-```typescript
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-}
-```
+# Communication entre Composants
 
 ---
 
-## Exercice - Composant
+## Communication Parent → Enfant
+
+### Entrées (@Input)
 
 ```typescript
 @Component({
-  selector: 'app-user-list',
+  selector: 'app-user-card',
   template: `
-    <div class="user-list">
-      <h2>Utilisateurs</h2>
-      @for (user of users(); track user.id) {
-        <app-user-card
-          [user]="user"
-          (userClick)="onUserSelect($event)"
-        />
-      }
+    <div class="card">
+      <h3>{{ userName }}</h3>
+      <p>{{ userRole }}</p>
     </div>
   `
 })
+export class UserCardComponent {
+  @Input() userName: string;
+  @Input() userRole: string;
+}
 ```
 
 ---
 
-## Exercice - Logique
+## Utilisation des @Input
+
+```html
+<app-user-card
+  userName="John Doe"
+  userRole="Admin"
+/>
+```
+
+---
+
+## Communication Enfant → Parent
+
+### Sorties (@Output)
 
 ```typescript
-export class UserListComponent {
-  users = signal<User[]>([]);
-  @Output() userSelect = new EventEmitter<User>();
+@Component({
+  selector: 'app-counter',
+  template: `
+    <div>
+      <h2>{{ count() }}</h2>
+      <button (click)="increment()">+</button>
+    </div>
+  `
+})
+export class CounterComponent {
+  count = signal(0);
+  @Output() countChange = new EventEmitter<number>();
 
-  onUserSelect(user: User) {
-    this.userSelect.emit(user);
+  increment() {
+    this.count.update(n => n + 1);
+    this.countChange.emit(this.count());
   }
 }
+```
+
+---
+
+## Gestion des événements @Output
+
+Utilisation :
+```html
+<app-counter
+  (countChange)="handleCountChange($event)"
+/>
 ```
 
 ---
@@ -354,7 +298,7 @@ export class PostListComponent {
     { id: 2, title: 'Deuxième article', excerpt: 'Un extrait du deuxième article...' }
   ];
 }
-``` 
+```
 
 ---
 

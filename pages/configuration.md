@@ -83,16 +83,16 @@ ng new exercice-app
 cd exercice-app
 ```
 
-2. Ajoutez ESLint et Prettier :
+2. Ajoutez ESLint et Prettier (optionnel si vous ne l'avez pas déjà) :
 
 ```bash
-ng add @angular-eslint/schematics
-npm install prettier prettier-eslint --save-dev
+ng add @angular/eslint
+npm install prettier @prettier/plugin-angular --save-dev
 ```
 
 ---
 
-3. Configurez les environnements :
+3. Configurez les environnements (optionnel) :
 
 ```typescript
 // src/app/environments/environment.ts
