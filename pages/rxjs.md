@@ -27,7 +27,7 @@ const apiCall$ = new Observable(observer => {
 
 ---
 
-<!-- retoucher -->
+## Marble Testing
 
 ### Donc ce flux : --1--2--3--4--5--
 
@@ -41,14 +41,20 @@ ce qui veut dire :
 
 ---
 
-## Observer
+## Observer - Partie 1
 
 Un observer est un objet qui écoute les événements d'un Observable.
 
 ```typescript
 // Observable simple
 const numbers$ = of(1, 2, 3, 4, 5)
+```
 
+---
+
+## Observer - Partie 2
+
+```typescript
 // Observer
 numbers$.subscribe({
   next: value => console.log(value),
@@ -59,7 +65,7 @@ numbers$.subscribe({
 
 ---
 
-## Types de Subjects
+## Types de Subjects - Partie 1
 
 ```typescript
 // Subject basique
@@ -67,12 +73,24 @@ const subject = new Subject<string>()
 subject.subscribe(value => console.log('A:', value))
 subject.subscribe(value => console.log('B:', value))
 subject.next('Hello') // A: Hello, B: Hello
+```
 
+---
+
+## Types de Subjects - Partie 2
+
+```typescript
 // BehaviorSubject - Garde la dernière valeur
 const behavior = new BehaviorSubject<number>(0)
 behavior.subscribe(value => console.log('Valeur actuelle:', value))
 console.log('Valeur stockée:', behavior.value)
+```
 
+---
+
+## Types de Subjects - Partie 3
+
+```typescript
 // ReplaySubject - Rejoue X valeurs
 const replay = new ReplaySubject<string>(2)
 replay.next('Un')
@@ -83,7 +101,7 @@ replay.subscribe(value => console.log(value)) // Deux, Trois
 
 ---
 
-## Opérateurs essentiels - Filtrage
+## Opérateurs essentiels - Filtrage - Partie 1
 
 ```typescript
 const source$ = interval(1000)
@@ -92,7 +110,13 @@ const source$ = interval(1000)
 source$.pipe(
   filter(n => n % 2 === 0)
 ) // 0, 2, 4, 6...
+```
 
+---
+
+## Opérateurs essentiels - Filtrage - Partie 2
+
+```typescript
 // take - Prend X valeurs puis complète
 source$.pipe(
   take(3)
@@ -103,7 +127,13 @@ const stop$ = timer(5000)
 source$.pipe(
   takeUntil(stop$)
 ) // Émet pendant 5 secondes
+```
 
+---
+
+## Opérateurs essentiels - Filtrage - Partie 3
+
+```typescript
 // distinctUntilChanged - Ignore les doublons consécutifs
 of(1, 1, 2, 2, 3, 3).pipe(
   distinctUntilChanged()
@@ -112,28 +142,46 @@ of(1, 1, 2, 2, 3, 3).pipe(
 
 ---
 
-## Opérateurs essentiels - Transformation
+## Opérateurs essentiels - Transformation - Partie 1
 
 ```typescript
 // map - Transforme chaque valeur
 source$.pipe(
   map(n => n * 2)
 ) // 0, 2, 4, 6...
+```
 
+---
+
+## Opérateurs essentiels - Transformation - Partie 2
+
+```typescript
 // switchMap - Annule l'Observable précédent
 searchTerm$.pipe(
   switchMap(term => 
     this.http.get(`/api/search?q=${term}`)
   )
 )
+```
 
+---
+
+## Opérateurs essentiels - Transformation - Partie 3
+
+```typescript
 // mergeMap - Fusionne tous les Observables
 userIds$.pipe(
   mergeMap(id => 
     this.http.get(`/api/user/${id}`)
   )
 )
+```
 
+---
+
+## Opérateurs essentiels - Transformation - Partie 4
+
+```typescript
 // concatMap - Attend que chaque Observable soit complété
 uploads$.pipe(
   concatMap(file => 
@@ -144,7 +192,7 @@ uploads$.pipe(
 
 ---
 
-## Opérateurs essentiels - Combinaison
+## Opérateurs essentiels - Combinaison - Partie 1
 
 ```typescript
 // combineLatest - Combine les dernières valeurs
@@ -155,7 +203,13 @@ combineLatest({
 }).subscribe(({ user, preferences, theme }) => {
   console.log('État complet:', { user, preferences, theme })
 })
+```
 
+---
+
+## Opérateurs essentiels - Combinaison - Partie 2
+
+```typescript
 // merge - Fusionne plusieurs Observables
 merge(
   clicks$,
@@ -164,7 +218,13 @@ merge(
 ).subscribe(event => {
   console.log('Interaction utilisateur:', event)
 })
+```
 
+---
+
+## Opérateurs essentiels - Combinaison - Partie 3
+
+```typescript
 // forkJoin - Attend que tous les Observables soient complétés
 forkJoin({
   posts: this.http.get('/api/posts'),
@@ -177,9 +237,8 @@ forkJoin({
 
 ---
 
-## Cas d'utilisation concrets
+## Cas d'utilisation concrets - Partie 1
 
-### 1. Recherche en temps réel
 ```typescript
 @Component({
   template: `
@@ -190,6 +249,13 @@ forkJoin({
     </div>
   `
 })
+```
+
+---
+
+## Cas d'utilisation concrets - Partie 2
+
+```typescript
 class SearchComponent {
   private searchTerm$ = new BehaviorSubject<string>('')
   
@@ -211,7 +277,8 @@ class SearchComponent {
 
 ---
 
-### 2. Gestion des websockets avec reconnexion
+## Gestion des websockets - Partie 1
+
 ```typescript
 class WebSocketService {
   private wsSubject = new BehaviorSubject<WebSocket | null>(null)
@@ -231,7 +298,15 @@ class WebSocketService {
     
     this.wsSubject.next(ws)
   }
-  
+}
+```
+
+---
+
+## Gestion des websockets - Partie 2
+
+```typescript
+class WebSocketService {
   messages$ = this.messagesSubject.asObservable().pipe(
     retry(3),
     share()
@@ -250,9 +325,7 @@ class WebSocketService {
 
 ---
 
-## Introduction à RxJS
-
-## Intégration avec Signals
+## Intégration avec Signals - Partie 1
 
 ```typescript
 @Component({
@@ -261,37 +334,44 @@ class WebSocketService {
     <div>Statut: {{ status() }}</div>
   `
 })
+```
+
+---
+
+## Intégration avec Signals - Partie 2
+
+```typescript
 export class DataComponent {
-  private dataService = inject(DataService);
+  private dataService = inject(DataService)
   
   // Conversion d'Observable en Signal
   data = toSignal(
     this.dataService.getData().pipe(
       catchError(error => {
-        console.error('Erreur:', error);
-        return of(null);
+        console.error('Erreur:', error)
+        return of(null)
       })
     ),
     { initialValue: null }
-  );
+  )
   
   // Signal computed basé sur Observable
   status = computed(() => 
     this.data() ? 'Chargé' : 'Chargement...'
-  );
+  )
 }
 ```
 
 ---
 
-## Opérateurs RxJS modernes
+## Opérateurs RxJS modernes - Partie 1
 
 ```typescript
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  private http = inject(HttpClient);
+  private http = inject(HttpClient)
   
   search(term: string): Observable<Result[]> {
     return of(term).pipe(
@@ -299,26 +379,38 @@ export class SearchService {
       debounceTime(300),
       
       // Ignorer si le terme est le même
-      distinctUntilChanged(),
-      
-      // Annuler la requête précédente
-      switchMap(term => 
-        this.http.get<Result[]>(`/api/search?q=${term}`).pipe(
-          // Gérer les erreurs par requête
-          catchError(error => {
-            console.error('Erreur de recherche:', error);
-            return of([]);
-          })
-        )
-      )
-    );
+      distinctUntilChanged()
+    )
   }
 }
 ```
 
 ---
 
-## Gestion des souscriptions
+## Opérateurs RxJS modernes - Partie 2
+
+```typescript
+export class SearchService {
+  search(term: string): Observable<Result[]> {
+    return of(term).pipe(
+      // Annuler la requête précédente
+      switchMap(term => 
+        this.http.get<Result[]>(`/api/search?q=${term}`).pipe(
+          // Gérer les erreurs par requête
+          catchError(error => {
+            console.error('Erreur de recherche:', error)
+            return of([])
+          })
+        )
+      )
+    )
+  }
+}
+```
+
+---
+
+## Gestion des souscriptions - Partie 1
 
 ```typescript
 @Component({
@@ -333,14 +425,21 @@ export class SearchService {
     }
   `
 })
+```
+
+---
+
+## Gestion des souscriptions - Partie 2
+
+```typescript
 export class SearchComponent implements OnDestroy {
-  private searchService = inject(SearchService);
-  private destroy$ = new Subject<void>();
+  private searchService = inject(SearchService)
+  private destroy$ = new Subject<void>()
   
-  searchTerm = signal('');
+  searchTerm = signal('')
   
   // Conversion du signal en Observable
-  private searchTerm$ = toObservable(this.searchTerm);
+  private searchTerm$ = toObservable(this.searchTerm)
   
   results = toSignal(
     this.searchTerm$.pipe(
@@ -350,18 +449,18 @@ export class SearchComponent implements OnDestroy {
       takeUntil(this.destroy$)
     ),
     { initialValue: [] }
-  );
+  )
   
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }
 ```
 
 ---
 
-## Combinaison d'Observables
+## Combinaison d'Observables - Partie 1
 
 ```typescript
 @Component({
@@ -373,10 +472,17 @@ export class SearchComponent implements OnDestroy {
     </div>
   `
 })
+```
+
+---
+
+## Combinaison d'Observables - Partie 2
+
+```typescript
 export class UserDashboardComponent {
-  private userService = inject(UserService);
-  private prefService = inject(PreferencesService);
-  private notifService = inject(NotificationService);
+  private userService = inject(UserService)
+  private prefService = inject(PreferencesService)
+  private notifService = inject(NotificationService)
   
   userData = toSignal(
     combineLatest({
@@ -391,20 +497,20 @@ export class UserDashboardComponent {
       }))
     ),
     { initialValue: null }
-  );
+  )
 }
 ```
 
 ---
 
-## Gestion des erreurs avancée
+## Gestion des erreurs avancée - Partie 1
 
 ```typescript
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorHandlingService {
-  private errorSubject = new Subject<Error>();
+  private errorSubject = new Subject<Error>()
   
   error$ = this.errorSubject.asObservable().pipe(
     // Grouper les erreurs similaires
@@ -414,14 +520,19 @@ export class ErrorHandlingService {
       debounceTime(1000),
       take(3)
     ))
-  );
+  )
   
   handleError(error: Error) {
-    this.errorSubject.next(error);
+    this.errorSubject.next(error)
   }
 }
+```
 
-// Utilisation dans un composant
+---
+
+## Gestion des erreurs avancée - Partie 2
+
+```typescript
 @Component({
   template: `
     @if (error()) {
@@ -432,49 +543,60 @@ export class ErrorHandlingService {
   `
 })
 export class ErrorComponent {
-  private errorService = inject(ErrorHandlingService);
+  private errorService = inject(ErrorHandlingService)
   
   error = toSignal(
     this.errorService.error$.pipe(
       map(error => error.message)
     ),
     { initialValue: null }
-  );
+  )
 }
 ```
 
 ---
 
-## WebSocket avec RxJS
+## WebSocket avec RxJS - Partie 1
 
 ```typescript
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  private socket$ = new WebSocket('ws://example.com');
-  private messagesSubject = new Subject<any>();
+  private socket$ = new WebSocket('ws://example.com')
+  private messagesSubject = new Subject<any>()
   
   messages$ = this.messagesSubject.asObservable().pipe(
     // Reconnexion automatique
     retryWhen(errors => errors.pipe(
       tap(error => console.error('WebSocket error:', error)),
       delay(1000)
-    )),
+    ))
+  )
+}
+```
+
+---
+
+## WebSocket avec RxJS - Partie 2
+
+```typescript
+export class WebSocketService {
+  messages$ = this.messagesSubject.asObservable().pipe(
     // Filtrage et transformation des messages
     filter(msg => msg.type === 'data'),
     map(msg => msg.payload),
     share()
-  );
+  )
   
   constructor() {
     this.socket$.addEventListener('message', (event) => {
-      this.messagesSubject.next(JSON.parse(event.data));
-    });
+      this.messagesSubject.next(JSON.parse(event.data))
+    })
   }
   
   send(message: any) {
-    this.socket$.send(JSON.stringify(message));
+    this.socket$.send(JSON.stringify(message))
   }
 }
 ```
@@ -488,7 +610,7 @@ routeAlias: 'exercice-search-realtime'
 
 ---
 
-### Composant de recherche
+## Composant de recherche - Partie 1
 
 ```typescript
 @Component({
@@ -512,26 +634,43 @@ routeAlias: 'exercice-search-realtime'
           {{ error() }}
         </div>
       }
-
-      <div class="search-results">
-        @for (post of searchResults(); track post.id) {
-          <div class="post-card">
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.excerpt }}</p>
-            <a [routerLink]="['/posts', post.id]">Lire la suite</a>
-          </div>
-        }
-      </div>
     </div>
   `
 })
+```
+
+---
+
+## Composant de recherche - Partie 2
+
+```typescript
+@Component({
+  template: `
+    <div class="search-results">
+      @for (post of searchResults(); track post.id) {
+        <div class="post-card">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.excerpt }}</p>
+          <a [routerLink]="['/posts', post.id]">Lire la suite</a>
+        </div>
+      }
+    </div>
+  `
+})
+```
+
+---
+
+## Composant de recherche - Partie 3
+
+```typescript
 export class PostSearchComponent {
-  private searchTerm$ = new BehaviorSubject<string>('');
-  private loading = signal(false);
-  private error = signal<string | null>(null);
+  private searchTerm$ = new BehaviorSubject<string>('')
+  private loading = signal(false)
+  private error = signal<string | null>(null)
 
   // État de la recherche avec Signals
-  searchTerm = toSignal(this.searchTerm$);
+  searchTerm = toSignal(this.searchTerm$)
   
   // Résultats de recherche
   searchResults = toSignal(
@@ -548,21 +687,23 @@ export class PostSearchComponent {
       switchMap(term => this.postService.searchPosts(term).pipe(
         // Gérer les erreurs pour chaque recherche
         catchError(err => {
-          this.error.set('Erreur lors de la recherche');
-          return of([]);
+          this.error.set('Erreur lors de la recherche')
+          return of([])
         }),
         // Fin du chargement
         finalize(() => this.loading.set(false))
       ))
     ),
     { initialValue: [] }
-  );
+  )
 
   constructor(private postService: PostService) {}
 }
 ```
 
-### Service de recherche
+---
+
+## Service de recherche - Partie 1
 
 ```typescript
 @Injectable({ providedIn: 'root' })
@@ -575,33 +716,41 @@ export class PostService {
       map(posts => posts.map(post => ({
         ...post,
         excerpt: this.createExcerpt(post.content)
-      }))),
-      // Trier par pertinence
-      map(posts => this.sortByRelevance(posts, term))
-    );
-  }
-
-  private createExcerpt(content: string): string {
-    return content.substring(0, 150) + '...';
-  }
-
-  private sortByRelevance(posts: Post[], term: string): Post[] {
-    return [...posts].sort((a, b) => {
-      const aScore = this.calculateRelevance(a, term);
-      const bScore = this.calculateRelevance(b, term);
-      return bScore - aScore;
-    });
-  }
-
-  private calculateRelevance(post: Post, term: string): number {
-    const titleMatch = post.title.toLowerCase().includes(term.toLowerCase());
-    const contentMatch = post.content.toLowerCase().includes(term.toLowerCase());
-    return (titleMatch ? 2 : 0) + (contentMatch ? 1 : 0);
+      })))
+    )
   }
 }
 ```
 
-### Filtres combinés
+---
+
+## Service de recherche - Partie 2
+
+```typescript
+export class PostService {
+  private createExcerpt(content: string): string {
+    return content.substring(0, 150) + '...'
+  }
+
+  private sortByRelevance(posts: Post[], term: string): Post[] {
+    return [...posts].sort((a, b) => {
+      const aScore = this.calculateRelevance(a, term)
+      const bScore = this.calculateRelevance(b, term)
+      return bScore - aScore
+    })
+  }
+
+  private calculateRelevance(post: Post, term: string): number {
+    const titleMatch = post.title.toLowerCase().includes(term.toLowerCase())
+    const contentMatch = post.content.toLowerCase().includes(term.toLowerCase())
+    return (titleMatch ? 2 : 0) + (contentMatch ? 1 : 0)
+  }
+}
+```
+
+---
+
+## Filtres combinés - Partie 1
 
 ```typescript
 @Component({
@@ -620,35 +769,53 @@ export class PostService {
         <option value="title">Alphabétique</option>
         <option value="popularity">Popularité</option>
       </select>
-
-      <select [ngModel]="author()" (ngModelChange)="author$.next($event)">
-        <option value="">Tous les auteurs</option>
-        @for (auth of authors(); track auth.id) {
-          <option [value]="auth.id">{{ auth.name }}</option>
-        }
-      </select>
     </div>
+  `
+})
+```
+
+---
+
+## Filtres combinés - Partie 2
+
+```typescript
+@Component({
+  template: `
+    <select [ngModel]="author()" (ngModelChange)="author$.next($event)">
+      <option value="">Tous les auteurs</option>
+      @for (auth of authors(); track auth.id) {
+        <option [value]="auth.id">{{ auth.name }}</option>
+      }
+    </select>
   `
 })
 export class PostFiltersComponent {
   // Sources des filtres
-  private category$ = new BehaviorSubject<string>('');
-  private sortBy$ = new BehaviorSubject<string>('date');
-  private author$ = new BehaviorSubject<string>('');
+  private category$ = new BehaviorSubject<string>('')
+  private sortBy$ = new BehaviorSubject<string>('date')
+  private author$ = new BehaviorSubject<string>('')
 
   // Conversion en Signals
-  category = toSignal(this.category$);
-  sortBy = toSignal(this.sortBy$);
-  author = toSignal(this.author$);
+  category = toSignal(this.category$)
+  sortBy = toSignal(this.sortBy$)
+  author = toSignal(this.author$)
+}
+```
 
+---
+
+## Filtres combinés - Partie 3
+
+```typescript
+export class PostFiltersComponent {
   // Données des filtres
   categories = computed(() => 
     [...new Set(this.postStore.posts().map(p => p.category))]
-  );
+  )
   
   authors = computed(() => 
     [...new Set(this.postStore.posts().map(p => p.author))]
-  );
+  )
 
   // Combinaison des filtres
   filteredPosts = toSignal(
@@ -659,37 +826,23 @@ export class PostFiltersComponent {
       author: this.author$
     }).pipe(
       map(({ posts, category, sortBy, author }) => {
-        let filtered = posts;
+        let filtered = posts
 
         // Filtre par catégorie
         if (category) {
-          filtered = filtered.filter(p => p.category === category);
+          filtered = filtered.filter(p => p.category === category)
         }
 
         // Filtre par auteur
         if (author) {
-          filtered = filtered.filter(p => p.author.id === author);
+          filtered = filtered.filter(p => p.author.id === author)
         }
 
-        // Tri
-        filtered = [...filtered].sort((a, b) => {
-          switch (sortBy) {
-            case 'date':
-              return new Date(b.date).getTime() - new Date(a.date).getTime();
-            case 'title':
-              return a.title.localeCompare(b.title);
-            case 'popularity':
-              return b.views - a.views;
-            default:
-              return 0;
-          }
-        });
-
-        return filtered;
+        return filtered
       })
     ),
     { initialValue: [] }
-  );
+  )
 
   constructor(private postStore: PostStore) {}
 }
@@ -697,113 +850,33 @@ export class PostFiltersComponent {
 
 ---
 
-## Opérateurs courants
+## Filtres combinés - Partie 4
 
-```typescript {1-3|4-6|7-9|10-12|13-15}
-// Création d'un Observable
-const numbers$ = new Observable<number>(subscriber => {
-  subscriber.next(1);
-  subscriber.next(2);
-  subscriber.next(3);
-  subscriber.complete();
-});
-
-// Souscription
-numbers$.subscribe({
-  next: value => console.log(value),
-  error: err => console.error(err),
-  complete: () => console.log('Terminé')
-});
-```
-
----
-
-## Opérateurs courants
-
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18}
-// map, filter, tap
-const numbers$ = of(1, 2, 3, 4, 5);
-
-numbers$.pipe(
-  map(x => x * 2),
-  filter(x => x > 4),
-  tap(x => console.log('Valeur:', x))
-).subscribe();
-```
-
----
-
-## Combinaison d'Observables
-
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
-// combineLatest, merge, forkJoin
-const user$ = this.userService.getUser();
-const posts$ = this.postService.getPosts();
-
-combineLatest({
-  user: user$,
-  posts: posts$
-}).subscribe(({ user, posts }) => {
-  console.log('User:', user);
-  console.log('Posts:', posts);
-});
-```
-
----
-
-## Gestion des erreurs
-
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
-this.http.get('/api/data').pipe(
-  catchError(error => {
-    console.error('Erreur:', error);
-    return of({ error: true }); // Valeur par défaut
-  }),
-  retry(3), // Réessaie 3 fois
-  timeout(5000) // Timeout après 5s
-).subscribe();
-```
-
----
-
-## Subjects et BehaviorSubjects
-
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21}
-@Injectable({
-  providedIn: 'root'
-})
-export class ThemeService {
-  private themeSubject = new BehaviorSubject<'light' | 'dark'>('light');
-  theme$ = this.themeSubject.asObservable();
-
-  setTheme(theme: 'light' | 'dark') {
-    this.themeSubject.next(theme);
-  }
-}
-```
-
----
-
-## RxJS avec Signals
-
-```typescript {1-3|4-6|7-9|10-12|13-15|16-18|19-21|22-24}
-@Component({
-  template: `
-    @if (users(); as users) {
-      @for (user of users; track user.id) {
-        <div>{{ user.name }}</div>
-      }
-    }
-  `
-})
-export class UserListComponent {
-  private userService = inject(UserService);
-  
-  users = toSignal(
-    this.userService.getUsers().pipe(
-      catchError(() => of([])),
-      shareReplay(1)
+```typescript
+export class PostFiltersComponent {
+  filteredPosts = toSignal(
+    combineLatest({
+      posts: this.postStore.posts$,
+      sortBy: this.sortBy$
+    }).pipe(
+      map(({ posts, sortBy }) => {
+        // Tri
+        return [...posts].sort((a, b) => {
+          switch (sortBy) {
+            case 'date':
+              return new Date(b.date).getTime() - new Date(a.date).getTime()
+            case 'title':
+              return a.title.localeCompare(b.title)
+            case 'popularity':
+              return b.views - a.views
+            default:
+              return 0
+          }
+        })
+      })
     ),
     { initialValue: [] }
-  );
+  )
+
+  constructor(private postStore: PostStore) {}
 }

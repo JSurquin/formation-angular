@@ -48,18 +48,27 @@ ng g s services/user --spec --type interface
 })
 export class UserService {
   private userSubject = new BehaviorSubject<User | null>(null);
+  // userSubject est un Observable (new BehaviorSubject donc il peut être observé) de type User | null par défaut à null
+  // user$ est un Observable de type User | null
   user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+  // on injecte le http client
 
+  // on récupère un user par son id dans la fonction getUser
   getUser(id: number): Observable<User> {
+    // appel à l'api pour récupérer un user par son id
     return this.http.get<User>(`/api/users/${id}`).pipe(
+      // on met à jour l'utilisateur dans le subject
       tap(user => this.userSubject.next(user))
     );
   }
-
+  
+  // on met à jour le user dans le subject dans la fonction updateUser
   updateUser(user: User): Observable<User> {
+    // appel à l'api pour mettre à jour le user
     return this.http.put<User>(`/api/users/${user.id}`, user).pipe(
+      // on met à jour l'utilisateur dans le subject
       tap(updatedUser => this.userSubject.next(updatedUser))
     );
   }
