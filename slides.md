@@ -60,9 +60,9 @@ Voici le sommaire de cette formation sur Angular 18/19:
 <small>
 
 <div class="flex flex-col gap-2">
+<Link to="forms-validation">📝 Formulaires et Validation</Link>
 <Link to="services-dependency-injection">📊 Services</Link>
 <Link to="dependency-injection">💉 Injection de dépendances</Link>
-<Link to="forms-validation">📝 Formulaires et Validation</Link>
 <Link to="signals">⚡ Signals (Nouveauté Angular 18)</Link>
 <Link to="rxjs-observables">🔄 RxJS et Observables</Link>
 <Link to="http-client">🌐 HTTP Client et API REST</Link>
@@ -113,15 +113,15 @@ src: ./pages/component_lifecycle.md
 ---
 
 ---
+src: ./pages/forms.md
+---
+
+---
 src: ./pages/services.md
 ---
 
 ---
 src: ./pages/dependency_injection.md
----
-
----
-src: ./pages/forms.md
 ---
 
 ---
