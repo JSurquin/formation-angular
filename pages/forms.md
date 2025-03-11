@@ -7,6 +7,162 @@ routeAlias: 'forms-validation'
 
 ---
 
+## Template-Driven Forms (TDF)
+
+```typescript
+@Component({
+  selector: 'app-login-form',
+  template: `
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="loginData.email"
+          required
+          email
+          #email="ngModel"
+        >
+        @if (email.invalid && email.touched) {
+          <span class="error">Email invalide</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="loginData.password"
+          required
+          minlength="6"
+          #password="ngModel"
+        >
+        @if (password.invalid && password.touched) {
+          <span class="error">
+            Le mot de passe doit contenir au moins 6 caractères
+          </span>
+        }
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid">
+        Se connecter
+      </button>
+    </form>
+  `
+})
+export class LoginFormComponent {
+  loginData = {
+    email: '',
+    password: ''
+  };
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      console.log(this.loginData);
+    }
+  }
+}
+```
+
+---
+
+## Two-Way Data Binding avec [(ngModel)]
+
+```typescript
+@Component({
+  template: `
+    <div>
+      <input [(ngModel)]="username" name="username">
+      <p>Bonjour {{ username }}!</p>
+    </div>
+
+    <!-- Équivalent à : -->
+    <div>
+      <input 
+        [ngModel]="username" 
+        (ngModelChange)="username = $event" 
+        name="username"
+      >
+      <p>Bonjour {{ username }}!</p>
+    </div>
+  `
+})
+export class UserComponent {
+  username = '';
+}
+```
+
+---
+
+## Formulaires Réactifs (Model-Driven)
+
+```typescript
+@Component({
+  template: `
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email">
+        @if (emailErrors()) {
+          <span class="error">{{ emailErrors() }}</span>
+        }
+      </div>
+      
+      <div>
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" formControlName="password">
+        @if (passwordErrors()) {
+          <span class="error">{{ passwordErrors() }}</span>
+        }
+      </div>
+      
+      <button type="submit" [disabled]="!form.valid">
+        S'inscrire
+      </button>
+    </form>
+  `
+})
+export class SignupComponent {
+  form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8)
+    ])
+  });
+  
+  emailErrors = computed(() => {
+    const control = this.form.get('email');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Email requis';
+      if (control.errors['email']) return 'Email invalide';
+    }
+    return null;
+  });
+  
+  passwordErrors = computed(() => {
+    const control = this.form.get('password');
+    if (control?.errors && control.touched) {
+      if (control.errors['required']) return 'Mot de passe requis';
+      if (control.errors['minlength']) return 'Minimum 8 caractères';
+    }
+    return null;
+  });
+  
+  onSubmit() {
+    if (this.form.valid) {
+      console.log(this.form.value);
+    }
+  }
+}
+```
+
+---
+
 ## Commandes CLI pour les Formulaires
 
 ```bash
