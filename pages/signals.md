@@ -781,6 +781,54 @@ export class AuthStore {
 ```
 
 ---
+
+# Quand utiliser les Signals ?
+
+Signals VS RxJS
+
+Vous utilisez des Signals quand vous avez besoin d'un état réactif simple et efficace.
+
+Exemple :
+
+```typescript
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+const isEven = computed(() => count() % 2 === 0);
+```
+
+Cas parfait pour être gerer par un signal.
+
+
+---
+
+Vous utilisez RxJS quand vous avez besoin de gérer des flux de données complexes et d'événements.
+
+Exemple :
+
+```typescript
+const searchInput$ = fromEvent(searchInput, 'input').pipe(
+  map(event => (event.target as HTMLInputElement).value),
+  debounceTime(300),
+  distinctUntilChanged(),
+  switchMap(term => 
+    term.length > 2 
+      ? this.searchService.search(term) 
+      : of([])
+  ),
+  catchError(err => {
+    console.error('Erreur de recherche:', err);
+    return of([]);
+  })
+);
+searchInput$.subscribe(results => {
+  this.searchResults = results;
+});
+
+```
+
+Cas parfait pour être gerer par RxJS.
+
+---
 layout: exercices
 routeAlias: 'exercice-blog-signals'
 ---
