@@ -3,7 +3,7 @@ layout: new-section
 routeAlias: 'services-dependency-injection'
 ---
 
-# Services Angular
+# Services dans Angular
 
 ---
 
@@ -14,6 +14,137 @@ Un service est une classe qui encapsule la logique métier et les données parta
 - Suit le principe de responsabilité unique
 - Facilite la maintenance et les tests
 - Permet la séparation des préoccupations
+
+---
+
+## Service Classique
+
+```typescript
+// models/user.model.ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'user' | 'admin';
+}
+
+// services/user.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private users: User[] = [];
+  private currentUser: User | null = null;
+
+  // Getters classiques
+  getCurrentUser(): User | null {
+    return this.currentUser;
+  }
+
+  getUsers(): User[] {
+    return [...this.users]; // Retourne une copie pour l'immutabilité
+  }
+
+  // Méthodes de manipulation des données
+  addUser(user: User): void {
+    this.users.push(user);
+  }
+
+  updateUser(id: number, userData: Partial<User>): void {
+    const index = this.users.findIndex(u => u.id === id);
+    if (index !== -1) {
+      this.users[index] = { ...this.users[index], ...userData };
+    }
+  }
+
+  deleteUser(id: number): void {
+    this.users = this.users.filter(u => u.id !== id);
+  }
+
+  // Méthodes métier
+  login(email: string, password: string): boolean {
+    const user = this.users.find(u => u.email === email);
+    if (user) {
+      this.currentUser = user;
+      return true;
+    }
+    return false;
+  }
+
+  logout(): void {
+    this.currentUser = null;
+  }
+
+  isAdmin(): boolean {
+    return this.currentUser?.role === 'admin';
+  }
+}
+```
+
+---
+
+## Utilisation du Service
+
+```typescript
+@Component({
+  selector: 'app-user-list',
+  template: `
+    <div>
+      <h2>Liste des utilisateurs</h2>
+      @for (user of users; track user.id) {
+        <div class="user-card">
+          <h3>{{ user.name }}</h3>
+          <p>{{ user.email }}</p>
+          <button (click)="deleteUser(user.id)">Supprimer</button>
+        </div>
+      }
+    </div>
+  `
+})
+export class UserListComponent {
+  users: User[] = [];
+
+  constructor(private userService: UserService) {
+    this.users = this.userService.getUsers();
+  }
+
+  deleteUser(id: number): void {
+    this.userService.deleteUser(id);
+    // Mettre à jour la liste locale
+    this.users = this.userService.getUsers();
+  }
+}
+```
+
+---
+
+## Service avec État Simple
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class ThemeService {
+  private isDarkMode = false;
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
+
+  getTheme(): string {
+    return this.isDarkMode ? 'dark' : 'light';
+  }
+}
+```
 
 ---
 
@@ -36,6 +167,25 @@ ng g s services/user --flat
 
 # Générer un service avec une interface
 ng g s services/user --spec --type interface
+```
+
+---
+
+# Service classique sans Observable
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private user = signal<User | null>(null);
+
+  getUser() {
+    return this.user();
+  }
+  
+  
+}
 ```
 
 ---
