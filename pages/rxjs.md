@@ -13,8 +13,6 @@ Bon déjà c'est quoi un Observable ?
 
 Un Observable est un objet qui représente une séquence de valeurs, émises à des moments différents.
 
-Imaginons je fais un appel api , regardons du marble "testing" pour mieux comprendre :
-
 ```typescript
 const apiCall$ = new Observable(observer => {
   fetch('https://api.example.com/data')
@@ -24,20 +22,6 @@ const apiCall$ = new Observable(observer => {
     .finally(() => observer.complete())
 })
 ```
-
----
-
-## Marble Testing
-
-### Donc ce flux : --1--2--3--4--5--
-
-ce qui veut dire :
-
-> - 1 premiere étape : j'aurais donc une réponse de l'api
-> - 2 deuxième étape : j'aurais donc une autre réponse de l'api
-> - 3 troisième étape : j'aurais donc une autre réponse de l'api
-> - 4 quatrième étape : j'aurais donc une autre réponse de l'api
-> - 5 cinquième étape : j'aurais donc une autre réponse de l'api
 
 ---
 
